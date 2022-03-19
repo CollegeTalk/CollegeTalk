@@ -7,6 +7,11 @@ api = Api(app)
 hello_world = {}
 
 
+class Home(Resource):
+    def get(self):
+        return "Hello World!"
+
+
 class HelloWorld(Resource):
     def get(self, id):
         # curl http://localhost:5000/{id}
@@ -14,11 +19,12 @@ class HelloWorld(Resource):
 
     def put(self, id):
         # curl http://localhost:5000/{id} -d "data=Hello World" -X PUT
-        hello_world[id] = request.form['data']
+        hello_world[id] = request.form["data"]
         return jsonify({"hello_world": hello_world[id]})
 
 
-api.add_resource(HelloWorld, '/<string:id>')
+api.add_resource(Home, "/")
+api.add_resource(HelloWorld, "/<string:id>")
 
 
 if __name__ == "__main__":
