@@ -27,7 +27,7 @@ deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
     - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_API.git
-    - git fetch
+    - git pull
     - git subtree push --prefix Code/api heroku main
   only:
     - main
