@@ -17,17 +17,23 @@ variables:
     HEROKU_API_KEY: "9b94dab8-1852-49f8-a7ef-3de5ae101095"
     HEROKU_APP_API: "wmtalk-api"
 
-before_script:
-  - apt-get update -qy
-  - apt-get install -y git
+# before_script:
+#   - apt-get update -qy
+#   - apt-get install -y git
 stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   script:
-    - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_API.git
-    - git pull heroku main
-    - git subtree push --prefix Code/api heroku main
+    - cd Code/api
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=$HEROKU_APP_API --api-key=$HEROKU_API_KEY --skip-cleanup
+
+    # - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_API.git
+    # - git pull heroku main
+    # - git subtree push --prefix Code/api heroku main
   only:
     - main
