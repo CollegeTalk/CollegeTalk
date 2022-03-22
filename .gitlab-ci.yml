@@ -17,6 +17,9 @@ variables:
     HEROKU_API_KEY: "9b94dab8-1852-49f8-a7ef-3de5ae101095"
     HEROKU_APP_API: "wmtalk-api"
 
+before_script:
+  - apt-get update -qy
+  - apt-get install -y git
 stages:          # List of stages for jobs, and their order of execution
   - deploy
 
