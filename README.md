@@ -4,6 +4,7 @@ There's a lot that goes into college life for a student, but student's don't alw
 
 
 Frontend: https://collegetalk.azurewebsites.net/
+
 API: https://collegetalk-api.azurewebsites.net/
 
 ## Technologies Used
