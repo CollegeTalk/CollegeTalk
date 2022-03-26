@@ -1,6 +1,6 @@
 # WMTalk
 
-API: https://wmtalk-api.herokuapp.com/
+API: https://collegetalk-api.azurewebsites.net/
 
 ## Technologies Used
 
