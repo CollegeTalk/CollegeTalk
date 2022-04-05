@@ -15,8 +15,8 @@ There's a lot that goes into college life for a student, but student's don't alw
 - Frontend (Code/frontend):
     1. ```cd Code/frontend```
     2. ```npm install```
-    3. Either ```npm run dev``` or ```yarn dev```
-    4. Navigate to http://localhost:3000
+    3. Either ```npm run start``` or ```npm run android``` or ```npm run ios```
+    4. Navigate to http://localhost:19002
 
 - API (Code/api):
     1. ```cd Code/api```
