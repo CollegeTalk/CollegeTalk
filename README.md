@@ -1,13 +1,15 @@
 # CollegeTalk
 
-There's a lot that goes into college life for a student, but student's don't always get the information they need. CollegeTalk is an application for students to communicate with each other, giving them a space to ask questions and discuss topics freely and without judgement. This consolidates many other communication platforms that are currently being used within the student body, and provides a dedicated space for students to get their questions answered.
+There's a lot that goes into college life for a student, but students don't always get the information they need. CollegeTalk is an application for students to communicate with each other, giving them a space to ask questions and discuss topics freely and without judgement. This consolidates many other communication platforms that are currently being used within the student body, and provides a dedicated space for students to get their questions answered.
 
 ## Technologies Used
 
--   Frontend: Next.js (React, Typescript)
+-   Frontend: React Native (React, Typescript)
 -   Backend: Python
-    -   API: Flask
--   Platform/Deployment: Azure
+    -   API: Flask (REST API)
+-   Platform/Deployment:
+    -   API: Azure App Service
+    -   Database: ElephantSQL
 -   Database: PostgreSQL
 
 ## Running the Code Locally
@@ -29,7 +31,9 @@ There's a lot that goes into college life for a student, but student's don't alw
     7. You can make a PUT request with `curl http://localhost:5000/items/{item_name} -H 'Content-Type: application/json' -d '{"value":"Hello"}' -X PUT`, replacing {item_name} with a desired text. You can then make a GET request by navigating to http://localhost:5000/items/{item_name}, with {item_name} as the text used earlier for the PUT request.
     8. Get a list of items at http://localhost:5000/items
 
-## References
+## Deployments
 
 -   Frontend: local deployment
 -   API: https://collegetalk-api.azurewebsites.net/
+
+## References
