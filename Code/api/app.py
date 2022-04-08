@@ -53,9 +53,7 @@ class Item(Resource):
             item = db.session.query(ItemsModel).filter_by(
                 key=item_name).first()
             if item:
-                print(item.key, item.value, request.json["value"])
                 item.value = request.json["value"]
-                print(item.key, item.value, request.json["value"])
                 db.session.commit()
             else:
                 item = ItemsModel(item_name, request.json["value"])

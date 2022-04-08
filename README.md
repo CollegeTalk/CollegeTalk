@@ -21,10 +21,13 @@ There's a lot that goes into college life for a student, but student's don't alw
 
 -   API (Code/api):
     1. `cd Code/api`
-    2. Activate a venv if desired, then run `pip install -r requirements.txt`
-    3. `flask run`
-    4. Navigate to http://localhost:5000
-    5. You can make a PUT request with `curl http://localhost:5000/{id} -d "data=Hello World" -X PUT`, replacing {id} with a desired text. You can then make a GET request by navigating to http://localhost:5000/{id}, with {id} as the text used earlier for the PUT request.
+    2. Setup PostgreSQL and create a database
+    3. In a `.env` file, Set `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, `POSTGRES_PASS`, and `POSTGRES_DB` to appropriate values.
+    4. Activate a venv if desired, then run `pip install -r requirements.txt`
+    5. `flask run`
+    6. Navigate to http://localhost:5000
+    7. You can make a PUT request with `curl http://localhost:5000/items/{item_name} -H 'Content-Type: application/json' -d '{"value":"Hello"}' -X PUT`, replacing {item_name} with a desired text. You can then make a GET request by navigating to http://localhost:5000/items/{item_name}, with {item_name} as the text used earlier for the PUT request.
+    8. Get a list of items at http://localhost:5000/items
 
 ## References
 
