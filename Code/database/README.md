@@ -1,0 +1,1 @@
+This directory will be used for files for a temporary database for an early working demo. Since each microservice will have its own database, this directory will be removed after work on those microservices begin.
