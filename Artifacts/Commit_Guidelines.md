@@ -15,10 +15,12 @@ These are some rules and guidelines developers should follow while working on th
 - Merge `dev` into your branch and resolve merge conflicts before making the PR
 - When making a pull request to merge your branch into dev, assign at least one developer (more is ideal) to the PR so they can peer review the changes 
 - To peer review a PR, switch to the branch of the PR and pull down the changes, then look through and test the code to make sure there are none of the following issues:
-    - Loose comments that aren't for documentation (commented out debug code for example)
-    - Errors when running the code locally
     - Undocumented code that is not understandable to the reviewer 
     - Syntax or convention issues, like misuse of camelCase and snake_case or inconsistent file names
+    - Loose comments that aren't for documentation (commented out debug code for example)
+    - Errors when running the code locally
+    - Failed tests
+    
 - If there are changes to make to the PR, the branch owner should make the changes before reassigning and pinging the old reviewer to approve the PR
 - Once the PR is approved, the branch owner can merge the PR into `dev`
 
