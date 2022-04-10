@@ -1,5 +1,6 @@
-import { StyleSheet } from "react-native";
+import {KeyboardAvoidingView, StyleSheet, TextInput } from "react-native";
 import CreatePostButton from "../components/CreatePostButton";
+import CreatePostTitle from "../components/CreatePostTitle";
 
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
@@ -23,8 +24,13 @@ export default function TabOneScreen({
                 lightColor="#eee"
                 darkColor="rgba(255,255,255,0.1)"
             />
+            
+            <CreatePostTitle />
+
             <TextBox />
+
             <CreatePostButton path="/screens/TabOneScreen.tsx" />
+
         </View>
     );
 }
@@ -33,7 +39,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: 'space-evenly'
     },
     title: {
         fontSize: 36,
