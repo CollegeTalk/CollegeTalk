@@ -5,6 +5,17 @@ import Colors from '../constants/Colors';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
 
+function submitPostToApi() {
+    Alert.alert('Simple Button pressed')
+    fetch('http://localhost:5000/items/post', {
+        method: 'PUT',
+        body: '{"value":"Hello"}',
+    }).then(response => {
+        console.log(response)
+    }).catch(error => {
+        console.error(error);
+    })
+}
 
 
 export default function CreatePostButton({ path }: { path: string }) {
@@ -14,7 +25,7 @@ export default function CreatePostButton({ path }: { path: string }) {
       <Button
         title="Submit"
         color="#f194ff"
-        onPress={() => Alert.alert('Simple Button pressed')}
+        onPress={() => submitPostToApi()}
       />
     </View>
     
