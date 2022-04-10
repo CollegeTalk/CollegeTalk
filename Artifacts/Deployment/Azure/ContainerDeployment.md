@@ -9,17 +9,23 @@ Developers can deploy a Dockerized web app to Azure App Service using this tutor
 2. Add the following lines to the Dockerfile (commented):
 
 ```Dockerfile
-FROM python:latest # Pull latest Python Docker image, for the base environment
+# Pull latest Python Docker image, for the base environment
+FROM python:latest 
 
-WORKDIR /api # Set the working directory to a new directory called /api
+# Set the working directory to a new directory called /api
+WORKDIR /api 
 
-COPY requirements.txt requirements.txt # Copy local requirements.txt to /api
+# Copy local requirements.txt to /api
+COPY requirements.txt requirements.txt 
 
-RUN pip3 install -r requirements.txt # Install the requirements.txt in the container
+# Install the requirements.txt in the container
+RUN pip3 install -r requirements.txt 
 
-COPY . . # Copy rest of the files to /api
+# Copy rest of the files to /api
+COPY . . 
 
-CMD [ "python3", "-m", "flask", "run", "--host=0.0.0.0"] # Start the app in the container
+# Start the app in the container
+CMD [ "python3", "-m", "flask", "run", "--host=0.0.0.0"]
 ```
 
 3. Test the container locally by first building the container image: `docker build --tag collegetalk-api .` then running the container: `docker run -d -p 127.0.0.1:5000:5000 collegetalk-api`
