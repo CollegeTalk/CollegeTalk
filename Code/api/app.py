@@ -69,4 +69,4 @@ api.add_resource(ItemList, "/items")
 api.add_resource(Item, "/items/<string:item_name>")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")
