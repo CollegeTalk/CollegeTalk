@@ -4,6 +4,7 @@ import CreatePostButton from "../components/CreatePostButton";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
+import TextBox from "../components/TextBox";
 
 export default function TabOneScreen({
     navigation
@@ -16,7 +17,17 @@ export default function TabOneScreen({
                 lightColor="#eee"
                 darkColor="rgba(255,255,255,0.1)"
             />
-            <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+            <EditScreenInfo path="/screens/TabOneScreen.tsx" /><View
+                style={styles.separator}
+                lightColor="#eee"
+                darkColor="rgba(255,255,255,0.1)"
+            />
+            <TextBox />
+            <EditScreenInfo path="/screens/TabOneScreen.tsx" /><View
+                style={styles.separator}
+                lightColor="#eee"
+                darkColor="rgba(255,255,255,0.1)"
+            />
             <CreatePostButton path="/screens/TabOneScreen.tsx" />
         </View>
     );
