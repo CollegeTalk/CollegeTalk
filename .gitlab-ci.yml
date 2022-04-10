@@ -1,0 +1,16 @@
+stages:
+  - deploy
+
+deploy_api_container:
+  stage: deploy
+  image: mcr.microsoft.com/azure-cli
+  variables: 
+    SP_APP_ID: "969444b4-e4a6-4689-9394-4aac3b50441d"
+    SP_PASSWORD: "6GS_ZNYThV-4muW1.3NjlKPIIQcv.nZ9Y6"
+    SP_TENANT: "b93cbc3e-661d-4058-8693-a897b924b8d7"
+  script: 
+    - cd Code/api 
+    - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT 
+    - az acr build --registry collegetalk --image collegetalk-api .
+  only:
+    - main 
