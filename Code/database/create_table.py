@@ -1,8 +1,7 @@
 import os
 
-import sqlalchemy
 from dotenv import load_dotenv
-from sqlalchemy import Column, MetaData, String, Table, create_engine
+from sqlalchemy import Column, MetaData, Integer, String, Identity, DateTime, func, Table, create_engine
 
 load_dotenv()
 
@@ -22,6 +21,19 @@ items = Table(
     Column('key', String, primary_key=True),
     Column('value', String),
 )
+
+posts = Table(
+    'posts', meta,
+    Column('id', Integer, primary_key=True),
+    Column('value', String),
+    Column('id', Integer, Identity(
+        start=42, cycle=True), primary_key=True),
+    Column("time_created", DateTime(timezone=True),
+                           server_default=func.now()),
+    Column("title", String),
+    Column("body", String)
+)
+
 meta.create_all(engine)
 
 print(engine.table_names())
