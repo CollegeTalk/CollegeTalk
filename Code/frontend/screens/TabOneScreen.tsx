@@ -6,12 +6,13 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 import TextBox from "../components/TextBox";
 
+
 export default function TabOneScreen({
     navigation
 }: RootTabScreenProps<"TabOne">) {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Tab One</Text>
+            <Text style={styles.title}>Ask a Question:</Text>
             <View
                 style={styles.separator}
                 lightColor="#eee"
@@ -23,11 +24,6 @@ export default function TabOneScreen({
                 darkColor="rgba(255,255,255,0.1)"
             />
             <TextBox />
-            <EditScreenInfo path="/screens/TabOneScreen.tsx" /><View
-                style={styles.separator}
-                lightColor="#eee"
-                darkColor="rgba(255,255,255,0.1)"
-            />
             <CreatePostButton path="/screens/TabOneScreen.tsx" />
         </View>
     );
@@ -40,7 +36,7 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     title: {
-        fontSize: 20,
+        fontSize: 36,
         fontWeight: "bold"
     },
     separator: {
