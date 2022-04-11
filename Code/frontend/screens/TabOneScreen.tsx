@@ -1,12 +1,9 @@
 import { StyleSheet } from "react-native";
-
-import { RootTabScreenProps } from "../types";
-
-import EditScreenInfo from "../components/EditScreenInfo";
-import { Text, View } from "../components/Themed";
-import CreatePostTitle from "../components/CreatePost/Title";
-import TextBox from "../components/CreatePost/TextBox";
 import CreatePostButton from "../components/CreatePost/Button";
+import TextBox from "../components/CreatePost/TextBox";
+import CreatePostTitle from "../components/CreatePost/Title";
+import { Text, View } from "../components/Themed";
+import { RootTabScreenProps } from "../types";
 
 const styles = StyleSheet.create({
     container: {
@@ -33,7 +30,7 @@ const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => (
             lightColor="#eee"
             darkColor="rgba(255,255,255,0.1)"
         />
-        { /*<EditScreenInfo path="/screens/TabOneScreen.tsx" /> 
+        {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> 
         <View
             style={styles.separator}
             lightColor="#eee"

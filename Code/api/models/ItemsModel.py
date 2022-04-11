@@ -1,11 +1,9 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from .base import db
 
 
 class ItemsModel(db.Model):
     """
-    Defines the items model
+    Test model: Defines the items model
     """
 
     __tablename__ = "items"

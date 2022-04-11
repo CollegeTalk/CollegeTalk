@@ -2,15 +2,20 @@
 
 There's a lot that goes into college life for a student, but students don't always get the information they need. CollegeTalk is an application for students to communicate with each other, giving them a space to ask questions and discuss topics freely and without judgement. This consolidates many other communication platforms that are currently being used within the student body, and provides a dedicated space for students to get their questions answered.
 
+## Contributing 
+
+[Make sure to follow the guidelines for contributing](./Artifacts/Commit_Guidelines.md), because pushing directly into main without reviewing could destroy the production environment!
+
 ## Technologies Used
 
 -   Frontend: React Native (React, Typescript)
 -   Backend: Python
     -   API: Flask (REST API)
--   Platform/Deployment:
-    -   API: Azure App Service
-    -   Database: ElephantSQL
 -   Database: PostgreSQL
+-   Platform/Deployment:
+    -   API: Docker container to Azure Container Registry -> Azure App Service
+    -   Database: ElephantSQL
+
 
 ## Running the Code Locally
 
@@ -22,18 +27,15 @@ There's a lot that goes into college life for a student, but students don't alwa
     4. Navigate to http://localhost:19002
 
 -   API (Code/api):
-    1. `cd Code/api`
-    2. Setup PostgreSQL and create a database
-    3. In a `.env` file, Set `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, `POSTGRES_PASS`, and `POSTGRES_DB` to appropriate values.
-    4. Activate a venv if desired, then run `pip install -r requirements.txt`
-    5. `flask run`
-    6. Navigate to http://localhost:5000
-    7. You can make a PUT request with `curl http://localhost:5000/items/{item_name} -H 'Content-Type: application/json' -d '{"value":"Hello"}' -X PUT`, replacing {item_name} with a desired text. You can then make a GET request by navigating to http://localhost:5000/items/{item_name}, with {item_name} as the text used earlier for the PUT request.
-    8. Get a list of items at http://localhost:5000/items
+    - Follow the instructions and endpoints in [/Code/api](./Code/api/)
+    - Some sample requests to the test table called items: 
+        - PUT request to test items table with `curl http://localhost:5000/items/{item_name} -H 'Content-Type: application/json' -d '{"value":"Hello"}' -X PUT`, replacing {item_name} with a desired text
+        - GET request by navigating to http://localhost:5000/items/{item_name}, with {item_name} as the text used earlier for the PUT request
+        - GET the list of all items at http://localhost:5000/items
 
 ## Deployments
 
 -   Frontend: local deployment
--   API: https://collegetalk-api.azurewebsites.net/
+-   API: https://collegetalk.azurewebsites.net/
 
 ## References
