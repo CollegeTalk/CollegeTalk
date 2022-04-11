@@ -35,12 +35,26 @@ const styles = StyleSheet.create({
     }
 });
 
+function submitPostToApi() {
+    Alert.alert('Simple Button pressed')
+  
+    fetch('https://collegetalk-staging.azurewebsites.net/posts/5', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            "body": "body",
+            "title": "new"
+        })
+          
+    })
+}
+
 const CreatePostButton = ({ path }: { path: string }) => (
     <View>
         <Button
             title="Submit"
-            color="#f194ff"
-            onPress={() => Alert.alert("Simple Button pressed")}
+            color="#0000FF"
+            onPress={() => submitPostToApi()}
         />
     </View>
 );
