@@ -8,7 +8,7 @@ There's a lot that goes into college life for a student, but students don't alwa
 -   Backend: Python
     -   API: Flask (REST API)
 -   Platform/Deployment:
-    -   API: Docker container to Azure Container Registry -> Azure App Service
+    -   API: Azure App Service
     -   Database: ElephantSQL
 -   Database: PostgreSQL
 
@@ -34,6 +34,6 @@ There's a lot that goes into college life for a student, but students don't alwa
 ## Deployments
 
 -   Frontend: local deployment
--   API: https://collegetalk.azurewebsites.net/
+-   API: https://collegetalk-api.azurewebsites.net/
 
 ## References
