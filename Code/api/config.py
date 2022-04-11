@@ -26,9 +26,14 @@ class DevelopmentConfig(Config):
     This defaults the Database URL that can be created through the docker 
     cmd in the setup instructions. You can change this to environment variable as well. 
     """
+    host = os.environ["POSTGRES_HOST"]
+    port = os.environ["POSTGRES_PORT"]
+    username = os.environ["POSTGRES_USER"]
+    password = os.environ["POSTGRES_PASS"]
+    database = os.environ["POSTGRES_DB"]
 
     url = (
-        "postgresql://postgres:psqlpassword@127.0.0.1:5432/test"
+        f"postgresql://{username}:{password}@{host}:{port}/{database}"
     )  # set the URI to call get_pg_url() once you have `creds.ini` setup
     SQLALCHEMY_DATABASE_URI = url
     DEBUG = True
@@ -60,7 +65,7 @@ class DockerDevConfig(Config):
     """
 
     SQLALCHEMY_DATABASE_URI = (
-        "postgresql://testusr:password@postgres/testdb"
+        "postgresql://testusr:password@database/testdb"
     )  # hard coded URL, assuming you are using the docker-compose setup
     DEBUG = True
 
