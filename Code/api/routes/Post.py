@@ -7,7 +7,7 @@ class Post(Resource):
     def get(self, id):
         # curl http://localhost:5000/posts/{id}
         try:
-            post = PostsModel.query.filter_by(key=id).first_or_404()
+            post = PostsModel.query.filter_by(id=id).first_or_404()
             return jsonify(post.serialize)
         except RuntimeError:
             return jsonify({"error": f"Post {id} not found"})
