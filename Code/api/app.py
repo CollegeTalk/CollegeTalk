@@ -103,6 +103,25 @@ class Posts(Resource):
         except RuntimeError:
             return jsonify({"error": f"Error adding/updating {id}"})
 
+class User(Resource):
+    def get(self, id):
+        #curl http://localhost:5000/users/{id}
+        pass
+    def put(self, id):
+        #curl http://localhost:5000/users/{id}
+        pass
+    def post(self, id):
+        #curl http://localhost:5000/users/{id}
+        pass
+
+class Comments(Resource):
+    def gets(self, id):
+        #curl http://localhost:5000/comments/{id}
+        pass
+    def post(self, id):
+        pass
+    def delete(self, id):
+        pass
 
 api.add_resource(Home, "/")
 api.add_resource(ItemList, "/items")
