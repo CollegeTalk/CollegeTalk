@@ -1,5 +1,5 @@
 from .base import db
-
+from sqlalchemy.dialects.postgresql import UUID
 
 class PostsModel(db.Model):
     """
@@ -8,12 +8,10 @@ class PostsModel(db.Model):
 
     __tablename__ = "posts"
 
-    id = db.Column('id', db.Integer, db.Identity(
-        start=42, cycle=True), primary_key=True)
-    time_created = db.Column(db.DateTime(timezone=True),
-                             server_default=db.func.now())
-    title = db.Column("title", db.String)
-    body = db.Column("body", db.String)
+    id = db.Column(UUID(as_uuid=True), primary_key=True)
+    time_created = db.Column(db.DateTime(timezone=True))
+    title = db.Column(db.String)
+    body = db.Column(db.String)
 
     def __init__(self, id, time_created, title, body):
         self.id = id

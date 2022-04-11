@@ -32,7 +32,7 @@ api.add_resource(Home, "/")
 api.add_resource(ItemList, "/items")
 api.add_resource(Item, "/items/<string:item_name>")
 api.add_resource(PostList, "/posts")
-api.add_resource(Post, "/posts/<int:id>")
+api.add_resource(Post, "/posts/<string:id>")
 
 
 if __name__ == "__main__":

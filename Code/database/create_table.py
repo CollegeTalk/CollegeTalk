@@ -1,7 +1,9 @@
 import os
+from uuid import uuid4
 
+from sqlalchemy.dialects.postgresql import UUID
 from dotenv import load_dotenv
-from sqlalchemy import Column, MetaData, Integer, String, Identity, DateTime, func, Table, create_engine
+from sqlalchemy import Column, MetaData, String, DateTime, func, Table, create_engine, inspect
 
 load_dotenv()
 
@@ -12,7 +14,7 @@ PORT = os.environ['POSTGRES_PORT']
 DB = os.environ['POSTGRES_DB']
 db_string = f"postgresql://{USER}:{PASS}@{HOST}:{PORT}/{DB}"
 
-engine = create_engine(db_string)
+engine = create_engine(db_string, pool_size=20)
 
 meta = MetaData()
 
@@ -24,16 +26,18 @@ items = Table(
 
 posts = Table(
     'posts', meta,
-    Column('id', Integer, primary_key=True),
-    Column('value', String),
-    Column('id', Integer, Identity(
-        start=42, cycle=True), primary_key=True),
+    Column('id', UUID(as_uuid=True), primary_key=True,
+           default=uuid4),
     Column("time_created", DateTime(timezone=True),
-                           server_default=func.now()),
+           server_default=func.now()),
     Column("title", String),
     Column("body", String)
 )
 
 meta.create_all(engine)
 
-print(engine.table_names())
+inspector = inspect(engine)
+print("Tables List:")
+print("==============")
+for table_name in inspector.get_table_names():
+    print(f"{table_name}")

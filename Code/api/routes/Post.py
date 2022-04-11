@@ -18,10 +18,6 @@ class Post(Resource):
             post = db.session.query(PostsModel).filter_by(
                 id=id).first()
             data = request.json
-            print(request.json)
-            for key, value in data.items():
-                print(key, value)
-            print(data["title"], ' ', data["body"])
             if post:
                 post.title = data["title"]
                 post.body = data["body"]
