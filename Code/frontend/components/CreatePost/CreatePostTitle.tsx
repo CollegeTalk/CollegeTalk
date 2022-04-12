@@ -1,8 +1,9 @@
+import { Dispatch, SetStateAction } from "react";
 import {
-    Platform,
     KeyboardAvoidingView,
-    TextInput,
+    Platform,
     StyleSheet,
+    TextInput,
     View
 } from "react-native";
 
@@ -31,14 +32,24 @@ const styles = StyleSheet.create({
     }
 });
 
-const CreatePostTitle = () => (
+type CreatePostTitleProps = {
+    titleText: string;
+    setTitleText: Dispatch<SetStateAction<string>>;
+};
+
+const CreatePostTitle = ({ titleText, setTitleText }: CreatePostTitleProps) => (
     <View style={styles.center}>
         {/* Write a post title */}
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.writeTaskWrapper}
         >
-            <TextInput style={styles.input} placeholder="Write a post title" />
+            <TextInput
+                style={styles.input}
+                placeholder="Write a post title"
+                value={titleText}
+                onChangeText={setTitleText}
+            />
         </KeyboardAvoidingView>
     </View>
 );
