@@ -1,7 +1,5 @@
 import { StyleSheet } from "react-native";
-import CreatePostButton from "../components/CreatePost/Button";
-import TextBox from "../components/CreatePost/TextBox";
-import CreatePostTitle from "../components/CreatePost/Title";
+import CreatePost from "../components/CreatePost/CreatePost";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
 
@@ -31,17 +29,13 @@ const TabOneScreen = ({ navigation }: RootTabScreenProps<"TabOne">) => (
             darkColor="rgba(255,255,255,0.1)"
         />
         {/* <EditScreenInfo path="/screens/TabOneScreen.tsx" /> 
-        <View
-            style={styles.separator}
-            lightColor="#eee"
-            darkColor="rgba(255,255,255,0.1)"
-        />
-        */}
-        <CreatePostTitle />
-
-        <TextBox />
-
-        <CreatePostButton path="/screens/TabOneScreen.tsx" />
+            <View
+                style={styles.separator}
+                lightColor="#eee"
+                darkColor="rgba(255,255,255,0.1)"
+            />
+            */}
+        <CreatePost />
     </View>
 );
 
