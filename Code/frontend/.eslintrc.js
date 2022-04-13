@@ -1,27 +1,27 @@
-{
-    "env": {
+module.exports = {
+    env: {
         "react-native/react-native": true // whitelist all browser-like globals
     },
-    "extends": [
+    extends: [
         "plugin:react/recommended",
         "airbnb",
         "prettier",
         "plugin:jest/recommended",
         "plugin:import/typescript"
     ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
+    parser: "@typescript-eslint/parser",
+    parserOptions: {
+        ecmaFeatures: {
+            jsx: true
         },
-        "ecmaVersion": "latest",
-        "sourceType": "module"
+        ecmaVersion: "latest",
+        sourceType: "module"
     },
-    "plugins": ["react-native", "@typescript-eslint", "jest"],
-    "rules": {
+    plugins: ["react-native", "@typescript-eslint", "jest"],
+    rules: {
         "react/jsx-filename-extension": [
             2,
-            { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
+            { extensions: [".js", ".jsx", ".ts", ".tsx"] }
         ],
         "react/jsx-uses-react": "off",
         "react/jsx-props-no-spreading": "warn",
@@ -31,27 +31,31 @@
         "react/function-component-definition": [
             "error",
             {
-                "namedComponents": "arrow-function",
-                "unnamedComponents": "arrow-function"
+                namedComponents: "arrow-function",
+                unnamedComponents: "arrow-function"
             }
         ],
         "import/extensions": [
             "error",
             "ignorePackages",
             {
-                "js": "never",
-                "jsx": "never",
-                "ts": "never",
-                "tsx": "never"
+                js: "never",
+                jsx: "never",
+                ts: "never",
+                tsx: "never"
             }
         ],
-        "no-unused-vars": "warn"
+        "no-unused-vars": "warn",
+        "no-console": [
+            process.env.NODE_ENV === "dev" ? "warn" : "error",
+            { allow: ["warn", "error"] }
+        ]
     },
-    "settings": {
+    settings: {
         "import/resolver": {
-            "node": {
-                "extensions": [".js", ".jsx", ".ts", ".tsx"]
+            node: {
+                extensions: [".js", ".jsx", ".ts", ".tsx"]
             }
         }
     }
-}
+};

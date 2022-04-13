@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CreatePostTitle /> renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "justifyContent": "space-around",
+      "marginTop": 100,
+    }
+  }
+>
+  <View
+    onLayout={[Function]}
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "bottom": 60,
+          "flexDirection": "row",
+          "justifyContent": "center",
+          "position": "absolute",
+          "width": "100%",
+        },
+        Object {
+          "paddingBottom": 0,
+        },
+      ]
+    }
+  >
+    <TextInput
+      onChangeText={[Function]}
+      placeholder="Write a post title"
+      style={
+        Object {
+          "backgroundColor": "#FFF",
+          "borderColor": "#C0C0C0",
+          "borderRadius": 60,
+          "borderWidth": 1,
+          "paddingHorizontal": 15,
+          "paddingVertical": 15,
+          "width": 250,
+        }
+      }
+      value=""
+    />
+  </View>
+</View>
+`;

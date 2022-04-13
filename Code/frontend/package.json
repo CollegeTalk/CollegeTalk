@@ -8,11 +8,29 @@
         "ios": "expo start --ios",
         "web": "expo start --web",
         "eject": "expo eject",
-        "lint": "eslint './**/*.{js,ts,jsx,tsx}' --quiet --fix",
-        "test": "jest --watchAll"
+        "lint": "cross-env NODE_ENV=dev eslint './**/*.{js,ts,jsx,tsx}' --fix",
+        "lintProd": "cross-env NODE_ENV=prod eslint './**/*.{js,ts,jsx,tsx}' --quiet --fix",
+        "test": "jest --watch --coverage=false",
+        "testProd": "jest",
+        "updateSnapshots": "jest -u --coverage=false"
     },
     "jest": {
-        "preset": "jest-expo"
+        "preset": "jest-expo",
+        "transformIgnorePatterns": [
+            "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+        ],
+        "collectCoverage": true,
+        "collectCoverageFrom": [
+            "**/*.{js,jsx,ts,tsx}",
+            "!**/__tests__/**",
+            "!**/coverage/**",
+            "!**/node_modules/**",
+            "!**/react-native.config.js",
+            "!**/babel.config.js",
+            "!**/types.tsx",
+            "!**/*.{json}",
+            "!**/.*"
+        ]
     },
     "dependencies": {
         "@expo/vector-icons": "^12.0.0",
@@ -33,17 +51,20 @@
         "expo-web-browser": "~10.1.0",
         "react": "17.0.1",
         "react-dom": "17.0.1",
-        "react-native": "0.64.3",
+        "react-native": "^0.68.0",
         "react-native-safe-area-context": "3.3.2",
         "react-native-screens": "~3.10.1",
         "react-native-web": "0.17.1"
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",
+        "@types/jest": "^27.4.1",
         "@types/react": "~17.0.21",
         "@types/react-native": "~0.64.12",
+        "@types/react-test-renderer": "^18.0.0",
         "@typescript-eslint/eslint-plugin": "^5.18.0",
         "@typescript-eslint/parser": "^5.18.0",
+        "cross-env": "^7.0.3",
         "eslint": "^8.12.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-plugin-import": "^2.26.0",

@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import CreatePost from "../components/CreatePost/CreatePost";
 import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
+import { RootTabScreenProps } from "../../types";
 
 const styles = StyleSheet.create({
     container: {

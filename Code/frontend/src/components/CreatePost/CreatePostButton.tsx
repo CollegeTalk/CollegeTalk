@@ -47,7 +47,6 @@ const CreatePostButton = ({
         Alert.alert("Post submitted");
 
         const rand: number = Math.floor(Math.random() * 10) + 5;
-        console.log(titleText, bodyText);
 
         fetch(`https://collegetalk.azurewebsites.net/posts/${rand}`, {
             method: "PUT",

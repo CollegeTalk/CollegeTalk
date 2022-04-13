@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 
 import { Text, View } from "../components/Themed";
-import { RootStackScreenProps } from "../types";
+import { RootStackScreenProps } from "../../types";
 
 const styles = StyleSheet.create({
     container: {
