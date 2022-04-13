@@ -1,6 +1,6 @@
 # Architecture
 
-We have decided that a microservices architecture is the best software architecture for our app, as our app consisted of many loosely coupeled services such as posts/comments, post search, user management, and messaging. In addition, the high agility of this architecture supports our Agile team structure, and allows us to divide up small teams to focus on different services without stepping on each others toes. We also may plan out additional features, which are fairly trivial to add as a new microservice. Finally, it allows for ease of scalability, as in the future when we gain more users, we need to scale up to be able to support the increased load, and microservices architecture helps support this.
+We have decided on a microservices architecture as thearchitecture for our app, as our app consists of many loosely coupled services such as posts/comments, post search, user management, and messaging. In addition, the high agility of this architecture supports our Agile team structure, and allows us to divide up small teams to focus on different services without stepping on each other's toes. The microservice architecture also is flexible to additional features, which can be adde as additional services. Finally, it allows for ease of scalability, as in the future when we gain more users, we need to scale up to be able to support the increased load.
 
 ## Sprint 1 Architectural Choices
 
