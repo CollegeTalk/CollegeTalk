@@ -7,7 +7,7 @@ test_frontend:
     stage: test
     image: node:alpine
     script:
-        - cd Code/api
+        - cd Code/frontend
         - npm ci
         - npx jest --ci
     only:
