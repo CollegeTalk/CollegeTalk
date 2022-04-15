@@ -22,6 +22,20 @@ test_api:
         changes:
             - Code/api/**/*
 
+staging_frontend_expo:
+    stage: staging
+    image: node:alpine
+    variables:
+        EXPO_TOKEN: $EXPO_TOKEN
+    script:
+        - cd Code/frontend
+        - npm ci
+        - apk add --no-cache bash
+        - npx expo publish --non-interactive
+    # only:
+    #     changes:
+    #         - Code/frontend/**/*
+
 staging_api_container:
     stage: staging
     image: mcr.microsoft.com/azure-cli
