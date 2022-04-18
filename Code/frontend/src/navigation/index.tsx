@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
     NavigationContainer,
@@ -14,18 +14,19 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ComponentProps } from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 
-import Colors from "../constants/Colors";
-import useColorScheme from "../hooks/useColorScheme";
-import ModalScreen from "../screens/ModalScreen";
-import NotFoundScreen from "../screens/NotFoundScreen";
-import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
 import {
     RootStackParamList,
     RootTabParamList,
     RootTabScreenProps
 } from "../../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+import Colors from "../constants/Colors";
+import useColorScheme from "../hooks/useColorScheme";
+
+import ModalScreen from "../screens/ModalScreen";
+import NotFoundScreen from "../screens/NotFoundScreen";
+import HomeScreen from "../screens/HomeScreen";
+import CreatePostScreen from "../screens/CreatePostScreen";
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -34,15 +35,10 @@ const TabBarIcon = ({
     name,
     color
 }: {
-    name: ComponentProps<typeof FontAwesome>["name"];
+    name: ComponentProps<typeof Feather>["name"];
     color: string;
 }) => (
-    <FontAwesome
-        size={30}
-        style={{ marginBottom: -3 }}
-        name={name}
-        color={color}
-    />
+    <Feather size={30} style={{ marginBottom: -3 }} name={name} color={color} />
 );
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
@@ -56,18 +52,18 @@ const BottomTabNavigator = () => {
 
     return (
         <BottomTab.Navigator
-            initialRouteName="TabOne"
+            initialRouteName="Home"
             screenOptions={{
                 tabBarActiveTintColor: Colors[colorScheme].tint
             }}
         >
             <BottomTab.Screen
-                name="TabOne"
-                component={TabOneScreen}
-                options={({ navigation }: RootTabScreenProps<"TabOne">) => ({
-                    title: "Tab One",
+                name="Home"
+                component={HomeScreen}
+                options={({ navigation }: RootTabScreenProps<"Home">) => ({
+                    title: "Home",
                     tabBarIcon: ({ color }) => (
-                        <TabBarIcon name="code" color={color} />
+                        <TabBarIcon name="home" color={color} />
                     ),
                     headerRight: () => (
                         <Pressable
@@ -76,8 +72,8 @@ const BottomTabNavigator = () => {
                                 opacity: pressed ? 0.5 : 1
                             })}
                         >
-                            <FontAwesome
-                                name="info-circle"
+                            <Feather
+                                name="info"
                                 size={25}
                                 color={Colors[colorScheme].text}
                                 style={{ marginRight: 15 }}
@@ -87,12 +83,12 @@ const BottomTabNavigator = () => {
                 })}
             />
             <BottomTab.Screen
-                name="TabTwo"
-                component={TabTwoScreen}
+                name="CreatePost"
+                component={CreatePostScreen}
                 options={{
-                    title: "Tab Two",
+                    title: "Create Post",
                     tabBarIcon: ({ color }) => (
-                        <TabBarIcon name="code" color={color} />
+                        <TabBarIcon name="plus" color={color} />
                     )
                 }}
             />
