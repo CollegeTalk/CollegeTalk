@@ -1,9 +1,9 @@
 from .base import db
 from sqlalchemy.dialects.postgresql import UUID
 
-class PostsModel(db.Model):
+class PostModel(db.Model):
     """
-    Defines the posts model
+    Defines the post model
     """
 
     __tablename__ = "posts"
