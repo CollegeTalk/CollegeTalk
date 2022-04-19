@@ -9,7 +9,7 @@ test_frontend:
     script:
         - cd Code/frontend
         - npm ci
-        - npm run test
+        - npx jest --ci
     # only:
     #     changes:
     #         - Code/frontend/**/*
