@@ -6,9 +6,17 @@ from models import PostsModel, db
 
 class PostList(Resource):
     def get(self):
-        # Get all items
-        posts = PostsModel.query.all()
-        return jsonify([post.serialize for post in posts])
+        # get a limited number of posts, newest to oldest
+        # curl http://localhost:5000/posts?limit=1 -H 'Content-Type: application/json'
+        # get all posts, newest to oldest
+        # curl http://localhost:5000/posts -H 'Content-Type: application/json'
+        limit = request.args.get("limit")
+        if limit != None and limit.isnumeric() and int(limit) >= 0:
+            posts = PostsModel.query.order_by(PostsModel.time_created.desc()).limit(int(limit))
+            return jsonify([post.serialize for post in posts])
+        else:
+            posts = PostsModel.query.order_by(PostsModel.time_created.desc())
+            return jsonify([post.serialize for post in posts])
 
     def post(self):
         # Post new item
