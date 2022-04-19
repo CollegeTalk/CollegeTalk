@@ -10,9 +10,9 @@ test_frontend:
         - cd Code/frontend
         - npm ci
         - npx jest --ci
-    # only:
-    #     changes:
-    #         - Code/frontend/**/*
+    only:
+        changes:
+            - Code/frontend/**/*
 
 test_api:
     stage: test
