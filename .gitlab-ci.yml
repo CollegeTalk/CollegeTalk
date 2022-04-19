@@ -1,62 +1,18 @@
 stages:
-    - test
-    - staging
-    - deploy
+    - triggers
 
-lint_test_frontend:
-    stage: test
-    image: node:alpine
-    script:
-        - cd Code/frontend
-        - npm ci
-        - npm run lint
-        - npx jest --ci
-    only:
-        changes:
-            - Code/frontend/**/*
+trigger_frontend_pipeline:
+    stage: triggers
+    trigger:
+        include: Code/frontend/.gitlab-ci.yml
+    rules:
+        - changes:
+              - Code/frontend/**/*
 
-test_api:
-    stage: test
-    script:
-        - echo "Testing api"
-    only:
-        changes:
-            - Code/api/**/*
-
-staging_frontend_expo:
-    stage: staging
-    image: node:alpine
-    script:
-        - cd Code/frontend
-        - npm install
-        - npm install expo-cli
-        - apk add --no-cache bash
-        - npx expo publish --non-interactive
-    only:
-        refs:
-            - merge_requests
-        changes:
-            - Code/frontend/**/*
-
-staging_api_container:
-    stage: staging
-    image: mcr.microsoft.com/azure-cli
-    script:
-        - cd Code/api
-        - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
-        - az acr build --registry collegetalk --image collegetalk-api-staging .
-    only:
-        refs:
-            - merge_requests
-        changes:
-            - Code/api/**/*
-
-deploy_api_container:
-    stage: deploy
-    image: mcr.microsoft.com/azure-cli
-    script:
-        - cd Code/api
-        - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
-        - az acr build --registry collegetalk --image collegetalk-api .
-    only:
-        - main
+trigger_api_pipeline:
+    stage: triggers
+    trigger:
+        include: Code/api/.gitlab-ci.yml
+    rules:
+        - changes:
+              - Code/api/**/*

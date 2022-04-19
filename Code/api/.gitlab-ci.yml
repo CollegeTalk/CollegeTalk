@@ -1,0 +1,31 @@
+stages:
+    - test
+    - staging
+    - deploy
+
+test_api:
+    stage: test
+    script:
+        - echo "Testing api"
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+
+staging_api_container:
+    stage: staging
+    needs: [test_api]
+    image: mcr.microsoft.com/azure-cli
+    script:
+        - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
+        - az acr build --registry collegetalk --image collegetalk-api-staging .
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == "main"
+
+deploy_api_container:
+    stage: deploy
+    needs: [staging_api_container]
+    image: mcr.microsoft.com/azure-cli
+    script:
+        - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
+        - az acr build --registry collegetalk --image collegetalk-api .
+    only:
+        - main
