@@ -1,5 +1,7 @@
 # CollegeTalk API
 
+This is the CollegeTalk API Gateway to access microservices. For now, it acts as a simple business layer until we begin implementation of our microservices.
+
 The deployed API staging environment can be found here: https://collegetalk-staging.azurewebsites.net/
 
 The deployed API production environment will be live here: http://collegetalk.azurewebsites.net/
