@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from flask_restful import Resource
-from models import ItemModel, db
+from models import db, ItemModel
+from routes.utils import update_fields
 
 
 class Item(Resource):
@@ -17,13 +18,13 @@ class Item(Resource):
         try:
             item = db.session.query(ItemModel).filter_by(
                 key=item_name).first()
+            data = request.json
             if item:
-                item.value = request.json['value']
-                db.session.commit()
+                update_fields(item, data)
             else:
                 item = ItemModel(item_name, request.json['value'])
                 db.session.add(item)
-                db.session.commit()
+            db.session.commit()
             return jsonify(item.serialize)
         except RuntimeError:
             return jsonify({'error': f'Error adding/updating {item_name}'})

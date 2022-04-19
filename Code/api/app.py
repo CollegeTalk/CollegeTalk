@@ -7,7 +7,7 @@ from sqlalchemy_utils import create_database, database_exists
 
 from config import config
 from models import db
-from routes import Home, Item, ItemList, Post, PostList
+from routes import Index, Items, Item, Posts, Post, Subgroups, Subgroup
 
 app = Flask(__name__)
 api = Api(app)
@@ -28,11 +28,13 @@ if env != 'production':
 
 migrate = Migrate(app, db)
 
-api.add_resource(Home, '/')
-api.add_resource(ItemList, '/items')
+api.add_resource(Index, '/')
+api.add_resource(Items, '/items')
 api.add_resource(Item, '/items/<string:item_name>')
-api.add_resource(PostList, '/posts')
+api.add_resource(Posts, '/posts')
 api.add_resource(Post, '/posts/<string:id>')
+api.add_resource(Subgroups, '/subgroups')
+api.add_resource(Subgroup, '/subgroups/<string:id>')
 
 
 if __name__ == '__main__':

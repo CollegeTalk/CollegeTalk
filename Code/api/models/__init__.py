@@ -4,7 +4,9 @@
 from .base import db
 from .ItemModel import ItemModel
 from .PostModel import PostModel
+from .SubgroupModel import SubgroupModel
 
-__all__ = ['ItemModel', 'PostModel', 'db']
+
+__all__ = ['db', 'ItemModel', 'PostModel', 'SubgroupModel']
 
 # You must import all of the new Models you create to this page
