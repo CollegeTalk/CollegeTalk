@@ -8,7 +8,7 @@ test_api:
     script:
         - echo "Testing api"
     rules:
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+        - if: $CI_PIPELINE_SOURCE == "push"
 
 staging_api_container:
     stage: staging
