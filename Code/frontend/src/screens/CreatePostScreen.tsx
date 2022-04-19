@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 import { primaryColors } from "../constants/Colors";
+import { RootTabScreenProps } from "../../types";
 
 import { Text, View } from "../components/Themed";
 import CreatePost from "../components/CreatePost/CreatePost";
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const CreatePostScreen = () => (
+const CreatePostScreen = ({ navigation }: RootTabScreenProps<"Home">) => (
     <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.viewWrapper}

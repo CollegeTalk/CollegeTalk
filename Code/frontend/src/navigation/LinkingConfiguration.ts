@@ -22,7 +22,12 @@ const linking: LinkingOptions<RootStackParamList> = {
                     },
                     CreatePost: {
                         screens: {
-                            CreatePostScreen: "post"
+                            CreatePostScreen: "create-post"
+                        }
+                    },
+                    Profile: {
+                        screens: {
+                            Profile: "profile"
                         }
                     }
                 }
