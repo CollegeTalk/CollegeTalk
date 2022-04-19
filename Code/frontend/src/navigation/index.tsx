@@ -27,6 +27,7 @@ import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import HomeScreen from "../screens/HomeScreen";
 import CreatePostScreen from "../screens/CreatePostScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -89,6 +90,16 @@ const BottomTabNavigator = () => {
                     title: "Create Post",
                     tabBarIcon: ({ color }) => (
                         <TabBarIcon name="plus" color={color} />
+                    )
+                }}
+            />
+            <BottomTab.Screen
+                name="Profile"
+                component={ProfileScreen}
+                options={{
+                    title: "Profile",
+                    tabBarIcon: ({ color }) => (
+                        <TabBarIcon name="user" color={color} />
                     )
                 }}
             />
