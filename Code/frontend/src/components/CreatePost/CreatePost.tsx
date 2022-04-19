@@ -19,10 +19,15 @@ const styles = StyleSheet.create({
 });
 
 const CreatePost = () => {
-    const [title, setTitle] = useState("");
-    const [body, setBody] = useState("");
+    const [[title, showTitleError], setTitle] = useState(["", false]);
+    const [[body], setBody] = useState(["", false]);
 
     const submitPostToApi = () => {
+        if (title === "") {
+            setTitle([title, true]);
+            return;
+        }
+
         const rand: number = Math.floor(Math.random() * 10) + 5;
 
         fetch(`https://collegetalk.azurewebsites.net/posts/${rand}`, {
@@ -46,14 +51,13 @@ const CreatePost = () => {
     return (
         <View style={styles.postContainer}>
             <InputField
+                type={showTitleError ? "title" : ""}
                 placeholder="Your awesome question"
-                text={title}
                 setText={setTitle}
                 isLarge={false}
             />
             <InputField
                 placeholder="Optional details here"
-                text={body}
                 setText={setBody}
                 isLarge
             />

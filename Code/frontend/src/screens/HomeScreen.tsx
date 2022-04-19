@@ -5,8 +5,6 @@ import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../../types";
 import BusAnimation from "../assets/animations/457-moving-bus.json";
 
-import EditScreenInfo from "../components/EditScreenInfo";
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,

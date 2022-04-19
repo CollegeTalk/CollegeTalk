@@ -1,4 +1,10 @@
-import { StyleSheet } from "react-native";
+import {
+    StyleSheet,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+    Keyboard
+} from "react-native";
 
 import { primaryColors } from "../constants/Colors";
 
@@ -17,15 +23,28 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontWeight: "bold",
         color: primaryColors.text,
-        marginVertical: 10
+        marginTop: 10
+    },
+    viewWrapper: {
+        width: "100%",
+        height: "100%",
+        flexDirection: "row",
+        justifyContent: "center"
     }
 });
 
 const CreatePostScreen = () => (
-    <View style={styles.container}>
-        <Text style={styles.title}>Ask a Question:</Text>
-        <CreatePost />
-    </View>
+    <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.viewWrapper}
+    >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.container}>
+                <Text style={styles.title}>Ask a Question:</Text>
+                <CreatePost />
+            </View>
+        </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
 );
 
 export default CreatePostScreen;
