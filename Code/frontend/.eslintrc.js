@@ -26,7 +26,7 @@ module.exports = {
         "react/jsx-uses-react": "off",
         "react/jsx-props-no-spreading": "warn",
         "react/react-in-jsx-scope": "off",
-        "react/no-unstable-nested-components": "warn",
+        "react/no-unstable-nested-components": "off",
         "react/require-default-props": "off",
         "react/function-component-definition": [
             "error",

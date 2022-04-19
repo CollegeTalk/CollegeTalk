@@ -1,9 +1,9 @@
 from .base import db
 
 
-class ItemsModel(db.Model):
+class ItemModel(db.Model):
     """
-    Test model: Defines the items model
+    Test model: Defines the item model
     """
 
     __tablename__ = "items"
