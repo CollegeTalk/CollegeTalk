@@ -40,10 +40,6 @@ staging_frontend_expo:
 staging_api_container:
     stage: staging
     image: mcr.microsoft.com/azure-cli
-    variables:
-        SP_APP_ID: $SP_APP_ID
-        SP_PASSWORD: $SP_PASSWORD
-        SP_TENANT: $SP_TENANT
     script:
         - cd Code/api
         - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
@@ -57,10 +53,6 @@ staging_api_container:
 deploy_api_container:
     stage: deploy
     image: mcr.microsoft.com/azure-cli
-    variables:
-        SP_APP_ID: $SP_APP_ID
-        SP_PASSWORD: $SP_PASSWORD
-        SP_TENANT: $SP_TENANT
     script:
         - cd Code/api
         - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT

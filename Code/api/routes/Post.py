@@ -1,13 +1,13 @@
 from flask import jsonify, request
 from flask_restful import Resource
-from models import PostsModel, db
+from models import PostModel, db
 
 
 class Post(Resource):
     def get(self, id):
         # curl http://localhost:5000/posts/{id}
         try:
-            post = PostsModel.query.filter_by(id=id).first_or_404()
+            post = PostModel.query.filter_by(id=id).first_or_404()
             return jsonify(post.serialize)
         except RuntimeError:
             return jsonify({"error": f"Post {id} not found"})
@@ -15,7 +15,7 @@ class Post(Resource):
     def put(self, id):
         # curl http://localhost:5000/posts/{id} -H 'Content-Type: application/json' -d '{"title":"test", "body":"blah blah blah"}' -X PUT
         try:
-            post = db.session.query(PostsModel).filter_by(
+            post = db.session.query(PostModel).filter_by(
                 id=id).first()
             data = request.json
             if post:
@@ -23,7 +23,7 @@ class Post(Resource):
                 post.body = data["body"]
                 db.session.commit()
             else:
-                post = PostsModel(id, db.func.now(),
+                post = PostModel(id, db.func.now(),
                                   data["title"], data["body"])
                 db.session.add(post)
                 db.session.commit()
