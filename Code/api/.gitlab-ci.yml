@@ -7,8 +7,8 @@ test_api:
     stage: test
     script:
         - echo "Testing api"
-    rules:
-        - if: '$CI_PIPELINE_SOURCE == "push"'
+    # rules:
+    #     - if: '$CI_PIPELINE_SOURCE == "push"'
 
 staging_api_container:
     stage: staging
