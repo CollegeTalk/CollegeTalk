@@ -5,6 +5,6 @@ from .base import db
 from .ItemModel import ItemModel
 from .PostModel import PostModel
 
-__all__ = ["ItemModel", "PostModel", "db"]
+__all__ = ['ItemModel', 'PostModel', 'db']
 
 # You must import all of the new Models you create to this page

@@ -7,6 +7,6 @@ from .Post import Post
 from .PostList import PostList
 from .User import User
 
-__all__ = ["Home", "Item", "ItemList", "Post", "PostList", "User", "Comment"]
+__all__ = ['Home', 'Item', 'ItemList', 'Post', 'PostList', 'User', 'Comment']
 
 # You must import all of the new routes you create to this page
