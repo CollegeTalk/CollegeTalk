@@ -10,9 +10,9 @@ test_frontend:
         - cd Code/frontend
         - npm ci
         - npm run test
-    only:
-        changes:
-            - Code/frontend/**/*
+    # only:
+    #     changes:
+    #         - Code/frontend/**/*
 
 test_api:
     stage: test
@@ -25,11 +25,9 @@ test_api:
 staging_frontend_expo:
     stage: staging
     image: node:alpine
-    variables:
-        EXPO_TOKEN: $EXPO_TOKEN
     script:
         - cd Code/frontend
-        - npm ci
+        - npm install
         - apk add --no-cache bash
         - npx expo publish --non-interactive
     # only:
