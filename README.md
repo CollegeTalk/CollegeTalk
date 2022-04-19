@@ -35,7 +35,7 @@ There's a lot that goes into college life for a student, but students don't alwa
 
 ## Deployments
 
--   Frontend: local deployment
+-   Frontend: https://expo.dev/@collegetalk/collegetalk
 -   API: https://collegetalk.azurewebsites.net/
 
 ## References

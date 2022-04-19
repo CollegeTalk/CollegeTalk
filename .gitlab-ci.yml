@@ -1,16 +1,42 @@
 stages:
-    - build
+    - test
     - staging
     - deploy
 
-build_api_container:
-    stage: build
+lint_test_frontend:
+    stage: test
+    image: node:alpine
     script:
-        - echo "Building api"
+        - cd Code/frontend
+        - npm ci
+        - npm run lint
+        - npx jest --ci
+    only:
+        changes:
+            - Code/frontend/**/*
+
+test_api:
+    stage: test
+    script:
         - echo "Testing api"
     only:
         changes:
             - Code/api/**/*
+
+staging_frontend_expo:
+    stage: staging
+    image: node:alpine
+    script:
+        - cd Code/frontend
+        - npm install
+        - npm install expo-cli
+        - apk add --no-cache bash
+        - npx expo publish --non-interactive
+    only:
+        refs:
+            - merge_requests
+        changes:
+            - Code/frontend/**/*
 
 staging_api_container:
     stage: staging
