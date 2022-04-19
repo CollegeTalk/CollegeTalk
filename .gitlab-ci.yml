@@ -3,12 +3,13 @@ stages:
     - staging
     - deploy
 
-test_frontend:
+lint_test_frontend:
     stage: test
     image: node:alpine
     script:
         - cd Code/frontend
         - npm ci
+        - npm run lint
         - npx jest --ci
     only:
         changes:
