@@ -17,7 +17,7 @@ staging_api_container:
     image: mcr.microsoft.com/azure-cli
     script:
         - cd Code/api
-        - az login --service-principal -u "$SP_APP_ID" -p "$SP_PASSWORD" --tenant "$SP_TENANT"
+        - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
         - az acr build --registry collegetalk --image collegetalk-api-staging .
     only:
         refs:
@@ -30,7 +30,7 @@ deploy_api_container:
     image: mcr.microsoft.com/azure-cli
     script:
         - cd Code/api
-        - az login --service-principal -u "$SP_APP_ID" -p "$SP_PASSWORD" --tenant "$SP_TENANT"
+        - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
         - az acr build --registry collegetalk --image collegetalk-api .
     only:
         - main
