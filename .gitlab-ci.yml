@@ -31,9 +31,11 @@ staging_frontend_expo:
         - npm install expo-cli
         - apk add --no-cache bash
         - npx expo publish --non-interactive
-    # only:
-    #     changes:
-    #         - Code/frontend/**/*
+    only:
+        refs:
+            - merge_requests
+        changes:
+            - Code/frontend/**/*
 
 staging_api_container:
     stage: staging
