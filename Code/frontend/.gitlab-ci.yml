@@ -14,8 +14,9 @@ lint_frontend:
     script:
         - npm ci
         - npm run lint
-    rules:
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+    only:
+        - pushes
+        - merge_requests
 
 test_frontend:
     stage: test
@@ -23,8 +24,9 @@ test_frontend:
     script:
         - npm ci
         - npx jest --ci
-    rules:
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_PIPELINE_SOURCE == "push"
+    only:
+        - pushes
+        - merge_requests
 
 staging_frontend_expo:
     stage: staging
@@ -35,8 +37,9 @@ staging_frontend_expo:
         - npm install expo-cli
         - apk add --no-cache bash
         - npx expo publish --non-interactive
-    rules:
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == "main"
+    only:
+        - main
+        - merge_requests
 
 deploy_frontend:
     stage: deploy

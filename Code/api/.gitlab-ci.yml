@@ -7,8 +7,9 @@ test_api:
     stage: test
     script:
         - echo "Testing api"
-    # rules:
-    #     - if: '$CI_PIPELINE_SOURCE == "push"'
+    only:
+        - pushes
+        - merge_requests
 
 staging_api_container:
     stage: staging
@@ -17,8 +18,9 @@ staging_api_container:
     script:
         - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
         - az acr build --registry collegetalk --image collegetalk-api-staging .
-    rules:
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == "main"
+    only:
+        - main
+        - merge_requests
 
 deploy_api_container:
     stage: deploy
