@@ -28,6 +28,7 @@ staging_frontend_expo:
     script:
         - cd Code/frontend
         - npm install
+        - npm install expo-cli
         - apk add --no-cache bash
         - npx expo publish --non-interactive
     # only:
