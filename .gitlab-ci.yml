@@ -5,14 +5,16 @@ trigger_frontend_pipeline:
     stage: triggers
     trigger:
         include: Code/frontend/.gitlab-ci.yml
-    rules:
-        - changes:
-              - Code/frontend/**/*
+    only:
+        changes:
+            - Code/frontend/**/*
+
 
 trigger_api_pipeline:
     stage: triggers
     trigger:
         include: Code/api/.gitlab-ci.yml
-    rules:
-        - changes:
-              - Code/api/**/*
+    only:
+        changes:
+            - Code/api/**/*
+
