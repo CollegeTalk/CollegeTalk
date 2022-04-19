@@ -3,6 +3,9 @@ stages:
     - staging
     - deploy
 
+before_script:
+    - cd Code/api
+
 test_api:
     stage: test
     script:
