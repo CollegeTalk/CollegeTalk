@@ -3,7 +3,7 @@ from flask_restful import Resource
 from models import ItemModel
 
 
-class ItemList(Resource):
+class Items(Resource):
     def get(self):
         # Get all items
         items = ItemModel.query.all()

@@ -1,12 +1,23 @@
 # this file structure follows http://flask.pocoo.org/docs/1.0/patterns/appfactories/
-from .Comment import Comment
-from .Home import Home
+from .Index import Index
+from .Items import Items
 from .Item import Item
-from .ItemList import ItemList
+from .Posts import Posts
 from .Post import Post
-from .PostList import PostList
+from .Subgroups import Subgroups
+from .Subgroup import Subgroup
 from .User import User
-
-__all__ = ["Home", "Item", "ItemList", "Post", "PostList", "User", "Comment"]
+from .Comment import Comment
 
 # You must import all of the new routes you create to this page
+__all__ = [
+    'Index',
+    'Items',
+    'Item',
+    'Posts',
+    'Post',
+    'Subgroups',
+    'Subgroup',
+    'User',
+    'Comment'
+]
