@@ -15,7 +15,7 @@ lint_frontend:
         - npm ci
         - npm run lint
     only:
-        - pushes
+        - branches
         - merge_requests
 
 test_frontend:
@@ -25,7 +25,7 @@ test_frontend:
         - npm ci
         - npx jest --ci
     only:
-        - pushes
+        - branches
         - merge_requests
 
 staging_frontend_expo:
