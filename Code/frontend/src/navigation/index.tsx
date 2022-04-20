@@ -3,8 +3,8 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { ComponentProps } from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { ComponentProps, useState } from "react";
+import { ColorSchemeName, View, Pressable } from "react-native";
 import {
     NavigationContainer,
     DefaultTheme,
@@ -15,6 +15,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Feather } from "@expo/vector-icons";
+import { SearchBar } from "@rneui/themed";
 
 import {
     RootStackParamList,
@@ -87,7 +88,29 @@ const BottomTabNavigator = () => {
                                 style={{ marginLeft: 15 }}
                             />
                         </Pressable>
-                    )
+                    ),
+                    headerTitle: () => {
+                        const [searchQuery, updateSearchQuery] = useState("");
+                        return (
+                            <View style={{ width: 250 }}>
+                                <SearchBar
+                                    containerStyle={{
+                                        width: "90%",
+                                        height: "90%"
+                                    }}
+                                    inputContainerStyle={{
+                                        height: "40%",
+                                        marginTop: -5
+                                    }}
+                                    placeholder="Search CollegeTalk"
+                                    onChangeText={updateSearchQuery}
+                                    value={searchQuery}
+                                    lightTheme
+                                    round
+                                />
+                            </View>
+                        );
+                    }
                 })}
             />
             <BottomTab.Screen
