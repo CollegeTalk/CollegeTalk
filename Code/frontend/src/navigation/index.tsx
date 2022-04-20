@@ -3,16 +3,18 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { Feather } from "@expo/vector-icons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { ComponentProps } from "react";
+import { ColorSchemeName, Pressable } from "react-native";
 import {
     NavigationContainer,
     DefaultTheme,
-    DarkTheme
+    DarkTheme,
+    DrawerActions
 } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { ComponentProps } from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { Feather } from "@expo/vector-icons";
 
 import {
     RootStackParamList,
@@ -23,7 +25,7 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 
-import ModalScreen from "../screens/ModalScreen";
+// import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import HomeScreen from "../screens/HomeScreen";
 import CreatePostScreen from "../screens/CreatePostScreen";
@@ -55,29 +57,34 @@ const BottomTabNavigator = () => {
         <BottomTab.Navigator
             initialRouteName="Home"
             screenOptions={{
-                tabBarActiveTintColor: Colors[colorScheme].tint
+                tabBarActiveTintColor: Colors[colorScheme].tint,
+                tabBarShowLabel: false
             }}
         >
             <BottomTab.Screen
                 name="Home"
                 component={HomeScreen}
                 options={({ navigation }: RootTabScreenProps<"Home">) => ({
-                    title: "Home",
+                    title: "",
                     tabBarIcon: ({ color }) => (
                         <TabBarIcon name="home" color={color} />
                     ),
-                    headerRight: () => (
+                    headerLeft: () => (
                         <Pressable
-                            onPress={() => navigation.navigate("Modal")}
+                            onPress={() =>
+                                navigation.dispatch(
+                                    DrawerActions.toggleDrawer()
+                                )
+                            }
                             style={({ pressed }) => ({
                                 opacity: pressed ? 0.5 : 1
                             })}
                         >
                             <Feather
-                                name="info"
+                                name="menu"
                                 size={25}
                                 color={Colors[colorScheme].text}
-                                style={{ marginRight: 15 }}
+                                style={{ marginLeft: 15 }}
                             />
                         </Pressable>
                     )
@@ -107,6 +114,26 @@ const BottomTabNavigator = () => {
     );
 };
 
+const Drawer = createDrawerNavigator();
+
+const HomeDrawerNavigator = () => (
+    <Drawer.Navigator
+        initialRouteName="Main"
+        screenOptions={{
+            swipeEnabled: false
+        }}
+    >
+        <Drawer.Screen
+            name="Main"
+            component={BottomTabNavigator}
+            options={{
+                drawerItemStyle: { display: "none" },
+                headerShown: false
+            }}
+        />
+    </Drawer.Navigator>
+);
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 /**
@@ -125,9 +152,9 @@ const RootNavigator = () => (
             component={NotFoundScreen}
             options={{ title: "Oops!" }}
         />
-        <Stack.Group screenOptions={{ presentation: "modal" }}>
+        {/* <Stack.Group screenOptions={{ presentation: "modal" }}>
             <Stack.Screen name="Modal" component={ModalScreen} />
-        </Stack.Group>
+        </Stack.Group> */}
     </Stack.Navigator>
 );
 
@@ -136,7 +163,8 @@ const Navigation = ({ colorScheme }: { colorScheme: ColorSchemeName }) => (
         linking={LinkingConfiguration}
         theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
-        <RootNavigator />
+        {/* <RootNavigator /> */}
+        <HomeDrawerNavigator />
     </NavigationContainer>
 );
 

@@ -3,37 +3,35 @@ import LottieView from "lottie-react-native";
 
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../../types";
+import { primaryColors } from "../constants/Colors";
 import BusAnimation from "../assets/animations/457-moving-bus.json";
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "flex-start",
+        backgroundColor: primaryColors.background,
+        paddingTop: 10
+    },
+    safeViewContainer: {
+        flex: 1
     },
     title: {
-        fontSize: 20,
-        fontWeight: "bold"
+        fontSize: 30,
+        fontWeight: "bold",
+        color: primaryColors.text
     },
     animationContainer: {
         width: "80%",
-        height: "30%"
-    },
-    separator: {
-        marginVertical: 10,
-        height: 1,
-        width: "80%"
+        height: "30%",
+        backgroundColor: "rgba(0, 0, 0, 0)"
     }
 });
 
 const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => (
     <View style={styles.container}>
         <Text style={styles.title}>Home</Text>
-        <View
-            style={styles.separator}
-            lightColor="#eee"
-            darkColor="rgba(255,255,255,0.1)"
-        />
         <View style={styles.animationContainer}>
             <LottieView source={BusAnimation} autoPlay loop />
         </View>
