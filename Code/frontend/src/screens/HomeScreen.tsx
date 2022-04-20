@@ -12,10 +12,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "flex-start",
         backgroundColor: primaryColors.background,
-        paddingTop: 10
-    },
-    safeViewContainer: {
-        flex: 1
+        paddingTop: 20
     },
     title: {
         fontSize: 30,

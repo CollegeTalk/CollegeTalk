@@ -1,0 +1,20 @@
+diff --git a/node_modules/@rneui/base/dist/SearchBar/SearchBar.d.ts b/node_modules/@rneui/base/dist/SearchBar/SearchBar.d.ts
+index ece128c..9973094 100644
+--- a/node_modules/@rneui/base/dist/SearchBar/SearchBar.d.ts
++++ b/node_modules/@rneui/base/dist/SearchBar/SearchBar.d.ts
+@@ -16,12 +16,14 @@ export interface SearchBarBaseProps extends React.ComponentPropsWithRef<typeof T
+     showLoading?: boolean;
+     leftIconContainerStyle?: StyleProp<ViewStyle>;
+     rightIconContainerStyle?: StyleProp<ViewStyle>;
++    lightTheme?: boolean;
++    round?: boolean;
+     onClear?(): void;
+     onFocus?(): void;
+     onBlur?(): void;
+     onChangeText?(text: string): void;
+     onCancel?(): void;
+-    theme: Theme;
++    theme?: Theme;
+ }
+ export declare type SearchBarProps = SearchBarBaseProps | SearchBarDefaultProps | SearchBarAndroidProps | SearchBarIosProps;
+ export declare class SearchBar extends React.Component<SearchBarProps & {
