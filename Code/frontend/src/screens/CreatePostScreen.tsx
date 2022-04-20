@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const CreatePostScreen = ({ navigation }: RootTabScreenProps<"Home">) => (
+const CreatePostScreen = ({ navigation }: RootTabScreenProps<"CreatePost">) => (
     <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.viewWrapper}

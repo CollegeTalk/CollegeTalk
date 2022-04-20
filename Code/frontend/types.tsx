@@ -18,15 +18,10 @@ export type RootTabParamList = {
 
 export type RootStackParamList = {
     Root: NavigatorScreenParams<RootTabParamList> | undefined;
-    Modal: undefined;
+    // Modal: undefined;
+    HomeDrawer: undefined;
     NotFound: undefined;
 };
-
-declare global {
-    namespace ReactNavigation {
-        type RootParamList = RootStackParamList;
-    }
-}
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
     NativeStackScreenProps<RootStackParamList, Screen>;

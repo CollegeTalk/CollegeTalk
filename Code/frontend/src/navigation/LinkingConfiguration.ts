@@ -32,7 +32,8 @@ const linking: LinkingOptions<RootStackParamList> = {
                     }
                 }
             },
-            Modal: "modal",
+            // Modal: "modal",
+            HomeDrawer: "home-drawer",
             NotFound: "*"
         }
     }

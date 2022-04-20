@@ -15,7 +15,7 @@ Please follow the steps below when adding a new screen to the `./src/screens` fo
 3. Modify the `./src/navgiation/LinkingConfiguration.ts` file to add a route to the screen:
 
     ```typescript
-        Profile: {
+        <ScreenName>: {
             screens: {
                 <ScreenName>: "<screenName>"
             }
