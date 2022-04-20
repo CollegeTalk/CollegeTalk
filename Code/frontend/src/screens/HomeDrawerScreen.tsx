@@ -1,38 +1,93 @@
-import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import { Button } from "@rneui/themed";
 
-import EditScreenInfo from "../components/EditScreenInfo";
+import { primaryColors } from "../constants/Colors";
+
 import { Text, View } from "../components/Themed";
 
 const styles = StyleSheet.create({
     container: {
+        height: "100%",
         flex: 1,
-        alignItems: "center",
-        justifyContent: "center"
+        marginVertical: 44
     },
-    title: {
+    institutionContainer: {
+        width: "100%",
+        paddingHorizontal: 10,
+        marginVertical: 12
+    },
+    sectionLabel: {
         fontSize: 20,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        marginBottom: 8
     },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: "80%"
+    institutionText: {
+        overflow: "hidden",
+        fontSize: 20,
+        fontWeight: "bold",
+        textAlign: "center",
+        color: primaryColors.text,
+        backgroundColor: primaryColors.background,
+        borderRadius: 8,
+        paddingHorizontal: 5,
+        paddingVertical: 8
+    },
+    groupsContainer: {
+        width: "100%",
+        flex: 1,
+        paddingHorizontal: 10,
+        marginVertical: 12
+    },
+    groupSubcontainer: {
+        flex: 1,
+        flexDirection: "column",
+        backgroundColor: primaryColors.background,
+        borderRadius: 8,
+        paddingHorizontal: 15,
+        paddingVertical: 10
+    },
+    groupText: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: primaryColors.background,
+        marginVertical: 2
     }
 });
 
+type GroupButtonProps = {
+    title: string;
+};
+
+const GroupButton = ({ title }: GroupButtonProps) => (
+    <Button
+        title={title}
+        buttonStyle={{
+            backgroundColor: primaryColors.text,
+            borderRadius: 30
+        }}
+        containerStyle={{
+            marginHorizontal: 5,
+            marginVertical: 10
+        }}
+        titleStyle={styles.groupText}
+    />
+);
+
 const HomeDrawerScreen = () => (
     <View style={styles.container}>
-        <Text style={styles.title}>Modal</Text>
-        <View
-            style={styles.separator}
-            lightColor="#eee"
-            darkColor="rgba(255,255,255,0.1)"
-        />
-        <EditScreenInfo path="/screens/ModalScreen.tsx" />
-
-        {/* Use a light status bar on iOS to account for the black space above the modal */}
-        <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+        <View style={styles.institutionContainer}>
+            <Text style={styles.sectionLabel}>My Institution</Text>
+            <Text style={styles.institutionText}>William & Mary</Text>
+        </View>
+        <View style={styles.groupsContainer}>
+            <Text style={styles.sectionLabel}>My Groups</Text>
+            <View style={styles.groupSubcontainer}>
+                <GroupButton title="NERF Club" />
+                <GroupButton title="Design Jobs" />
+                <GroupButton title="Squash" />
+                <GroupButton title="WEAST Comedy" />
+            </View>
+        </View>
     </View>
 );
 
