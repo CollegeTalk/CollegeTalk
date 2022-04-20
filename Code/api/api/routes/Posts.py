@@ -1,6 +1,8 @@
+from api.models import PostModel, db
 from flask import jsonify, request
 from flask_restful import Resource
-from models import db, PostModel
+
+from .base import api
 
 
 class Posts(Resource):
@@ -31,3 +33,6 @@ class Posts(Resource):
             return jsonify(post.serialize)
         except RuntimeError:
             return jsonify({'error': f'Error adding {id}'})
+
+
+api.add_resource(Posts, '/posts')

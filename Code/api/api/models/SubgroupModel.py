@@ -1,7 +1,9 @@
-from .base import db
-from sqlalchemy.dialects.postgresql import UUID
-from flask import jsonify
 from uuid import uuid4
+
+from flask import jsonify
+from sqlalchemy.dialects.postgresql import UUID
+
+from .base import db
 
 
 class SubgroupModel(db.Model):

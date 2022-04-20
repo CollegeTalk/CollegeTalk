@@ -1,6 +1,8 @@
+from api.models import SubgroupModel, db
 from flask import jsonify, request
 from flask_restful import Resource
-from models import db, SubgroupModel
+
+from .base import api
 
 
 class Subgroups(Resource):
@@ -22,3 +24,6 @@ class Subgroups(Resource):
             return jsonify(subgroup.serialize)
         except RuntimeError:
             return jsonify({'error': f'Error adding {id}'})
+
+
+api.add_resource(Subgroups, '/subgroups')

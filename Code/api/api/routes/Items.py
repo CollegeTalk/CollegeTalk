@@ -1,6 +1,8 @@
+from api.models import ItemModel
 from flask import jsonify
 from flask_restful import Resource
-from models import ItemModel
+
+from .base import api
 
 
 class Items(Resource):
@@ -8,3 +10,6 @@ class Items(Resource):
         # Get all items
         items = ItemModel.query.all()
         return jsonify([item.serialize for item in items])
+
+
+api.add_resource(Items, '/items')
