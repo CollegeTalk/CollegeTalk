@@ -1,7 +1,9 @@
+from api.models import PostModel, db
+from api.routes.utils import update_fields
 from flask import jsonify, request
 from flask_restful import Resource
-from models import db, PostModel
-from routes.utils import update_fields
+
+from .base import api
 
 
 class Post(Resource):
@@ -22,3 +24,6 @@ class Post(Resource):
             return jsonify(post.serialize)
         except RuntimeError:
             return jsonify({'error': f'Error updating {id}'})
+
+
+api.add_resource(Post, '/posts/<string:id>')

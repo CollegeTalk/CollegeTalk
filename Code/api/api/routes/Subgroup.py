@@ -1,7 +1,9 @@
+from api.models import SubgroupModel, db
+from api.routes.utils import update_fields
 from flask import jsonify, request
 from flask_restful import Resource
-from models import db, SubgroupModel
-from routes.utils import update_fields
+
+from .base import api
 
 
 class Subgroup(Resource):
@@ -22,3 +24,6 @@ class Subgroup(Resource):
             return jsonify(subgroup.serialize)
         except RuntimeError:
             return jsonify({'error': f'Error adding/updating {id}'})
+
+
+api.add_resource(Subgroup, '/subgroups/<string:id>')

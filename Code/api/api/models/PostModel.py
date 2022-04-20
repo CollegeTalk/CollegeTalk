@@ -1,7 +1,9 @@
-from sqlalchemy import ForeignKey
-from .base import db
-from sqlalchemy.dialects.postgresql import UUID
 from uuid import uuid4
+
+from sqlalchemy import ForeignKey
+from sqlalchemy.dialects.postgresql import UUID
+
+from .base import db
 
 
 class PostModel(db.Model):
