@@ -1,3 +1,6 @@
+'''
+Application factory that creates the Flask app instance.
+'''
 import os
 
 import click
@@ -24,7 +27,9 @@ def recreate_db():
 
 
 def create_app(test_config=None):
-
+    '''
+    Factory function that creates the Flask app instance.
+    '''
     app = Flask(__name__)
 
     env = os.environ.get('FLASK_ENV', 'development')
@@ -48,6 +53,6 @@ def create_app(test_config=None):
         with app.app_context():
             db.create_all()
 
-    migrate = Migrate(app, db)
+    Migrate(app, db)
 
     return app
