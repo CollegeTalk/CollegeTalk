@@ -12,7 +12,7 @@ class Subgroup(Resource):
             subgroup = SubgroupModel.query.filter_by(id=id).get_or_404()
             return jsonify(subgroup.serialize)
         except RuntimeError:
-            return jsonify({'error': f'Subgroup {id} not found'})
+            return jsonify({"error": f"Subgroup {id} not found"})
 
     def put(self, id):
         try:
@@ -23,7 +23,7 @@ class Subgroup(Resource):
             db.session.commit()
             return jsonify(subgroup.serialize)
         except RuntimeError:
-            return jsonify({'error': f'Error adding/updating {id}'})
+            return jsonify({"error": f"Error adding/updating {id}"})
 
 
-api.add_resource(Subgroup, '/subgroups/<string:id>')
+api.add_resource(Subgroup, "/subgroups/<string:id>")

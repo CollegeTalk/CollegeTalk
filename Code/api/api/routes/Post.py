@@ -12,7 +12,7 @@ class Post(Resource):
             post = PostModel.query.filter_by(id=id).get_or_404()
             return jsonify(post.serialize)
         except RuntimeError:
-            return jsonify({'error': f'Post {id} not found'})
+            return jsonify({"error": f"Post {id} not found"})
 
     def put(self, id):
         try:
@@ -26,4 +26,4 @@ class Post(Resource):
             return jsonify({'error': f'Error updating {id}'})
 
 
-api.add_resource(Post, '/posts/<string:id>')
+api.add_resource(Post, "/posts/<string:id>")

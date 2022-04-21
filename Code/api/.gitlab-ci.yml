@@ -8,8 +8,12 @@ before_script:
 
 test_api:
     stage: test
+    image: python:latest
     script:
-        - echo "Testing api"
+        - pip install -r requirements.txt
+        - pip install -r requirements-dev.txt
+        - coverage run -m pytest
+        - coverage report
     only:
         - branches
         - merge_requests
