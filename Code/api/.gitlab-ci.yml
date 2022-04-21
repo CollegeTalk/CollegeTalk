@@ -13,6 +13,10 @@ test_api:
         - apt-get -y update && apt-get -y install postgresql 
         - pip install -r requirements.txt
         - pip install -r requirements-dev.txt
+        - adduser postgres --gecos '' --disabled-login 
+        - mkdir /usr/local/pgsql/data
+        - chown postgres /usr/local/pgsql/data
+        - su postgres
         - coverage run -m pytest
         - coverage report
     only:
