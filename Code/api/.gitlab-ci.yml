@@ -16,6 +16,7 @@ test_api:
         - pip install -r requirements.txt
         - pip install -r requirements-dev.txt
         - su postgres
+        - whoami
         - coverage run -m pytest
         - coverage report
     only:
