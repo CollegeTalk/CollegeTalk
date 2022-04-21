@@ -12,14 +12,14 @@ from .User import User
 
 # You must import all of the new routes you create to this page
 __all__ = [
-    'api',
-    'Index',
-    'Items',
-    'Item',
-    'Posts',
-    'Post',
-    'Subgroups',
-    'Subgroup',
-    'User',
-    'Comment'
+    "api",
+    "Index",
+    "Items",
+    "Item",
+    "Posts",
+    "Post",
+    "Subgroups",
+    "Subgroup",
+    "User",
+    "Comment",
 ]

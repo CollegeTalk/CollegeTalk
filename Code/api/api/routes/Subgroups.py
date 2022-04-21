@@ -15,15 +15,12 @@ class Subgroups(Resource):
         # Post new subgroup
         try:
             data = request.json
-            subgroup = SubgroupModel(
-                data['name'],
-                data['description']
-            )
+            subgroup = SubgroupModel(data["name"], data["description"])
             db.session.add(subgroup)
             db.session.commit()
             return jsonify(subgroup.serialize)
         except RuntimeError:
-            return jsonify({'error': f'Error adding {id}'})
+            return jsonify({"error": f"Error adding {id}"})
 
 
-api.add_resource(Subgroups, '/subgroups')
+api.add_resource(Subgroups, "/subgroups")

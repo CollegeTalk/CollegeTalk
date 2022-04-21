@@ -12,4 +12,4 @@ class Items(Resource):
         return jsonify([item.serialize for item in items])
 
 
-api.add_resource(Items, '/items')
+api.add_resource(Items, "/items")

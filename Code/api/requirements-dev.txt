@@ -1,11 +1,16 @@
+asn1crypto==1.5.1
 atomicwrites==1.4.0
 attrs==21.4.0
+black==22.3.0
 colorama==0.4.4
 coverage==6.3.2
 iniconfig==1.1.1
+freezegun==1.2.1
 packaging==21.3
 pluggy==1.0.0
 py==1.11.0
 pyparsing==3.0.8
 pytest==7.1.1
+scramp==1.4.1
 tomli==2.0.1
+git+https://github.com/tk0miya/testing.postgresql.git@c81ded434d00ec8424de0f9e1f4063c778c6aaa8#egg=testing.postgresql
