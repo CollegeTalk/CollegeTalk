@@ -10,7 +10,7 @@ test_api:
     stage: test
     image: python:latest
     script:
-        - sudo apt-get -y update && sudo apt-get install postgresql
+        - apt-get -y update && apt-get install postgresql
         - pip install -r requirements.txt
         - pip install -r requirements-dev.txt
         - coverage run -m pytest
