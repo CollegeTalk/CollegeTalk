@@ -11,10 +11,10 @@ test_api:
     image: python:latest
     script:
         - apt-get -y update && apt-get -y install postgresql 
+        - python3 -m venv venv
+        - . venv/bin/activate
         - pip install -r requirements.txt
         - pip install -r requirements-dev.txt
-        - mkdir /usr/local/pgsql/data
-        - chown postgres /usr/local/pgsql/data
         - su postgres
         - coverage run -m pytest
         - coverage report
