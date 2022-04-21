@@ -221,3 +221,18 @@ def test_put_post(client):
     assert post.subgroup_id == subgroup_uuid
 
     _clear_post_tables()
+
+
+def test_post_post_invalid_fields(client):
+    # TODO: test invalid fields
+    pass
+
+
+def test_get_nonexistent_post(client):
+    # TODO: test nonexistent post
+    pass
+
+
+def test_put_post_invalid_fields(client):
+    # TODO: test invalid fields
+    pass
