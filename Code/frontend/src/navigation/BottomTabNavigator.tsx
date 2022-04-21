@@ -104,14 +104,14 @@ const BottomTabNavigator = () => {
                 options={({
                     navigation
                 }: RootTabScreenProps<"CreatePost">) => ({
-                    title: "Create Post",
+                    title: "",
                     tabBarButton: () => (
                         <FAB
                             style={{
                                 top: -10
                             }}
                             icon={{ name: "add", color: "white" }}
-                            color={Colors[colorScheme].tint}
+                            color={Colors.light.tint}
                             onPress={() => navigation.navigate("CreatePost")}
                         />
                     )
@@ -121,7 +121,7 @@ const BottomTabNavigator = () => {
                 name="Profile"
                 component={ProfileScreen}
                 options={{
-                    title: "Profile",
+                    title: "",
                     tabBarIcon: ({ color }) => (
                         <TabBarIcon name="user" color={color} />
                     )
