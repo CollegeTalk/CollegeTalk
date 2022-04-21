@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 import { Button } from "@rneui/themed";
 
+import { Feather } from "@expo/vector-icons";
 import { primaryColors } from "../constants/Colors";
 
 import { Text, View } from "../components/Themed";
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
         backgroundColor: primaryColors.background,
         borderRadius: 8,
         paddingHorizontal: 5,
-        paddingVertical: 8
+        paddingVertical: 10
     },
     groupsContainer: {
         width: "100%",
@@ -41,16 +42,19 @@ const styles = StyleSheet.create({
     groupSubcontainer: {
         flex: 1,
         flexDirection: "column",
+        justifyContent: "space-between",
         backgroundColor: primaryColors.background,
         borderRadius: 8,
         paddingHorizontal: 15,
         paddingVertical: 10
     },
+    groupList: {
+        backgroundColor: "transparent"
+    },
     groupText: {
         fontSize: 18,
         fontWeight: "bold",
-        color: primaryColors.background,
-        marginVertical: 2
+        color: primaryColors.background
     }
 });
 
@@ -82,10 +86,34 @@ const HomeDrawerScreen = () => (
         <View style={styles.groupsContainer}>
             <Text style={styles.sectionLabel}>My Groups</Text>
             <View style={styles.groupSubcontainer}>
-                <GroupButton title="NERF Club" />
-                <GroupButton title="Design Jobs" />
-                <GroupButton title="Squash" />
-                <GroupButton title="WEAST Comedy" />
+                <View style={styles.groupList}>
+                    <GroupButton title="NERF Club" />
+                    <GroupButton title="Design Jobs" />
+                    <GroupButton title="Squash" />
+                    <GroupButton title="WEAST Comedy" />
+                </View>
+                <Button
+                    title="Add"
+                    type="outline"
+                    icon={
+                        <Feather
+                            size={20}
+                            name="plus"
+                            color={primaryColors.text}
+                        />
+                    }
+                    buttonStyle={{
+                        borderWidth: 3,
+                        borderColor: primaryColors.text,
+                        borderRadius: 30
+                    }}
+                    titleStyle={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: primaryColors.text,
+                        marginLeft: 5
+                    }}
+                />
             </View>
         </View>
     </View>

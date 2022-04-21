@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     animationContainer: {
         width: "80%",
         height: "30%",
-        backgroundColor: "rgba(0, 0, 0, 0)"
+        backgroundColor: "transparent"
     }
 });
 
