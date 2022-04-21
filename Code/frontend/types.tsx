@@ -31,3 +31,13 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
         BottomTabScreenProps<RootTabParamList, Screen>,
         NativeStackScreenProps<RootStackParamList>
     >;
+
+export type Post = {
+    id: string;
+    time_created: Date;
+    author_id: string;
+    title: string;
+    body: string;
+    num_upvotes: number;
+    subgroup_id: string;
+};

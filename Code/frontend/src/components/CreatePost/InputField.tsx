@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction } from "react";
-import { StyleSheet, View } from "react-native";
+import { Ref, Dispatch, SetStateAction, forwardRef } from "react";
+import { StyleSheet, TextInput, View } from "react-native";
 import { Input } from "@rneui/themed";
 
 import { primaryColors } from "../../constants/Colors";
@@ -33,24 +33,22 @@ type InputFieldProps = {
     isLarge: boolean;
 };
 
-const InputField = ({
-    type,
-    placeholder,
-    setText,
-    isLarge
-}: InputFieldProps) => (
-    <View style={styles(isLarge).container}>
-        <Input
-            inputContainerStyle={styles(isLarge).inputContainer}
-            inputStyle={styles(isLarge).input}
-            placeholder={placeholder}
-            onChangeText={(value) => setText([value, false])}
-            shake={() => true}
-            errorStyle={{ color: "red" }}
-            errorMessage={type && `Please input a valid ${type}`}
-            multiline={isLarge}
-        />
-    </View>
+const InputField = forwardRef(
+    ({ type, placeholder, setText, isLarge }: InputFieldProps, ref) => (
+        <View style={styles(isLarge).container}>
+            <Input
+                ref={ref as Ref<TextInput>}
+                inputContainerStyle={styles(isLarge).inputContainer}
+                inputStyle={styles(isLarge).input}
+                placeholder={placeholder}
+                onChangeText={(value) => setText([value, false])}
+                shake={() => true}
+                errorStyle={{ color: "red" }}
+                errorMessage={type && `Please input a valid ${type}`}
+                multiline={isLarge}
+            />
+        </View>
+    )
 );
 
 export default InputField;
