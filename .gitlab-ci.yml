@@ -1,6 +1,7 @@
 stages:
     - triggers
 
+# Normal 
 trigger_frontend_pipeline:
     stage: triggers
     trigger:
@@ -10,7 +11,6 @@ trigger_frontend_pipeline:
         changes:
             - Code/frontend/**/*
 
-
 trigger_api_pipeline:
     stage: triggers
     trigger:
@@ -19,4 +19,17 @@ trigger_api_pipeline:
     only:
         changes:
             - Code/api/**/*
+    except:
+        - merge_requests
 
+# Merge requests
+trigger_api_pipeline_mr:
+    stage: triggers
+    trigger:
+        include: Code/api/.gitlab-ci-mr.yml
+        strategy: depend
+    only:
+        refs:
+            - merge_requests
+        changes:
+            - Code/api/**/*
