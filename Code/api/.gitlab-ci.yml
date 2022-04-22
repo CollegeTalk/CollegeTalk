@@ -30,7 +30,7 @@ staging_api_container:
     only:
         refs:
             - merge_requests
-            - main
+            # - main
 
 deploy_api_container:
     stage: deploy
