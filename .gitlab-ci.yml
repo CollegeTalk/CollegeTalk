@@ -17,6 +17,10 @@ trigger_api_pipeline:
         include: Code/api/.gitlab-ci.yml
         strategy: depend
     only:
+        refs:
+            - branches
+            - merge_requests
+
         changes:
             - Code/api/**/*
 
