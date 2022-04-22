@@ -18,6 +18,20 @@ test_api:
         - su -c 'coverage run -m pytest' postgres
         - coverage report
 
+test_api_2:
+    stage: test
+    image: python:latest
+    script:
+        - apt-get -y update && apt-get -y install postgresql 
+        - python3 -m venv venv
+        - . venv/bin/activate
+        - pip install -r requirements.txt
+        - pip install -r requirements-dev.txt
+        - su -c 'coverage run -m pytest' postgres
+        - coverage report
+    only:
+        - merge_requests
+
 staging_api_container:
     stage: staging
     image: mcr.microsoft.com/azure-cli
