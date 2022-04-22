@@ -17,9 +17,9 @@ test_api:
         - pip install -r requirements-dev.txt
         - su -c 'coverage run -m pytest' postgres
         - coverage report
-    only:
-        # - branches
-        - merge_requests
+    # only:
+    #     - branches
+    #     - merge_requests
 
 staging_api_container:
     stage: staging
@@ -29,8 +29,8 @@ staging_api_container:
         - az acr build --registry collegetalk --image collegetalk-api-staging .
     only:
         refs:
-            - merge_requests
-            # - main
+            # - merge_requests
+            - main
 
 deploy_api_container:
     stage: deploy
