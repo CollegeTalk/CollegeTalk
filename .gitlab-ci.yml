@@ -31,5 +31,5 @@ trigger_api_pipeline_mr:
     only:
         refs:
             - merge_requests
-        changes:
-            - Code/api/**/*
+        # changes:
+        #     - Code/api/**/*
