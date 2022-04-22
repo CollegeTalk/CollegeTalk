@@ -23,18 +23,17 @@ test_api:
 
 staging_api_container:
     stage: staging
-    needs: [test_api]
     image: mcr.microsoft.com/azure-cli
     script:
         - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
         - az acr build --registry collegetalk --image collegetalk-api-staging .
     only:
-        - main
-        - merge_requests
+        refs:
+            - merge_requests
+            - main
 
 deploy_api_container:
     stage: deploy
-    needs: [staging_api_container]
     image: mcr.microsoft.com/azure-cli
     script:
         - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
