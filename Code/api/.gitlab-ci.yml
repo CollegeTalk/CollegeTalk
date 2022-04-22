@@ -18,7 +18,7 @@ test_api:
         - su -c 'coverage run -m pytest' postgres
         - coverage report
     only:
-        - branches
+        # - branches
         - merge_requests
 
 staging_api_container:
