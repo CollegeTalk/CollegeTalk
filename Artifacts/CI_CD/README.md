@@ -11,61 +11,6 @@ On Gitlab, the `.gitlab-ci.yml` in the root of the project allows for creation o
 
 ## Current CI/CD Pipeline
 
-```yaml
-stages:
-    - build
-    - staging
-    - deploy
+Due to the project being a monorepo, we decided to utilize a parent-child pipeline with two children pipelines that run on changes in `Code/frontend` and `Code/api`. Each child pipeline acts as a Directed Acyclic Graph, so that each successive job is dependent on the completion of the previous job. 
 
-build_api_container:
-    stage: build
-    script:
-        - echo "Building api"
-        - echo "Testing api"
-    only:
-        changes:
-            - Code/api/**/*
-
-staging_api_container:
-    stage: staging
-    image: mcr.microsoft.com/azure-cli
-    variables:
-        SP_APP_ID: $SP_APP_ID
-        SP_PASSWORD: $SP_PASSWORD
-        SP_TENANT: $SP_TENANT
-    script:
-        - cd Code/api
-        - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
-        - az acr build --registry collegetalk --image collegetalk-api-staging .
-    only:
-        refs:
-            - merge_requests
-        changes:
-            - Code/api/**/*
-
-deploy_api_container:
-    stage: deploy
-    image: mcr.microsoft.com/azure-cli
-    variables:
-        SP_APP_ID: $SP_APP_ID
-        SP_PASSWORD: $SP_PASSWORD
-        SP_TENANT: $SP_TENANT
-    script:
-        - cd Code/api
-        - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
-        - az acr build --registry collegetalk --image collegetalk-api .
-    only:
-        - main
-```
-
-### Build
-
-Currently still work in progress, will run tests and build whenever a push is made, no matter the branch.
-
-### Staging
-
-Will run when merge requests are made. This will push to a live staging environment, to make sure that code is deploying properly
-
-### Deploy
-
-Runs when the main branch is pushed to, deploying to a production environment.
+![current ci/cd pipeline](./cicdpipeline.png)

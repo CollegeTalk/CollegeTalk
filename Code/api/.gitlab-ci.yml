@@ -1,0 +1,36 @@
+stages:
+    - test
+    - staging
+    - deploy
+
+before_script:
+    - cd Code/api
+
+test_api:
+    stage: test
+    script:
+        - echo "Testing api"
+    only:
+        - branches
+        - merge_requests
+
+staging_api_container:
+    stage: staging
+    needs: [test_api]
+    image: mcr.microsoft.com/azure-cli
+    script:
+        - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
+        - az acr build --registry collegetalk --image collegetalk-api-staging .
+    only:
+        - main
+        - merge_requests
+
+deploy_api_container:
+    stage: deploy
+    needs: [staging_api_container]
+    image: mcr.microsoft.com/azure-cli
+    script:
+        - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
+        - az acr build --registry collegetalk --image collegetalk-api .
+    only:
+        - main

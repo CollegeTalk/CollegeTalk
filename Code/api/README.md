@@ -1,5 +1,7 @@
 # CollegeTalk API
 
+This is the CollegeTalk API Gateway to access microservices. For now, it acts as a simple business layer until we begin implementation of our microservices.
+
 The deployed API staging environment can be found here: https://collegetalk-staging.azurewebsites.net/
 
 The deployed API production environment will be live here: http://collegetalk.azurewebsites.net/
@@ -8,7 +10,7 @@ The deployed API production environment will be live here: http://collegetalk.az
 
 The API has two endpoints currently.
 
--   /items - a test endpoint that shows the list of items, storing key and value as string
+-   /items - a test endpoint that shows the list of items, storing key and value as string. This endpoint will be removed eventually.
     -   /items/{item_id} - an individual item and its data
 -   /posts - posts in the database
     -   /posts/{post_id} - an individual post, which has an int id, timestamp , and string title and body

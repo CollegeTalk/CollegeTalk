@@ -1,36 +1,22 @@
 stages:
-    - build
-    - staging
-    - deploy
+    - triggers
 
-build_api_container:
-    stage: build
-    script:
-        - echo "Building api"
-        - echo "Testing api"
+trigger_frontend_pipeline:
+    stage: triggers
+    trigger:
+        include: Code/frontend/.gitlab-ci.yml
+        strategy: depend
+    only:
+        changes:
+            - Code/frontend/**/*
+
+
+trigger_api_pipeline:
+    stage: triggers
+    trigger:
+        include: Code/api/.gitlab-ci.yml
+        strategy: depend
     only:
         changes:
             - Code/api/**/*
 
-staging_api_container:
-    stage: staging
-    image: mcr.microsoft.com/azure-cli
-    script:
-        - cd Code/api
-        - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
-        - az acr build --registry collegetalk --image collegetalk-api-staging .
-    only:
-        refs:
-            - merge_requests
-        changes:
-            - Code/api/**/*
-
-deploy_api_container:
-    stage: deploy
-    image: mcr.microsoft.com/azure-cli
-    script:
-        - cd Code/api
-        - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
-        - az acr build --registry collegetalk --image collegetalk-api .
-    only:
-        - main
