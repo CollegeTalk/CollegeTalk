@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { View, Alert, StyleSheet } from "react-native";
+import { RefObject, useState, createRef } from "react";
+import { TextInput, View, Alert, StyleSheet } from "react-native";
 import { Button } from "@rneui/themed";
 
 import { primaryColors } from "../../constants/Colors";
@@ -19,41 +19,49 @@ const styles = StyleSheet.create({
 });
 
 const CreatePost = () => {
-    const [title, setTitle] = useState("");
-    const [body, setBody] = useState("");
+    const titleInput: RefObject<TextInput> = createRef();
+    const [[title, showTitleError], setTitle] = useState(["", false]);
+    const bodyInput: RefObject<TextInput> = createRef();
+    const [[body], setBody] = useState(["", false]);
 
-    const submitPostToApi = () => {
-        const rand: number = Math.floor(Math.random() * 10) + 5;
+    const submitPost = async () => {
+        if (title === "") {
+            setTitle([title, true]);
+            return;
+        }
 
-        fetch(`https://collegetalk.azurewebsites.net/posts/${rand}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                title,
-                body
-            })
-        })
-            .then(() => {
-                Alert.alert("Post submitted");
-            })
-            .catch((err) => {
-                Alert.alert(`Something went wrong! ${err.body.message}`);
+        try {
+            await fetch(`https://collegetalk.azurewebsites.net/posts`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    title,
+                    body
+                })
             });
+            Alert.alert("Post submitted");
+            titleInput?.current?.clear();
+            bodyInput?.current?.clear();
+        } catch (err) {
+            Alert.alert(`Something went wrong! ${err}`);
+        }
     };
 
     return (
         <View style={styles.postContainer}>
             <InputField
+                ref={titleInput}
+                type={showTitleError ? "title" : ""}
                 placeholder="Your awesome question"
-                text={title}
                 setText={setTitle}
                 isLarge={false}
             />
             <InputField
+                ref={bodyInput}
                 placeholder="Optional details here"
-                text={body}
                 setText={setBody}
                 isLarge
             />
@@ -77,7 +85,7 @@ const CreatePost = () => {
                         width: 200,
                         marginVertical: 10
                     }}
-                    onPress={() => submitPostToApi()}
+                    onPress={() => submitPost()}
                 />
             </View>
         </View>

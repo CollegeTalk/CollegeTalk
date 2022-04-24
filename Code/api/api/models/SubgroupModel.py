@@ -35,5 +35,5 @@ class SubgroupModel(db.Model):
             "id": self.id,
             "name": self.name,
             "description": self.description,
-            "posts": [post.serialize for post in self.posts[:10]],
+            "posts": [post.id for post in self.posts],
         }

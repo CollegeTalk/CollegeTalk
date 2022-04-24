@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CreatePostTitle /> renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "marginBottom": 20,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "paddingHorizontal": 10,
+        "width": "100%",
+      }
+    }
+    testID="RNE__Input__view-wrapper"
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "borderBottomWidth": 0,
+          "borderColor": "#86939e",
+          "flexDirection": "row",
+          "transform": Array [
+            Object {
+              "translateX": 0,
+            },
+          ],
+        }
+      }
+    >
+      <TextInput
+        allowFontScaling={true}
+        editable={true}
+        multiline={false}
+        onChangeText={[Function]}
+        placeholder=""
+        placeholderTextColor="#86939e"
+        rejectResponderTermination={true}
+        shake={[Function]}
+        style={
+          Object {
+            "borderColor": "#e2d6aa",
+            "borderRadius": 15,
+            "borderWidth": 1,
+            "color": "white",
+            "flex": 1,
+            "fontSize": 18,
+            "height": 50,
+            "minHeight": 40,
+            "paddingHorizontal": 15,
+            "paddingVertical": 10,
+            "textAlignVertical": "top",
+            "width": "100%",
+          }
+        }
+        testID="RNE__Input__text-input"
+        underlineColorAndroid="transparent"
+      />
+    </View>
+    <Text
+      style={
+        Object {
+          "color": "red",
+          "fontSize": 12,
+          "margin": 5,
+        }
+      }
+    />
+  </View>
+</View>
+`;
