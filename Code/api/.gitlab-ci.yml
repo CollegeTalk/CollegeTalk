@@ -17,24 +17,19 @@ test_api:
         - pip install -r requirements-dev.txt
         - su -c 'coverage run -m pytest' postgres
         - coverage report
-    only:
-        - branches
-        - merge_requests
 
 staging_api_container:
     stage: staging
-    needs: [test_api]
     image: mcr.microsoft.com/azure-cli
     script:
         - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT
         - az acr build --registry collegetalk --image collegetalk-api-staging .
     only:
+        - dev
         - main
-        - merge_requests
 
 deploy_api_container:
     stage: deploy
-    needs: [staging_api_container]
     image: mcr.microsoft.com/azure-cli
     script:
         - az login --service-principal -u $SP_APP_ID -p $SP_PASSWORD --tenant $SP_TENANT

@@ -10,7 +10,6 @@ trigger_frontend_pipeline:
         changes:
             - Code/frontend/**/*
 
-
 trigger_api_pipeline:
     stage: triggers
     trigger:
