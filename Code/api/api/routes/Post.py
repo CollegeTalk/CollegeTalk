@@ -9,7 +9,7 @@ from .base import api
 class Post(Resource):
     def get(self, id):
         try:
-            post = PostModel.query.filter_by(id=id).get_or_404()
+            post = PostModel.query.filter_by(id=id).first()
             return jsonify(post.serialize)
         except RuntimeError:
             return jsonify({"error": f"Post {id} not found"})
@@ -17,7 +17,7 @@ class Post(Resource):
     def put(self, id):
         try:
             post = db.session.query(PostModel).filter_by(
-                id=id).get_or_404()
+                id=id).first_or_404()
             data = request.json
             update_fields(post, data)
             db.session.commit()
