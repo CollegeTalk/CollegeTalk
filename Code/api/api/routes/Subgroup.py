@@ -22,7 +22,7 @@ class Subgroup(Resource):
             db.session.commit()
             return jsonify(subgroup.serialize)
         except RuntimeError:
-            return jsonify({"error": f"Error adding/updating {id}"})
+            return jsonify({"error": f"Error updating {id}"})
 
 
 api.add_resource(Subgroup, "/subgroups/<string:id>")
