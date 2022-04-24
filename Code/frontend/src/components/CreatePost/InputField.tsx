@@ -1,67 +1,54 @@
-import { Dispatch, SetStateAction } from "react";
-import {
-    KeyboardAvoidingView,
-    Platform,
-    StyleSheet,
-    TextInput,
-    View
-} from "react-native";
+import { Ref, Dispatch, SetStateAction, forwardRef } from "react";
+import { StyleSheet, TextInput, View } from "react-native";
+import { Input } from "@rneui/themed";
+
+import { primaryColors } from "../../constants/Colors";
 
 const styles = (isLarge: boolean) =>
     StyleSheet.create({
         container: {
-            alignItems: "center",
-            justifyContent: "space-around",
-            marginTop: 100
+            marginBottom: 20
+        },
+        inputContainer: {
+            borderBottomWidth: 0
         },
         input: {
             width: "100%",
             height: isLarge ? 100 : 50,
-            backgroundColor: "#FFF",
+            color: "white",
             borderRadius: 15,
-            borderColor: "#C0C0C0",
+            borderColor: primaryColors.text,
             borderWidth: 1,
             paddingHorizontal: 15,
-            paddingTop: isLarge ? 5 : 15,
-            paddingBottom: isLarge ? 0 : 15
-        },
-        writeTaskWrapper: {
-            position: "absolute",
-            bottom: 60,
-            width: "100%",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            marginVertical: 10
+            // TODO: fix this, doesn't work??
+            paddingVertical: isLarge ? 30 : 10,
+            textAlignVertical: "top"
         }
     });
 
 type InputFieldProps = {
+    type?: string;
     placeholder: string;
-    text: string;
-    setText: Dispatch<SetStateAction<string>>;
+    setText: Dispatch<SetStateAction<[string, boolean]>>;
     isLarge: boolean;
 };
 
-const InputField = ({
-    placeholder,
-    text,
-    setText,
-    isLarge
-}: InputFieldProps) => (
-    <View style={styles(isLarge).container}>
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles(isLarge).writeTaskWrapper}
-        >
-            <TextInput
-                style={styles(isLarge).input}
+const InputField = forwardRef(
+    ({ type, placeholder, setText, isLarge }: InputFieldProps, ref) => (
+        <View style={styles(isLarge).container}>
+            <Input
+                ref={ref as Ref<TextInput>}
+                inputContainerStyle={styles(isLarge).inputContainer}
+                inputStyle={styles(isLarge).input}
                 placeholder={placeholder}
-                value={text}
-                onChangeText={setText}
+                onChangeText={(value) => setText([value, false])}
+                shake={() => true}
+                errorStyle={{ color: "red" }}
+                errorMessage={type && `Please input a valid ${type}`}
+                multiline={isLarge}
             />
-        </KeyboardAvoidingView>
-    </View>
+        </View>
+    )
 );
 
 export default InputField;

@@ -22,12 +22,18 @@ const linking: LinkingOptions<RootStackParamList> = {
                     },
                     CreatePost: {
                         screens: {
-                            CreatePostScreen: "post"
+                            CreatePostScreen: "create-post"
+                        }
+                    },
+                    Profile: {
+                        screens: {
+                            Profile: "profile"
                         }
                     }
                 }
             },
-            Modal: "modal",
+            // Modal: "modal",
+            HomeDrawer: "home-drawer",
             NotFound: "*"
         }
     }
