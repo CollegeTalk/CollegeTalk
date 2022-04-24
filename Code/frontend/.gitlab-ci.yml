@@ -4,7 +4,7 @@ stages:
     - staging
     - deploy
 
-image: node:alpine
+image: node:16-alpine
 
 before_script:
     - cd Code/frontend
