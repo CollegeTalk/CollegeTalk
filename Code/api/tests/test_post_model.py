@@ -55,7 +55,7 @@ def test_get_posts_all(client):
     assert len(data) == 1
 
     assert data[0]["author_id"] == str(test_author_id)
-    assert data[0]["title"] == "how is cs425 entrepreneurship?"
+    assert data[0]["title"] == test_title
     assert data[0]["body"] == test_post_body
     assert data[0]["num_upvotes"] == 0
     assert data[0]["subgroup_id"] == str(subgroup_uuid)
@@ -136,7 +136,7 @@ def test_post_post(client):
 
     assert not post == None
     assert post.author_id == test_author_id
-    assert post.title == "how is cs425 entrepreneurship?"
+    assert post.title == test_title
     assert post.body == test_post_body
     assert post.subgroup_id == subgroup_uuid
 
