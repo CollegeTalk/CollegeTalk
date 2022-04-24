@@ -13,7 +13,8 @@ The API has two endpoints currently.
 -   /items - a test endpoint that shows the list of items, storing key and value as string. This endpoint will be removed eventually.
     -   /items/{item_id} - an individual item and its data
 -   /posts - posts in the database
-    -   /posts/{post_id} - an individual post, which has an int id, timestamp , and string title and body
+    -   /posts/{post_id} - an individual post, which has an uuid id, timestamp, uuid author, string title, string body, and uuid subgroup
+-   /subgroups - subgroups in the database
 
 ## Running the API
 
