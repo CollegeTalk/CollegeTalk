@@ -7,28 +7,30 @@ import { primaryColors } from "../../constants/Colors";
 const PostsFeed = () => {
     const [posts, setPosts] = useState([] as Post[]);
 
-    const fetchPosts = async () => {
-        try {
-            const response = await fetch(
-                `https://collegetalk.azurewebsites.net/posts`,
-                {
-                    method: "GET",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                    }
+    useEffect(
+        () => {
+            let controller = new AbortController();
+            ( async () => {
+                try {
+                    const response = await fetch(
+                        `https://collegetalk.azurewebsites.net/posts`,
+                        {
+                            method: "GET",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            signal: controller.signal
+                        }
+                    );
+                    const postsData = await response.json();
+                    setPosts(postsData);
+                } catch (err: any) {
+                    Alert.alert(`Something went wrong! ${err}`);
                 }
-            );
-            const postsData = await response.json();
-            setPosts(postsData);
-        } catch (err: any) {
-            Alert.alert(`Something went wrong! ${err}`);
-        }
-    };
-
-    useEffect(() => {
-        fetchPosts();
-    });
+            })();
+            return () => controller?.abort();
+        }, []);
 
     return (
         <View style= {{ backgroundColor: "white" }}>
