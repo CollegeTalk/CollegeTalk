@@ -10,7 +10,7 @@ class Item(Resource):
     def get(self, item_name):
         # curl http://localhost:5000/items/{item_name}
         try:
-            item = ItemModel.query.filter_by(key=item_name).get_or_404()
+            item = ItemModel.query.filter_by(key=item_name).first()
             return jsonify(item.serialize)
         except RuntimeError:
             return jsonify({"error": f"Item {item_name} not found"})
@@ -19,7 +19,7 @@ class Item(Resource):
         # curl http://localhost:5000/items/{item_name} -H 'Content-Type: application/json' -d '{"value":"Hello"}' -X PUT
         try:
             item = db.session.query(ItemModel).filter_by(
-                key=item_name).get_or_404()
+                key=item_name).first_or_404()
             data = request.json
             update_fields(item, data)
             db.session.commit()

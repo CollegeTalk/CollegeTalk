@@ -9,7 +9,7 @@ from .base import api
 class Subgroup(Resource):
     def get(self, id):
         try:
-            subgroup = SubgroupModel.query.filter_by(id=id).get_or_404()
+            subgroup = SubgroupModel.query.filter_by(id=id).first()
             return jsonify(subgroup.serialize)
         except RuntimeError:
             return jsonify({"error": f"Subgroup {id} not found"})
@@ -17,7 +17,7 @@ class Subgroup(Resource):
     def put(self, id):
         try:
             subgroup = db.session.query(SubgroupModel).filter_by(
-                id=id).get_or_404()
+                id=id).first_or_404()
             data = request.json
             update_fields(subgroup, data)
             db.session.commit()
