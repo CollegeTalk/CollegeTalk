@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Alert } from "react-native";
 
 import { Post } from "../../../types";
+import { primaryColors } from "../../constants/Colors";
 
 const PostsFeed = () => {
     const [posts, setPosts] = useState([] as Post[]);
@@ -30,18 +31,23 @@ const PostsFeed = () => {
     });
 
     return (
-        <View>
+        <View style= {{ backgroundColor: "white" }}>
             {posts &&
                 posts.map((postData) => (
-                    <View key={postData.id}>
+                    <View key={postData.id} >
+                    
                         {/* Replace with Post component */}
-                        <Text style={{ color: "white" }}>
+                        <View style={{ backgroundColor: primaryColors.background, flex:0.1}}/>
+                        <Text style={{ color: "green" }}>
                             {postData.time_created}
                         </Text>
-                        <Text style={{ color: "white" }}>{postData.title}</Text>
-                        <Text style={{ color: "white" }}>{postData.body}</Text>
+                        <Text style={{ color: "green", fontSize: 20, fontWeight: "bold" }}>{postData.title}</Text>
+                        <Text style={{ color: "green" }}>{postData.body}</Text>
+                      
                     </View>
+                    
                 ))}
+                
         </View>
     );
 };
