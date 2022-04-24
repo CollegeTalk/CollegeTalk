@@ -25,7 +25,7 @@ class Item(Resource):
             db.session.commit()
             return jsonify(item.serialize)
         except RuntimeError:
-            return jsonify({"error": f"Error adding/updating {item_name}"})
+            return jsonify({"error": f"Error updating {item_name}"})
 
 
 api.add_resource(Item, "/items/<string:item_name>")
