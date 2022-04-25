@@ -6,13 +6,7 @@ import HomeDrawerScreen from "../screens/HomeDrawerScreen";
 const Drawer = createDrawerNavigator();
 
 const HomeDrawerNavigator = () => (
-    <Drawer.Navigator
-        initialRouteName="Main"
-        screenOptions={{
-            swipeEnabled: false
-        }}
-        drawerContent={HomeDrawerScreen}
-    >
+    <Drawer.Navigator initialRouteName="Main" drawerContent={HomeDrawerScreen}>
         <Drawer.Screen
             name="Main"
             component={BottomTabNavigator}
