@@ -1,57 +1,20 @@
-import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Alert } from "react-native";
+import { View } from "react-native";
 
 import { Post } from "../../../types";
-import { primaryColors } from "../../constants/Colors";
 
-const PostsFeed = () => {
-    const [posts, setPosts] = useState([] as Post[]);
+import PostCard from "./PostCard";
 
-    useEffect(
-        () => {
-            let controller = new AbortController();
-            ( async () => {
-                try {
-                    const response = await fetch(
-                        `https://collegetalk.azurewebsites.net/posts`,
-                        {
-                            method: "GET",
-                            headers: {
-                                Accept: "application/json",
-                                "Content-Type": "application/json"
-                            },
-                            signal: controller.signal
-                        }
-                    );
-                    const postsData = await response.json();
-                    setPosts(postsData);
-                } catch (err: any) {
-                    Alert.alert(`Something went wrong! ${err}`);
-                }
-            })();
-            return () => controller?.abort();
-        }, []);
-
-    return (
-        <View style= {{ backgroundColor: "white" }}>
-            {posts &&
-                posts.map((postData) => (
-                    <View key={postData.id} >
-                    
-                        {/* Replace with Post component */}
-                        <View style={{ backgroundColor: primaryColors.background, flex:0.1}}/>
-                        <Text style={{ color: "green" }}>
-                            {postData.time_created}
-                        </Text>
-                        <Text style={{ color: "green", fontSize: 20, fontWeight: "bold" }}>{postData.title}</Text>
-                        <Text style={{ color: "green" }}>{postData.body}</Text>
-                      
-                    </View>
-                    
-                ))}
-                
-        </View>
-    );
+type PostsFeedProps = {
+    posts: Post[];
 };
+
+const PostsFeed = ({ posts }: PostsFeedProps) => (
+    <View style={{ width: "100%" }}>
+        {posts &&
+            posts.map((postData) => (
+                <PostCard key={postData.id} {...postData} />
+            ))}
+    </View>
+);
 
 export default PostsFeed;

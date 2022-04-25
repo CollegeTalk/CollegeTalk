@@ -24,7 +24,7 @@ module.exports = {
             { extensions: [".js", ".jsx", ".ts", ".tsx"] }
         ],
         "react/jsx-uses-react": "off",
-        "react/jsx-props-no-spreading": "warn",
+        "react/jsx-props-no-spreading": "off",
         "react/react-in-jsx-scope": "off",
         "react/no-unstable-nested-components": "off",
         "react/require-default-props": "off",
