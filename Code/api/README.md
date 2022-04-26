@@ -8,13 +8,14 @@ The deployed API production environment will be live here: http://collegetalk.az
 
 ## Endpoints
 
-The API has two endpoints currently.
+The API has six endpoints currently.
 
 -   /items  - a test endpoint that shows the list of items, storing key and value as string (GET, PUT). This endpoint will be removed eventually.
     -   /items/{item_id} - an individual item and its data (GET, PUT)
 -   /posts - posts in the database (GET, POST)
     -   /posts/{post_id} - an individual post, which has an uuid id, timestamp, uuid author, string title, string body, and uuid subgroup (GET, PUT)
--   /subgroups - subgroups in the database, which has a uuid id, string name, string description, and a relation to the posts that are part of the subgroup (GET, POST)
+-   /subgroups - subgroups in the database (GET, POST)
+    -   /subgroups/{subgroup_id} - an individual subgroup, which has an uuid id, string name, string description, and a relation to the posts that are part of the subgroup (GET, PUT)
 
 ## Running the API
 
