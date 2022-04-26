@@ -10,11 +10,11 @@ The deployed API production environment will be live here: http://collegetalk.az
 
 The API has two endpoints currently.
 
--   /items - a test endpoint that shows the list of items, storing key and value as string. This endpoint will be removed eventually.
-    -   /items/{item_id} - an individual item and its data
--   /posts - posts in the database
-    -   /posts/{post_id} - an individual post, which has an uuid id, timestamp, uuid author, string title, string body, and uuid subgroup
--   /subgroups - subgroups in the database
+-   /items  - a test endpoint that shows the list of items, storing key and value as string (GET, PUT). This endpoint will be removed eventually.
+    -   /items/{item_id} - an individual item and its data (GET, PUT)
+-   /posts - posts in the database (GET, POST)
+    -   /posts/{post_id} - an individual post, which has an uuid id, timestamp, uuid author, string title, string body, and uuid subgroup (GET, PUT)
+-   /subgroups - subgroups in the database, which has a uuid id, string name, string description, and a relation to the posts that are part of the subgroup (GET, POST)
 
 ## Running the API
 
@@ -39,3 +39,9 @@ POSTGRES_DB = "test"
 1. With Docker, you only need to have Docker and docker-compose installed, with no need for Postgres or any database setup
 2. In `Code/` run `docker-compose up`
 3. When the text says the containers are ready, navigate to `localhost:5000`
+
+## Testing
+To run tests, make sure the packages in `requirements-dev.txt` are installed, then run `pytest`. Pytest will run through test cases in `Code/api/tests`. To see code coverage, run `coverage run -m pytest`, and then when the tests are complete, run `coverage report` to see code coverage.
+
+## Misc 
+To delete and recreate a database with a schema according to the models in `Code/api/api/models`, first make sure the target database credentials are correct in `.env`, then run `flask recreate-db`.
