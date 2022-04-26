@@ -1,0 +1,39 @@
+stages:
+    - lint
+    - test
+    - staging
+    - deploy
+
+image: node:16-alpine
+
+before_script:
+    - cd Code/frontend
+    - npm install
+
+lint_frontend:
+    stage: lint
+    script:
+        - npm run lint
+
+test_frontend:
+    stage: test
+    script:
+        - npx jest --ci
+
+staging_frontend_expo:
+    stage: staging
+    script:
+        - npm install expo-cli
+        - apk add --no-cache bash
+        - npx expo publish --non-interactive
+    only:
+        - dev
+        - main
+
+
+deploy_frontend:
+    stage: deploy
+    script:
+        - echo "Deploying frontend"
+    only:
+        - main
