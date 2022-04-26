@@ -1,6 +1,5 @@
 from uuid import uuid4
 
-from flask import jsonify
 from sqlalchemy.dialects.postgresql import UUID
 
 from .base import db

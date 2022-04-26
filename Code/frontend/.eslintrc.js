@@ -47,7 +47,7 @@ module.exports = {
         ],
         "no-unused-vars": "warn",
         "no-console": [
-            process.env.NODE_ENV === "dev" ? "warn" : "error",
+            process.env.NODE_ENV === "prod" ? "error" : "warn",
             { allow: ["warn", "error"] }
         ]
     },

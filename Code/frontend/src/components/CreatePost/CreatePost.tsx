@@ -1,6 +1,8 @@
 import { RefObject, useState, createRef } from "react";
 import { TextInput, View, Alert, StyleSheet } from "react-native";
 import { Button } from "@rneui/themed";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 import { primaryColors } from "../../constants/Colors";
 
@@ -31,22 +33,36 @@ const CreatePost = () => {
         }
 
         try {
-            await fetch(`https://collegetalk.azurewebsites.net/posts`, {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    title,
-                    body
-                })
-            });
+            // TODO: change to real author_id
+            const authorId = uuidv4();
+            // TODO: change to real subgroup_id
+            const subgroupId = "68d580b2-f9d6-4eeb-aa45-686a984151ab";
+            const response = await fetch(
+                `https://collegetalk-staging.azurewebsites.net/posts`,
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        author_id: authorId,
+                        title,
+                        body,
+                        subgroup_id: subgroupId
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(`${response.status}`);
+            }
+
             Alert.alert("Post submitted");
             titleInput?.current?.clear();
             bodyInput?.current?.clear();
         } catch (err) {
-            Alert.alert(`Something went wrong! ${err}`);
+            Alert.alert(`Something went wrong! Error code ${err}`);
         }
     };
 

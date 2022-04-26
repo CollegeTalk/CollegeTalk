@@ -40,11 +40,12 @@ const styles = StyleSheet.create({
 
 const fetchPosts = async (
     controller: AbortController,
-    setPosts: Dispatch<SetStateAction<Post[]>>
+    setPosts: Dispatch<SetStateAction<[Post[], boolean]>>,
+    setRefreshing: Dispatch<SetStateAction<boolean>>
 ) => {
     try {
         const response = await fetch(
-            `https://collegetalk.azurewebsites.net/posts`,
+            `https://collegetalk-staging.azurewebsites.net/posts`,
             {
                 method: "GET",
                 headers: {
@@ -55,7 +56,8 @@ const fetchPosts = async (
             }
         );
         const postsData = await response.json();
-        setPosts(postsData);
+        setRefreshing(false);
+        setPosts([postsData, true]);
     } catch (err: any) {
         if (!controller.signal.aborted) {
             Alert.alert(`Something went wrong! ${err}`);
@@ -69,18 +71,21 @@ const HomeScreen = () => {
 
     const [refreshing, setRefreshing] = useState(false);
 
-    const [posts, setPosts] = useState([] as Post[]);
+    const [[posts, initialFetched], setPosts] = useState([[], false] as [
+        Post[],
+        boolean
+    ]);
 
     useEffect(() => {
-        fetchPosts(controller, setPosts);
+        if (!initialFetched || refreshing) {
+            fetchPosts(controller, setPosts, setRefreshing);
+        }
         return () => controller?.abort();
-    });
+    }, [controller, refreshing, posts, fetchPosts, setPosts, setRefreshing]);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        fetchPosts(controller, setPosts);
-        setTimeout(() => setRefreshing(false), 2000);
-    }, []);
+    }, [setRefreshing]);
 
     return (
         <SafeAreaView style={styles.container}>
