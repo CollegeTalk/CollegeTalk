@@ -28,15 +28,24 @@ class DevelopmentConfig(Config):
     cmd in the setup instructions. You can change this to environment variable as well.
     """
 
-    host = os.environ["POSTGRES_HOST"]
-    port = os.environ["POSTGRES_PORT"]
-    username = os.environ["POSTGRES_USER"]
-    password = os.environ["POSTGRES_PASS"]
-    database = os.environ["POSTGRES_DB"]
+    host = os.environ.get("POSTGRES_HOST")
+    port = os.environ.get("POSTGRES_PORT")
+    username = os.environ.get("POSTGRES_USER")
+    password = os.environ.get("POSTGRES_PASS")
+    database = os.environ.get("POSTGRES_DB")
 
     url = f"postgresql://{username}:{password}@{host}:{port}/{database}"  # set the URI to call get_pg_url() once you have `creds.ini` setup
     SQLALCHEMY_DATABASE_URI = url
     DEBUG = True
+
+
+class StagingConfig(Config):
+    """
+    Staging Configuration
+    """
+
+    SQLALCHEMY_DATABASE_URI = os.environ.get("STAGING_DATABASE_URL")
+    DEBUG = False
 
 
 class ProductionConfig(Config):
@@ -49,7 +58,7 @@ class ProductionConfig(Config):
     """
 
     SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL"
+        "PRODUCTION_DATABASE_URL"
     )  # you may do the same as the dev config but this gets the database URL from an env variable
     DEBUG = False
 
