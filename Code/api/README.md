@@ -15,7 +15,7 @@ The API has six endpoints currently.
 -   /posts - posts in the database (GET, POST)
     -   /posts/{post_id} - an individual post, which has an uuid id, timestamp, uuid author, string title, string body, and uuid subgroup (GET, PUT)
 -   /subgroups - subgroups in the database (GET, POST)
-    -   /subgroups/{subgroup_id} - an individual subgroup, which has a uuid id, string name, string description, and a relation to the posts that are part of the subgroup (GET, PUT)
+    -   /subgroups/{subgroup_id} - an individual subgroup, which has an uuid id, string name, string description, and a relation to the posts that are part of the subgroup (GET, PUT)
 
 ## Running the API
 
