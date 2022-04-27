@@ -37,22 +37,19 @@ const CreatePost = () => {
             const authorId = uuidv4();
             // TODO: change to real subgroup_id
             const subgroupId = "68d580b2-f9d6-4eeb-aa45-686a984151ab";
-            const response = await fetch(
-                `https://collegetalk-staging.azurewebsites.net/posts`,
-                {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        author_id: authorId,
-                        title,
-                        body,
-                        subgroup_id: subgroupId
-                    })
-                }
-            );
+            const response = await fetch(`${process.env.API_URL}/posts`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    author_id: authorId,
+                    title,
+                    body,
+                    subgroup_id: subgroupId
+                })
+            });
 
             if (!response.ok) {
                 throw new Error(`${response.status}`);
