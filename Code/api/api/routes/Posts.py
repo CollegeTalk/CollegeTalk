@@ -20,7 +20,7 @@ class Posts(Resource):
         return jsonify([post.serialize for post in posts])
 
     def post(self):
-        # Post new item
+        # post new post
         try:
             data = request.json
             post = PostModel(

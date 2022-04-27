@@ -25,5 +25,15 @@ class Post(Resource):
         except RuntimeError:
             return jsonify({'error': f'Error updating {id}'})
 
+    def delete(self, id):
+        try:
+            post = db.session.query(PostModel).filter_by(
+                id=id).first_or_404()
+            db.session.delete(post)
+            db.session.commit()
+            return jsonify(post.serialize)
+        except RuntimeError:
+            return jsonify({'error': f'Error deleting {id}'})
+
 
 api.add_resource(Post, "/posts/<string:id>")
