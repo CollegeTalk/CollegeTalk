@@ -1,26 +1,40 @@
-import { StyleSheet } from "react-native";
-import { Card, Text } from "@rneui/themed";
+import { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Card, Text, Icon } from "@rneui/themed";
 
 import { primaryColors } from "../../constants/Colors";
 
 const styles = StyleSheet.create({
-    containerStyle: {
+    container: {
+        flexShrink: 1,
         backgroundColor: primaryColors.text,
         borderRadius: 20,
         marginVertical: 20
     },
+    headingContainer: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-between"
+    },
+    titleContainer: {
+        flex: 5
+    },
     title: {
-        fontSize: 28,
+        fontSize: 24,
         fontWeight: "bold",
         textAlign: "left",
         alignItems: "center",
         color: "black",
         marginBottom: 0
     },
+    iconContainer: {
+        flex: 1,
+        alignItems: "center"
+    },
     body: {
-        fontSize: 20,
+        fontSize: 18,
         color: "black",
-        marginTop: 15
+        marginTop: 10
     },
     timestamp: {
         fontSize: 14,
@@ -89,10 +103,41 @@ const PostCard = ({
 }: PostCardProps) => {
     const timestamp = generateTimestamp(timeCreated);
 
+    const [hasUpvote, toggleUpvote] = useState(false);
+    const [numUpvotes, setNumUpvotes] = useState(0);
+
+    const toggleUserUpvote = () => {
+        toggleUpvote(!hasUpvote);
+        setNumUpvotes(hasUpvote ? numUpvotes - 1 : numUpvotes + 1);
+    };
+
     return (
-        <Card containerStyle={styles.containerStyle}>
-            <Card.Title style={styles.title}>{title}</Card.Title>
-            <Text style={styles.timestamp}>{timestamp}</Text>
+        <Card containerStyle={styles.container}>
+            <View style={styles.headingContainer}>
+                <View style={styles.titleContainer}>
+                    <Card.Title style={styles.title}>{title}</Card.Title>
+                    <Text style={styles.timestamp}>{timestamp}</Text>
+                </View>
+                <View style={styles.iconContainer}>
+                    <Icon
+                        name={hasUpvote ? "thumb-up-alt" : "thumb-up-off-alt"}
+                        size={32}
+                        type="material"
+                        color={hasUpvote ? "green" : "slategray"}
+                        onPress={() => toggleUserUpvote()}
+                    />
+                    <Text
+                        style={{
+                            color: hasUpvote ? "green" : "slategray",
+                            fontSize: 18,
+                            fontWeight: "bold",
+                            marginLeft: 5
+                        }}
+                    >
+                        {numUpvotes}
+                    </Text>
+                </View>
+            </View>
             {body !== "" && <Text style={styles.body}>{body}</Text>}
         </Card>
     );

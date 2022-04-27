@@ -22,11 +22,10 @@ import PostsFeed from "../components/Home/PostsFeed";
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: "center",
         backgroundColor: primaryColors.background
     },
     scrollView: {
+        width: "100%",
         alignItems: "center",
         paddingTop: 15,
         paddingBottom: 30
@@ -89,7 +88,6 @@ const HomeScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/** tintColor = iOS, colors = Android */}
             <ScrollView
                 contentContainerStyle={styles.scrollView}
                 refreshControl={
@@ -101,6 +99,7 @@ const HomeScreen = () => {
                     />
                 }
             >
+                {/** tintColor = iOS, colors = Android */}
                 <Text style={styles.title}>Home</Text>
                 <PostsFeed {...{ posts }} />
             </ScrollView>
