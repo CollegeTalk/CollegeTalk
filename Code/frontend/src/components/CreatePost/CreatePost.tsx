@@ -36,7 +36,7 @@ const CreatePost = () => {
             // TODO: change to real author_id
             const authorId = uuidv4();
             // TODO: change to real subgroup_id
-            const subgroupId = "68d580b2-f9d6-4eeb-aa45-686a984151ab";
+            const subgroupId = "dffefc81-a557-4d9f-abbd-8ad5080b167e";
             const response = await fetch(`${process.env.API_URL}/posts`, {
                 method: "POST",
                 headers: {

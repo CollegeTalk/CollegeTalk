@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Card, Text, Icon } from "@rneui/themed";
 
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { CompositeNavigationProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootTabParamList, RootStackParamList } from "../../../types";
 import { primaryColors } from "../../constants/Colors";
 
 const styles = StyleSheet.create({
@@ -91,24 +95,71 @@ const generateTimestamp = (timeCreated: Date) => {
 };
 
 type PostCardProps = {
+    id: string;
     title: string;
     body: string;
     time_created: Date;
+    num_upvotes: number;
+    navigation: CompositeNavigationProp<
+        BottomTabNavigationProp<RootTabParamList, "Home">,
+        NativeStackNavigationProp<RootStackParamList, "HomeDrawer">
+    >;
 };
 
 const PostCard = ({
+    id,
     title,
     body,
-    time_created: timeCreated
+    time_created: timeCreated,
+    num_upvotes: numUpvotes,
+    navigation
 }: PostCardProps) => {
     const timestamp = generateTimestamp(timeCreated);
 
     const [hasUpvote, toggleUpvote] = useState(false);
-    const [numUpvotes, setNumUpvotes] = useState(0);
+    const [[upvotes, changedUpvote], setNumUpvotes] = useState([
+        numUpvotes,
+        false
+    ]);
+
+    useEffect(() => {
+        const updateUpvotes = async () => {
+            if (changedUpvote) {
+                console.log("updating!");
+                try {
+                    const response = await fetch(
+                        `${process.env.API_URL}/posts/${id}`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                num_upvotes: upvotes
+                            })
+                        }
+                    );
+
+                    if (!response.ok) {
+                        throw new Error(`${response.status}`);
+                    }
+                } catch (err) {
+                    console.error(`Something went wrong! Error code ${err}`);
+                }
+            }
+        };
+
+        navigation.addListener("blur", () => updateUpvotes());
+
+        return () => {
+            navigation.removeListener("blur", () => updateUpvotes());
+        };
+    });
 
     const toggleUserUpvote = () => {
         toggleUpvote(!hasUpvote);
-        setNumUpvotes(hasUpvote ? numUpvotes - 1 : numUpvotes + 1);
+        setNumUpvotes([hasUpvote ? upvotes - 1 : upvotes + 1, !changedUpvote]);
     };
 
     return (
@@ -134,7 +185,7 @@ const PostCard = ({
                             marginLeft: 5
                         }}
                     >
-                        {numUpvotes}
+                        {upvotes}
                     </Text>
                 </View>
             </View>
