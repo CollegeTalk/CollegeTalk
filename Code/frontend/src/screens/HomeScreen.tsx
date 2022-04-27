@@ -22,6 +22,7 @@ import PostsFeed from "../components/Home/PostsFeed";
 
 const styles = StyleSheet.create({
     container: {
+        height: "100%",
         backgroundColor: primaryColors.background
     },
     scrollView: {
@@ -43,17 +44,14 @@ const fetchPosts = async (
     setRefreshing: Dispatch<SetStateAction<boolean>>
 ) => {
     try {
-        const response = await fetch(
-            `https://collegetalk-staging.azurewebsites.net/posts`,
-            {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json"
-                },
-                signal: controller.signal
-            }
-        );
+        const response = await fetch(`${process.env.API_URL}/posts`, {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            signal: controller.signal
+        });
         const postsData = await response.json();
         setRefreshing(false);
         setPosts([postsData, true]);
