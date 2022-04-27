@@ -1,10 +1,4 @@
-import {
-    Dispatch,
-    SetStateAction,
-    useCallback,
-    useState,
-    useEffect
-} from "react";
+import { useCallback, useState, useEffect } from "react";
 import {
     StyleSheet,
     Alert,
@@ -14,9 +8,8 @@ import {
 } from "react-native";
 
 import { Text } from "../components/Themed";
-// import { RootTabScreenProps } from "../../types";
+import { RootTabScreenProps, Post } from "../../types";
 import { primaryColors } from "../constants/Colors";
-import { Post } from "../../types";
 
 import PostsFeed from "../components/Home/PostsFeed";
 
@@ -38,32 +31,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const fetchPosts = async (
-    controller: AbortController,
-    setPosts: Dispatch<SetStateAction<[Post[], boolean]>>,
-    setRefreshing: Dispatch<SetStateAction<boolean>>
-) => {
-    try {
-        const response = await fetch(`${process.env.API_URL}/posts`, {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            signal: controller.signal
-        });
-        const postsData = await response.json();
-        setRefreshing(false);
-        setPosts([postsData, true]);
-    } catch (err: any) {
-        if (!controller.signal.aborted) {
-            Alert.alert(`Something went wrong! ${err}`);
-        }
-    }
-};
-
-// { navigation }: RootTabScreenProps<"Home">
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
     const controller = new AbortController();
 
     const [refreshing, setRefreshing] = useState(false);
@@ -74,11 +42,37 @@ const HomeScreen = () => {
     ]);
 
     useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await fetch(`${process.env.API_URL}/posts`, {
+                    method: "GET",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    signal: controller.signal
+                });
+                const postsData = await response.json();
+                setRefreshing(false);
+                setPosts([postsData, true]);
+            } catch (err: any) {
+                if (!controller.signal.aborted) {
+                    Alert.alert(`Something went wrong! ${err}`);
+                }
+            }
+        };
+
+        navigation.addListener("focus", () => fetchPosts());
+
         if (!initialFetched || refreshing) {
-            fetchPosts(controller, setPosts, setRefreshing);
+            fetchPosts();
         }
-        return () => controller?.abort();
-    }, [controller, refreshing, posts, fetchPosts, setPosts, setRefreshing]);
+
+        return () => {
+            controller?.abort();
+            navigation.removeListener("focus", () => fetchPosts());
+        };
+    }, [controller, refreshing, posts, setPosts, setRefreshing]);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -86,6 +80,7 @@ const HomeScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            {/** tintColor = iOS, colors = Android */}
             <ScrollView
                 contentContainerStyle={styles.scrollView}
                 refreshControl={
@@ -97,9 +92,8 @@ const HomeScreen = () => {
                     />
                 }
             >
-                {/** tintColor = iOS, colors = Android */}
                 <Text style={styles.title}>Home</Text>
-                <PostsFeed {...{ posts }} />
+                <PostsFeed {...{ posts, navigation }} />
             </ScrollView>
         </SafeAreaView>
     );
