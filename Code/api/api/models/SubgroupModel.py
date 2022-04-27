@@ -28,11 +28,11 @@ class SubgroupModel(db.Model):
     @property
     def serialize(self):
         """
-        Return post in serializeable format
+        Return subgroup in serializeable format
         """
         return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'posts': [post.id for post in self.posts]
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "posts": [post.id for post in self.posts]
         }
