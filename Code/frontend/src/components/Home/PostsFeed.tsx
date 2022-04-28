@@ -1,18 +1,12 @@
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { CompositeNavigationProp } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { View } from "react-native";
 
-import { Post, RootStackParamList, RootTabParamList } from "../../../types";
+import { Post, HomeScreenNavigationProp } from "../../../types";
 
 import PostCard from "./PostCard";
 
 type PostsFeedProps = {
     posts: Post[];
-    navigation: CompositeNavigationProp<
-        BottomTabNavigationProp<RootTabParamList, "Home">,
-        NativeStackNavigationProp<RootStackParamList, "HomeDrawer">
-    >;
+    navigation: HomeScreenNavigationProp;
 };
 
 const PostsFeed = ({ posts, navigation }: PostsFeedProps) => (

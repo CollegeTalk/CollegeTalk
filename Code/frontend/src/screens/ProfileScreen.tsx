@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import LottieView from "lottie-react-native";
 
 import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../../types";
+// import { BottomTabNavScreenProps } from "../../types";
 import JaneAnimation from "../assets/animations/20860-person-on-laptop-working-on-laptop.json";
 
 const styles = StyleSheet.create({
@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
     }
 });
 
-const ProfileScreen = ({ navigation }: RootTabScreenProps<"Profile">) => (
+// { navigation }: BottomTabNavScreenProps<"Profile">
+const ProfileScreen = () => (
     <View style={styles.container}>
         <Text style={styles.title}>Profile</Text>
         <View style={styles.animationContainer}>
