@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 import { Text } from "../components/Themed";
-import { RootTabScreenProps, Post } from "../../types";
+import { HomeStackScreenProps, Post } from "../../types";
 import { primaryColors } from "../constants/Colors";
 
 import PostsFeed from "../components/Home/PostsFeed";
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const HomeScreen = ({ navigation }: RootTabScreenProps<"Home">) => {
+const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
     const controller = new AbortController();
 
     const [refreshing, setRefreshing] = useState(false);

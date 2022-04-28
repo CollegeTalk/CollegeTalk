@@ -4,13 +4,8 @@ module.exports = ({ cache }) => {
     return {
         presets: ["babel-preset-expo"],
         plugins: [
-            "react-native-reanimated/plugin",
-            ["@babel/plugin-proposal-private-methods", { loose: true }],
-            ["@babel/plugin-proposal-class-properties", { loose: true }],
-            [
-                "@babel/plugin-proposal-private-property-in-object",
-                { loose: true }
-            ]
+            "@babel/plugin-transform-flow-strip-types",
+            "react-native-reanimated/plugin"
         ],
         env: {
             development: {

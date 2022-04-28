@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
 import { Card, Text, Icon } from "@rneui/themed";
+import "react-native-gesture-handler";
 
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { CompositeNavigationProp } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootTabParamList, RootStackParamList } from "../../../types";
+import { HomeScreenNavigationProp } from "../../../types";
 import { primaryColors } from "../../constants/Colors";
 
 const styles = StyleSheet.create({
@@ -100,10 +98,7 @@ type PostCardProps = {
     body: string;
     time_created: Date;
     num_upvotes: number;
-    navigation: CompositeNavigationProp<
-        BottomTabNavigationProp<RootTabParamList, "Home">,
-        NativeStackNavigationProp<RootStackParamList, "HomeDrawer">
-    >;
+    navigation: HomeScreenNavigationProp;
 };
 
 const PostCard = ({
@@ -122,40 +117,39 @@ const PostCard = ({
         false
     ]);
 
-    useEffect(() => {
-        const updateUpvotes = async () => {
-            if (changedUpvote) {
-                console.log("updating!");
-                try {
-                    const response = await fetch(
-                        `${process.env.API_URL}/posts/${id}`,
-                        {
-                            method: "PUT",
-                            headers: {
-                                Accept: "application/json",
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                num_upvotes: upvotes
-                            })
-                        }
-                    );
+    // useEffect(() => {
+    //     const updateUpvotes = async () => {
+    //         if (changedUpvote) {
+    //             try {
+    //                 const response = await fetch(
+    //                     `${process.env.API_URL}/posts/${id}`,
+    //                     {
+    //                         method: "PUT",
+    //                         headers: {
+    //                             Accept: "application/json",
+    //                             "Content-Type": "application/json"
+    //                         },
+    //                         body: JSON.stringify({
+    //                             num_upvotes: upvotes
+    //                         })
+    //                     }
+    //                 );
 
-                    if (!response.ok) {
-                        throw new Error(`${response.status}`);
-                    }
-                } catch (err) {
-                    console.error(`Something went wrong! Error code ${err}`);
-                }
-            }
-        };
+    //                 if (!response.ok) {
+    //                     throw new Error(`${response.status}`);
+    //                 }
+    //             } catch (err) {
+    //                 console.error(`Something went wrong! Error code ${err}`);
+    //             }
+    //         }
+    //     };
 
-        navigation.addListener("blur", () => updateUpvotes());
+    //     navigation.addListener("beforeRemove", () => updateUpvotes());
 
-        return () => {
-            navigation.removeListener("blur", () => updateUpvotes());
-        };
-    });
+    //     return () => {
+    //         navigation.removeListener("beforeRemove", () => updateUpvotes());
+    //     };
+    // });
 
     const toggleUserUpvote = () => {
         toggleUpvote(!hasUpvote);
@@ -163,34 +157,40 @@ const PostCard = ({
     };
 
     return (
-        <Card containerStyle={styles.container}>
-            <View style={styles.headingContainer}>
-                <View style={styles.titleContainer}>
-                    <Card.Title style={styles.title}>{title}</Card.Title>
-                    <Text style={styles.timestamp}>{timestamp}</Text>
+        <TouchableWithoutFeedback
+            onPress={() => navigation.navigate("Post", { post_id: id })}
+        >
+            <Card containerStyle={styles.container}>
+                <View style={styles.headingContainer}>
+                    <View style={styles.titleContainer}>
+                        <Card.Title style={styles.title}>{title}</Card.Title>
+                        <Text style={styles.timestamp}>{timestamp}</Text>
+                    </View>
+                    <View style={styles.iconContainer}>
+                        <Icon
+                            name={
+                                hasUpvote ? "thumb-up-alt" : "thumb-up-off-alt"
+                            }
+                            size={32}
+                            type="material"
+                            color={hasUpvote ? "green" : "slategray"}
+                            onPress={() => toggleUserUpvote()}
+                        />
+                        <Text
+                            style={{
+                                color: hasUpvote ? "green" : "slategray",
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                marginLeft: 5
+                            }}
+                        >
+                            {upvotes}
+                        </Text>
+                    </View>
                 </View>
-                <View style={styles.iconContainer}>
-                    <Icon
-                        name={hasUpvote ? "thumb-up-alt" : "thumb-up-off-alt"}
-                        size={32}
-                        type="material"
-                        color={hasUpvote ? "green" : "slategray"}
-                        onPress={() => toggleUserUpvote()}
-                    />
-                    <Text
-                        style={{
-                            color: hasUpvote ? "green" : "slategray",
-                            fontSize: 18,
-                            fontWeight: "bold",
-                            marginLeft: 5
-                        }}
-                    >
-                        {upvotes}
-                    </Text>
-                </View>
-            </View>
-            {body !== "" && <Text style={styles.body}>{body}</Text>}
-        </Card>
+                {body !== "" && <Text style={styles.body}>{body}</Text>}
+            </Card>
+        </TouchableWithoutFeedback>
     );
 };
 

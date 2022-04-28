@@ -2,35 +2,78 @@
  * Learn more about using TypeScript with React Navigation:
  * https://reactnavigation.org/docs/typescript/
  */
-
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
     CompositeScreenProps,
+    CompositeNavigationProp,
     NavigatorScreenParams
 } from "@react-navigation/native";
+import {
+    DrawerScreenProps,
+    DrawerNavigationProp
+} from "@react-navigation/drawer";
+import {
+    BottomTabScreenProps,
+    BottomTabNavigationProp
+} from "@react-navigation/bottom-tabs";
+import { StackScreenProps, StackNavigationProp } from "@react-navigation/stack";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-export type RootTabParamList = {
+/**
+ * ParamList types
+ */
+export type HomeStackParamList = {
     Home: undefined;
+    Post: { post_id: "string" };
+};
+
+export type BottomTabParamList = {
+    HomeStack: NavigatorScreenParams<HomeStackParamList>;
     CreatePost: undefined;
     Profile: undefined;
 };
 
+export type HomeDrawerParamList = {
+    BottomTab: NavigatorScreenParams<BottomTabParamList>;
+};
+
 export type RootStackParamList = {
-    Root: NavigatorScreenParams<RootTabParamList> | undefined;
-    // Modal: undefined;
-    HomeDrawer: undefined;
+    Root: NavigatorScreenParams<HomeDrawerParamList>;
     NotFound: undefined;
 };
 
+/**
+ * ScreenProps types
+ */
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
     NativeStackScreenProps<RootStackParamList, Screen>;
 
-export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
+export type BottomTabNavScreenProps<Screen extends keyof BottomTabParamList> =
     CompositeScreenProps<
-        BottomTabScreenProps<RootTabParamList, Screen>,
-        NativeStackScreenProps<RootStackParamList>
+        BottomTabScreenProps<BottomTabParamList, Screen>,
+        DrawerScreenProps<HomeDrawerParamList>
     >;
+
+export type HomeStackScreenProps<Screen extends keyof HomeStackParamList> =
+    CompositeScreenProps<
+        StackScreenProps<HomeStackParamList, Screen>,
+        CompositeScreenProps<
+            BottomTabScreenProps<BottomTabParamList>,
+            DrawerScreenProps<HomeDrawerParamList>
+        >
+    >;
+
+export type HomeStackNavigationProp = CompositeNavigationProp<
+    BottomTabNavigationProp<BottomTabParamList, "HomeStack">,
+    StackNavigationProp<HomeStackParamList>
+>;
+
+export type HomeScreenNavigationProp = CompositeNavigationProp<
+    StackNavigationProp<HomeStackParamList, "Home">,
+    CompositeNavigationProp<
+        BottomTabNavigationProp<BottomTabParamList>,
+        DrawerNavigationProp<HomeDrawerParamList>
+    >
+>;
 
 export type Post = {
     id: string;
