@@ -1,0 +1,114 @@
+import {
+    createRef,
+    Dispatch,
+    RefObject,
+    SetStateAction,
+    useState
+} from "react";
+import {
+    StyleSheet,
+    Platform,
+    KeyboardAvoidingView,
+    Keyboard,
+    TouchableWithoutFeedback,
+    View,
+    TextInput,
+    Alert
+} from "react-native";
+import { Button, Input } from "@rneui/themed";
+import { v4 as uuidv4 } from "uuid";
+
+import Colors, { primaryColors } from "../../constants/Colors";
+import useColorScheme from "../../hooks/useColorScheme";
+
+const styles = StyleSheet.create({
+    commentContainer: {
+        flexDirection: "row"
+    },
+    inputContainer: {
+        borderBottomWidth: 0
+    }
+});
+
+type CommentInputProps = {
+    postId: string;
+    setRefreshing: Dispatch<SetStateAction<boolean>>;
+};
+
+const CommentInput = ({ postId, setRefreshing }: CommentInputProps) => {
+    const colorScheme = useColorScheme();
+
+    const commentInput: RefObject<TextInput> = createRef();
+    const [comment, setComment] = useState("");
+
+    const postComment = async () => {
+        // TODO: change to real author_id
+        const authorId = uuidv4();
+        try {
+            const response = await fetch(`${process.env.API_URL}/comments`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    author_id: authorId,
+                    body: comment,
+                    post_id: postId
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`${response.status}`);
+            }
+
+            Alert.alert("Comment posted");
+            commentInput?.current?.clear();
+            setRefreshing(true);
+        } catch (err) {
+            console.error(`Something went wrong! Error code ${err}`);
+        }
+    };
+
+    return (
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{
+                backgroundColor: Colors[colorScheme].background,
+                borderBottomWidth: 2,
+                borderBottomColor: "lightgray"
+            }}
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.commentContainer}>
+                    <Input
+                        ref={commentInput}
+                        containerStyle={{ width: "75%" }}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={{
+                            color: "black",
+                            borderRadius: 15,
+                            borderColor: primaryColors.text,
+                            borderWidth: 1,
+                            paddingHorizontal: 15,
+                            marginTop: 15
+                        }}
+                        placeholder="Add a comment"
+                        shake={() => true}
+                        onChangeText={(value) => setComment(value)}
+                    />
+                    <Button
+                        containerStyle={{ marginTop: 15 }}
+                        buttonStyle={{ borderRadius: 8 }}
+                        title="Reply"
+                        titleStyle={{ fontSize: 18 }}
+                        disabled={comment === ""}
+                        onPress={() => postComment()}
+                    />
+                </View>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+    );
+};
+
+export default CommentInput;

@@ -16,7 +16,6 @@ import CreatePost from "../components/CreatePost/CreatePost";
 
 const styles = StyleSheet.create({
     viewWrapper: {
-        width: "100%",
         height: "100%",
         flexDirection: "row",
         justifyContent: "center"

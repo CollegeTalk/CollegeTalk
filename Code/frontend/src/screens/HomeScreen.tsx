@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
     StyleSheet,
     Alert,
@@ -32,8 +32,6 @@ const styles = StyleSheet.create({
 });
 
 const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
-    const controller = new AbortController();
-
     const [refreshing, setRefreshing] = useState(false);
 
     const [[posts, initialFetched], setPosts] = useState([[], false] as [
@@ -42,6 +40,8 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
     ]);
 
     useEffect(() => {
+        const controller = new AbortController();
+
         const fetchPosts = async () => {
             try {
                 const response = await fetch(`${process.env.API_URL}/posts`, {
@@ -72,11 +72,14 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
             controller?.abort();
             navigation.removeListener("focus", () => fetchPosts());
         };
-    }, [controller, refreshing, posts, setPosts, setRefreshing]);
-
-    const onRefresh = useCallback(() => {
-        setRefreshing(true);
-    }, [setRefreshing]);
+    }, [
+        refreshing,
+        posts,
+        setPosts,
+        setRefreshing,
+        navigation,
+        initialFetched
+    ]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -86,7 +89,7 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
-                        onRefresh={onRefresh}
+                        onRefresh={() => setRefreshing(true)}
                         tintColor="white"
                         colors={["white"]}
                     />

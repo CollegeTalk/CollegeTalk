@@ -84,3 +84,12 @@ export type Post = {
     num_upvotes: number;
     subgroup_id: string;
 };
+
+export type Comment = {
+    id: string;
+    time_created: Date;
+    author_id: string;
+    body: string;
+    num_upvotes: number;
+    helpful_answer: boolean;
+};
