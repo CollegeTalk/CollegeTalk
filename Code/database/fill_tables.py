@@ -1,5 +1,6 @@
 """
 Reads from dummy_table_data.sql and inserts the values into the database (from .env)
+Make sure the tables have been created before running this script.
 """
 import os
 
