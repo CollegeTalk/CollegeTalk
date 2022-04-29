@@ -37,12 +37,14 @@ const HeaderLeft = ({ navigation, isHome, colorScheme }: HeaderLeftProps) =>
             })}
         >
             <Feather
-                name="arrow-left"
-                size={20}
+                name="chevron-left"
+                size={30}
                 color="white"
-                style={{ marginLeft: 15, marginRight: 10 }}
+                style={{ marginLeft: 5 }}
             />
-            <Text style={{ fontSize: 20, color: "white" }}>Back</Text>
+            <Text style={{ fontSize: 20, fontWeight: "600", color: "white" }}>
+                Back
+            </Text>
         </Pressable>
     );
 

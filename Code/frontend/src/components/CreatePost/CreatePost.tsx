@@ -67,13 +67,15 @@ const CreatePost = () => {
         <View style={styles.postContainer}>
             <InputField
                 ref={titleInput}
-                type={showTitleError ? "title" : ""}
+                showError={showTitleError}
+                errorMessage="Please input a valid title"
                 placeholder="Your awesome question"
                 setText={setTitle}
                 isLarge={false}
             />
             <InputField
                 ref={bodyInput}
+                showError={false}
                 placeholder="Optional details here"
                 setText={setBody}
                 isLarge

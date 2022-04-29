@@ -1,9 +1,8 @@
-import { ComponentProps, useState } from "react";
-import { View, Text } from "react-native";
+import { ComponentProps } from "react";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
-import { FAB, SearchBar } from "@rneui/themed";
+import { FAB } from "@rneui/themed";
 
 import { BottomTabParamList, BottomTabNavScreenProps } from "../../types";
 import Colors, { primaryColors } from "../constants/Colors";
@@ -13,6 +12,7 @@ import HomeStack from "./HomeStack";
 import CreatePostScreen from "../screens/CreatePostScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import HeaderLeft from "../components/Home/HeaderLeft";
+import HeaderTitle from "../components/Home/HeaderTitle";
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -62,7 +62,7 @@ const BottomTabNavigator = () => {
                         headerStyle: {
                             backgroundColor:
                                 routeName === "Home" || routeName === undefined
-                                    ? "white"
+                                    ? Colors[colorScheme].background
                                     : primaryColors.background
                         },
                         headerLeft: () => (
@@ -76,36 +76,15 @@ const BottomTabNavigator = () => {
                                 }}
                             />
                         ),
-                        headerTitle: () => {
-                            const [searchQuery, updateSearchQuery] =
-                                useState("");
-
-                            return routeName === "Home" ||
-                                routeName === undefined ? (
-                                <View style={{ width: 250 }}>
-                                    <SearchBar
-                                        containerStyle={{
-                                            width: "90%",
-                                            height: "90%",
-                                            backgroundColor: "transparent",
-                                            borderTopWidth: 0,
-                                            borderBottomWidth: 0
-                                        }}
-                                        inputContainerStyle={{
-                                            height: "40%",
-                                            marginTop: -5
-                                        }}
-                                        placeholder="Search CollegeTalk"
-                                        onChangeText={updateSearchQuery}
-                                        value={searchQuery}
-                                        lightTheme
-                                        round
-                                    />
-                                </View>
-                            ) : (
-                                <Text />
-                            );
-                        }
+                        headerTitle: () => (
+                            <HeaderTitle
+                                {...{
+                                    isHome:
+                                        routeName === "Home" ||
+                                        routeName === undefined
+                                }}
+                            />
+                        )
                     };
                 }}
             />

@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 });
 
 // TODO: this method is screaming for a refactor :(
-const generateTimestamp = (timeCreated: Date) => {
+export const generateTimestamp = (timeCreated: Date) => {
     const dateCreated = new Date(timeCreated);
 
     let timeDiff = new Date().getTime() - dateCreated.getTime();
@@ -117,39 +117,39 @@ const PostCard = ({
         false
     ]);
 
-    // useEffect(() => {
-    //     const updateUpvotes = async () => {
-    //         if (changedUpvote) {
-    //             try {
-    //                 const response = await fetch(
-    //                     `${process.env.API_URL}/posts/${id}`,
-    //                     {
-    //                         method: "PUT",
-    //                         headers: {
-    //                             Accept: "application/json",
-    //                             "Content-Type": "application/json"
-    //                         },
-    //                         body: JSON.stringify({
-    //                             num_upvotes: upvotes
-    //                         })
-    //                     }
-    //                 );
+    useEffect(() => {
+        const updateUpvotes = async () => {
+            if (changedUpvote) {
+                try {
+                    const response = await fetch(
+                        `${process.env.API_URL}/posts/${id}`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                num_upvotes: upvotes
+                            })
+                        }
+                    );
 
-    //                 if (!response.ok) {
-    //                     throw new Error(`${response.status}`);
-    //                 }
-    //             } catch (err) {
-    //                 console.error(`Something went wrong! Error code ${err}`);
-    //             }
-    //         }
-    //     };
+                    if (!response.ok) {
+                        throw new Error(`${response.status}`);
+                    }
+                } catch (err) {
+                    console.error(`Something went wrong! Error code ${err}`);
+                }
+            }
+        };
 
-    //     navigation.addListener("beforeRemove", () => updateUpvotes());
+        navigation.addListener("blur", () => updateUpvotes());
 
-    //     return () => {
-    //         navigation.removeListener("beforeRemove", () => updateUpvotes());
-    //     };
-    // });
+        return () => {
+            navigation.removeListener("blur", () => updateUpvotes());
+        };
+    }, [changedUpvote, id, navigation, upvotes]);
 
     const toggleUserUpvote = () => {
         toggleUpvote(!hasUpvote);

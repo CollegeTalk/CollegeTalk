@@ -7,8 +7,9 @@ from .base import api
 
 class Comments(Resource):
     def get(self):
-        comments = CommentModel.query.order_by(CommentModel.helpful_answer.desc(),
-                                               CommentModel.num_upvotes.desc())
+        post_id = request.args.get("post_id")
+        comments = CommentModel.query.filter_by(post_id=post_id).order_by(CommentModel.helpful_answer.desc(),
+                                                                          CommentModel.num_upvotes.desc())
         return jsonify([comment.serialize for comment in comments])
 
     def post(self):
