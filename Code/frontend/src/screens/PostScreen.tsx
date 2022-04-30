@@ -70,17 +70,19 @@ const styles = StyleSheet.create({
 });
 
 const PostScreen = ({
+    navigation,
     route: {
         params: { post_id: postId }
     }
 }: HomeStackScreenProps<"Post">) => {
     const colorScheme = useColorScheme();
 
+    const [initialFetched, setInitialFetched] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
-    const [[post, comments, initialFetched], setPostAndComments] = useState<
-        [Post | null, Comment[], boolean]
-    >([null, [], false]);
+    const [[post, comments], setPostAndComments] = useState<
+        [Post | null, Comment[]]
+    >([null, []]);
 
     const [hasUpvote, toggleUpvote] = useState(false);
     const [[upvotes, changedUpvote], setNumUpvotes] = useState([0, false]);
@@ -116,9 +118,14 @@ const PostScreen = ({
                 );
                 const commentsData = await commentsReponse.json();
 
+                setPostAndComments([postData, commentsData]);
+                setNumUpvotes([
+                    postData.num_upvotes + (hasUpvote ? 1 : 0),
+                    false
+                ]);
+
+                setInitialFetched(true);
                 setRefreshing(false);
-                setPostAndComments([postData, commentsData, true]);
-                setNumUpvotes([postData.num_upvotes, false]);
             } catch (err: any) {
                 if (!controller.signal.aborted) {
                     Alert.alert(`Something went wrong! ${err}`);
@@ -127,9 +134,45 @@ const PostScreen = ({
         };
 
         if (!initialFetched || refreshing) {
-            fetchPostAndComments();
+            setTimeout(() => fetchPostAndComments(), 1500);
         }
-    }, [initialFetched, postId, refreshing]);
+    }, [hasUpvote, initialFetched, postId, refreshing]);
+
+    useEffect(() => {
+        const updateUpvotes = async () => {
+            if (changedUpvote) {
+                try {
+                    const response = await fetch(
+                        `${process.env.API_URL}/posts/${postId}`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                num_upvotes: upvotes
+                            })
+                        }
+                    );
+
+                    if (!response.ok) {
+                        throw new Error(`${response.status}`);
+                    }
+                } catch (err) {
+                    console.error(`Something went wrong! Error code ${err}`);
+                }
+            }
+        };
+
+        const unsubscribeUpvoteListener = navigation.addListener("blur", () =>
+            updateUpvotes()
+        );
+
+        return () => {
+            unsubscribeUpvoteListener();
+        };
+    }, [changedUpvote, navigation, postId, upvotes]);
 
     const toggleUserUpvote = () => {
         toggleUpvote(!hasUpvote);
@@ -203,7 +246,8 @@ const PostScreen = ({
                         </Text>
                         {comments.map((commentData, idx) => (
                             <CommentCard
-                                {...commentData}
+                                key={commentData.id}
+                                {...{ ...commentData, navigation }}
                                 showDivider={idx !== comments.length - 1}
                             />
                         ))}

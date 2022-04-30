@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Card, Icon } from "@rneui/themed";
 
 import { primaryColors } from "../../constants/Colors";
+import { PostScreenNavigationProp } from "../../../types";
 
 import { generateTimestamp } from "../Home/PostCard";
 
@@ -32,24 +33,64 @@ const styles = StyleSheet.create({
 
 type CommentCardProps = {
     showDivider: boolean;
+    id: string;
     body: string;
     time_created: Date;
     num_upvotes: number;
     helpful_answer: boolean;
+    navigation: PostScreenNavigationProp;
 };
 
 const CommentCard = ({
     showDivider,
+    id: commentId,
     body,
     time_created: timeCreated,
     num_upvotes: numUpvotes,
-    helpful_answer: helpfulAnswer
+    helpful_answer: helpfulAnswer,
+    navigation
 }: CommentCardProps) => {
     const [hasUpvote, toggleUpvote] = useState(false);
     const [[upvotes, changedUpvote], setNumUpvotes] = useState([
-        numUpvotes,
+        numUpvotes + (hasUpvote ? 1 : 0),
         false
     ]);
+
+    useEffect(() => {
+        const updateUpvotes = async () => {
+            if (changedUpvote) {
+                try {
+                    const response = await fetch(
+                        `${process.env.API_URL}/comments/${commentId}`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                num_upvotes: upvotes
+                            })
+                        }
+                    );
+
+                    if (!response.ok) {
+                        throw new Error(`${response.status}`);
+                    }
+                } catch (err) {
+                    console.error(`Something went wrong! Error code ${err}`);
+                }
+            }
+        };
+
+        const unsubscribeUpvoteListener = navigation.addListener("blur", () =>
+            updateUpvotes()
+        );
+
+        return () => {
+            unsubscribeUpvoteListener();
+        };
+    }, [changedUpvote, commentId, navigation, upvotes]);
 
     const toggleUserUpvote = () => {
         toggleUpvote(!hasUpvote);
