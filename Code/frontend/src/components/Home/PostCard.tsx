@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
 import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
 import { Card, Text, Icon } from "@rneui/themed";
 import "react-native-gesture-handler";
 
-import { HomeScreenNavigationProp } from "../../../types";
+import { HomeScreenNavigationProp, PostUpvotesData } from "../../../types";
 import { primaryColors } from "../../constants/Colors";
 
 const styles = StyleSheet.create({
@@ -97,8 +96,9 @@ type PostCardProps = {
     title: string;
     body: string;
     time_created: Date;
-    num_upvotes: number;
+    postUpvotesData: PostUpvotesData;
     navigation: HomeScreenNavigationProp;
+    toggleUpvote: (id: string, upvoted: boolean) => void;
 };
 
 const PostCard = ({
@@ -106,55 +106,11 @@ const PostCard = ({
     title,
     body,
     time_created: timeCreated,
-    num_upvotes: numUpvotes,
-    navigation
+    postUpvotesData: { numUpvotes, hasUpvote },
+    navigation,
+    toggleUpvote
 }: PostCardProps) => {
     const timestamp = generateTimestamp(timeCreated);
-
-    const [hasUpvote, toggleUpvote] = useState(false);
-    const [[upvotes, changedUpvote], setNumUpvotes] = useState([
-        numUpvotes,
-        false
-    ]);
-
-    useEffect(() => {
-        const updateUpvotes = async () => {
-            if (changedUpvote) {
-                try {
-                    const response = await fetch(
-                        `${process.env.API_URL}/posts/${id}`,
-                        {
-                            method: "PUT",
-                            headers: {
-                                Accept: "application/json",
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                num_upvotes: upvotes
-                            })
-                        }
-                    );
-
-                    if (!response.ok) {
-                        throw new Error(`${response.status}`);
-                    }
-                } catch (err) {
-                    console.error(`Something went wrong! Error code ${err}`);
-                }
-            }
-        };
-
-        navigation.addListener("blur", () => updateUpvotes());
-
-        return () => {
-            navigation.removeListener("blur", () => updateUpvotes());
-        };
-    }, [changedUpvote, id, navigation, upvotes]);
-
-    const toggleUserUpvote = () => {
-        toggleUpvote(!hasUpvote);
-        setNumUpvotes([hasUpvote ? upvotes - 1 : upvotes + 1, !changedUpvote]);
-    };
 
     return (
         <TouchableWithoutFeedback
@@ -174,7 +130,7 @@ const PostCard = ({
                             size={32}
                             type="material"
                             color={hasUpvote ? "green" : "slategray"}
-                            onPress={() => toggleUserUpvote()}
+                            onPress={() => toggleUpvote(id, !hasUpvote)}
                         />
                         <Text
                             style={{
@@ -184,7 +140,7 @@ const PostCard = ({
                                 marginLeft: 5
                             }}
                         >
-                            {upvotes}
+                            {numUpvotes}
                         </Text>
                     </View>
                 </View>

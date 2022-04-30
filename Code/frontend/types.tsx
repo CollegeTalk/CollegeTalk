@@ -75,6 +75,14 @@ export type HomeScreenNavigationProp = CompositeNavigationProp<
     >
 >;
 
+export type PostScreenNavigationProp = CompositeNavigationProp<
+    StackNavigationProp<HomeStackParamList, "Post">,
+    CompositeNavigationProp<
+        BottomTabNavigationProp<BottomTabParamList>,
+        DrawerNavigationProp<HomeDrawerParamList>
+    >
+>;
+
 export type Post = {
     id: string;
     time_created: Date;
@@ -92,4 +100,14 @@ export type Comment = {
     body: string;
     num_upvotes: number;
     helpful_answer: boolean;
+};
+
+export type PostUpvotesData = {
+    numUpvotes: number;
+    hasUpvote: boolean;
+    changedUpvote: boolean;
+};
+
+export type UpvotesData = {
+    [id: string]: PostUpvotesData;
 };
