@@ -83,6 +83,11 @@ export type PostScreenNavigationProp = CompositeNavigationProp<
     >
 >;
 
+export type CreatePostScreenNavigationProp = CompositeNavigationProp<
+    BottomTabNavigationProp<BottomTabParamList, "CreatePost">,
+    DrawerNavigationProp<HomeDrawerParamList>
+>;
+
 export type Post = {
     id: string;
     time_created: Date;

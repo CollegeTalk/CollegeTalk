@@ -15,16 +15,16 @@ class CommentModel(db.Model):
 
     id = db.Column(UUID(as_uuid=True), primary_key=True)
     time_created = db.Column(db.DateTime(timezone=True))
-    author_id = db.Column(UUID(as_uuid=True))
+    author_id = db.Column(UUID(as_uuid=True), ForeignKey("users.id"))
     body = db.Column(db.String)
     num_upvotes = db.Column(db.Integer)
     helpful_answer = db.Column(db.Boolean)
     post_id = db.Column(UUID(as_uuid=True), ForeignKey("posts.id"))
 
-    def __init__(self, author_id, body, post_id):
+    def __init__(self, user_id, body, post_id):
         self.id = uuid4()
         self.time_created = db.func.now()
-        self.author_id = author_id
+        self.author_id = user_id
         self.body = body
         self.num_upvotes = 0
         self.helpful_answer = False

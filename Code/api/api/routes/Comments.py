@@ -7,6 +7,7 @@ from .base import api
 
 class Comments(Resource):
     def get(self):
+        # get all comments
         post_id = request.args.get("post_id")
         comments = CommentModel.query.filter_by(post_id=post_id).order_by(CommentModel.helpful_answer.desc(),
                                                                           CommentModel.num_upvotes.desc())

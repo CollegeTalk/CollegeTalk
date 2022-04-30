@@ -1,10 +1,11 @@
-import { RefObject, useState, createRef } from "react";
+import { RefObject, useState, useEffect, createRef } from "react";
 import { TextInput, View, Alert, StyleSheet } from "react-native";
 import { Button } from "@rneui/themed";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 
 import { primaryColors } from "../../constants/Colors";
+import { CreatePostScreenNavigationProp } from "../../../types";
 
 import InputField from "./InputField";
 
@@ -20,15 +21,29 @@ const styles = StyleSheet.create({
     }
 });
 
-const CreatePost = () => {
+type CreatePostProps = {
+    navigation: CreatePostScreenNavigationProp;
+};
+
+const CreatePost = ({ navigation }: CreatePostProps) => {
     const titleInput: RefObject<TextInput> = createRef();
-    const [[title, showTitleError], setTitle] = useState(["", false]);
+    const [showTitleError, toggleTitleError] = useState(false);
+    const [title, setTitle] = useState("");
+
     const bodyInput: RefObject<TextInput> = createRef();
-    const [[body], setBody] = useState(["", false]);
+    const [body, setBody] = useState("");
+
+    useEffect(() => {
+        const unsubscribeInputListener = navigation.addListener("blur", () =>
+            toggleTitleError(false)
+        );
+
+        return () => unsubscribeInputListener();
+    });
 
     const submitPost = async () => {
         if (title === "") {
-            setTitle([title, true]);
+            toggleTitleError(true);
             return;
         }
 
@@ -71,6 +86,7 @@ const CreatePost = () => {
                 errorMessage="Please input a valid title"
                 placeholder="Your awesome question"
                 setText={setTitle}
+                toggleError={toggleTitleError}
                 isLarge={false}
             />
             <InputField
