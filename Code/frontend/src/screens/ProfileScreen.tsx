@@ -1,20 +1,22 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import LottieView from "lottie-react-native";
 
-import { Text, View } from "../components/Themed";
 // import { BottomTabNavScreenProps } from "../../types";
 import JaneAnimation from "../assets/animations/20860-person-on-laptop-working-on-laptop.json";
+import { primaryColors } from "../constants/Colors";
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: "center",
         justifyContent: "flex-start",
+        backgroundColor: primaryColors.background,
         paddingTop: 20
     },
     title: {
-        fontSize: 20,
-        fontWeight: "bold"
+        fontSize: 30,
+        fontWeight: "bold",
+        color: primaryColors.text
     },
     animationContainer: {
         width: "80%",

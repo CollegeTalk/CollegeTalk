@@ -7,12 +7,12 @@ from .base import api
 
 class Subgroups(Resource):
     def get(self):
-        # Get all subgroups
+        # get all subgroups
         subgroups = SubgroupModel.query.all()
         return jsonify([subgroup.serialize for subgroup in subgroups])
 
     def post(self):
-        # Post new subgroup
+        # post new subgroup
         try:
             data = request.json
             subgroup = SubgroupModel(data["name"], data["description"])

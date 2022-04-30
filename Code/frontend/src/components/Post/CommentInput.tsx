@@ -91,10 +91,12 @@ const CommentInput = ({ postId, setRefreshing }: CommentInputProps) => {
                             borderColor: primaryColors.text,
                             borderWidth: 1,
                             paddingHorizontal: 15,
-                            marginTop: 15
+                            marginTop: 15,
+                            marginBottom: 25
                         }}
                         placeholder="Add a comment"
                         shake={() => true}
+                        renderErrorMessage={false}
                         onChangeText={(value) => setComment(value)}
                     />
                     <Button

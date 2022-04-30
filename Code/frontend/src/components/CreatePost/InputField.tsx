@@ -20,7 +20,8 @@ type InputFieldProps = {
     showError: boolean;
     errorMessage?: string;
     placeholder: string;
-    setText: Dispatch<SetStateAction<[string, boolean]>>;
+    setText: Dispatch<SetStateAction<string>>;
+    toggleError?: Dispatch<SetStateAction<boolean>>;
     isLarge: boolean;
 };
 
@@ -31,6 +32,7 @@ const InputField = forwardRef(
             errorMessage,
             placeholder,
             setText,
+            toggleError,
             isLarge
         }: InputFieldProps,
         ref
@@ -54,11 +56,16 @@ const InputField = forwardRef(
                     textAlignVertical: "top"
                 }}
                 placeholder={placeholder}
-                onChangeText={(value) => setText([value, false])}
+                onChangeText={(value) => {
+                    if (toggleError) {
+                        toggleError(value === "");
+                    }
+                    setText(value);
+                }}
                 shake={() => showError}
-                renderErrorMessage={showError}
+                renderErrorMessage={false}
                 errorStyle={{ color: "red" }}
-                errorMessage={errorMessage}
+                errorMessage={showError ? errorMessage : undefined}
                 multiline={isLarge}
             />
         </View>
