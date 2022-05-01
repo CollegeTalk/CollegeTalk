@@ -1,11 +1,10 @@
-import { RefObject, useState, useEffect, createRef } from "react";
+import { RefObject, useState, useEffect, createRef, useContext } from "react";
 import { TextInput, View, Alert, StyleSheet } from "react-native";
 import { Button } from "@rneui/themed";
-import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
 
 import { primaryColors } from "../../constants/Colors";
 import { CreatePostScreenNavigationProp } from "../../../types";
+import UserContext from "../../../UserContext";
 
 import InputField from "./InputField";
 
@@ -26,6 +25,8 @@ type CreatePostProps = {
 };
 
 const CreatePost = ({ navigation }: CreatePostProps) => {
+    const { user } = useContext(UserContext);
+
     const titleInput: RefObject<TextInput> = createRef();
     const [showTitleError, toggleTitleError] = useState(false);
     const [title, setTitle] = useState("");
@@ -48,8 +49,6 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
         }
 
         try {
-            // TODO: change to real author_id
-            const authorId = uuidv4();
             // TODO: change to real subgroup_id
             const subgroupId = "dffefc81-a557-4d9f-abbd-8ad5080b167e";
             const response = await fetch(`${process.env.API_URL}/posts`, {
@@ -59,7 +58,7 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    author_id: authorId,
+                    author_id: user,
                     title,
                     body,
                     subgroup_id: subgroupId

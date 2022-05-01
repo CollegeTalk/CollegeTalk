@@ -88,6 +88,18 @@ export type CreatePostScreenNavigationProp = CompositeNavigationProp<
     DrawerNavigationProp<HomeDrawerParamList>
 >;
 
+/**
+ * Database and data structure types
+ */
+export type User = {
+    id: string;
+    name: string;
+    username: string;
+    subgroups: string[];
+    posts: string[];
+    comments: string[];
+};
+
 export type Post = {
     id: string;
     time_created: Date;
@@ -98,15 +110,6 @@ export type Post = {
     subgroup_id: string;
 };
 
-export type Comment = {
-    id: string;
-    time_created: Date;
-    author_id: string;
-    body: string;
-    num_upvotes: number;
-    helpful_answer: boolean;
-};
-
 export type PostUpvotesData = {
     numUpvotes: number;
     hasUpvote: boolean;
@@ -115,4 +118,13 @@ export type PostUpvotesData = {
 
 export type UpvotesData = {
     [id: string]: PostUpvotesData;
+};
+
+export type Comment = {
+    id: string;
+    time_created: Date;
+    author_id: string;
+    body: string;
+    num_upvotes: number;
+    helpful_answer: boolean;
 };

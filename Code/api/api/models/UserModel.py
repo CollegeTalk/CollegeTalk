@@ -17,14 +17,26 @@ class UserModel(db.Model):
     name = db.Column(db.String)
     username = db.Column(db.String)
     subgroups = db.relationship(
-        "SubgroupModel", secondary="subgroup_users", back_populates="users")
-    posts = db.relationship("PostModel")
-    comments = db.relationship("CommentModel")
+        "SubgroupModel", secondary="users_subgroups", back_populates="users"
+    )
+    posts = db.relationship("PostModel", cascade="all, delete")
+    upvoted_posts = db.relationship(
+        "PostModel", secondary="users_posts", back_populates="users_upvoted"
+    )
+    comments = db.relationship("CommentModel", cascade="all, delete")
+    upvoted_comments = db.relationship(
+        "CommentModel", secondary="users_comments", back_populates="users_upvoted"
+    )
 
     def __init__(self, name, username=""):
         self.id = uuid4()
         self.name = name
-        self.username = generate_username()[0] if username == "" else username
+
+        newUsername = username
+        if newUsername == "":
+            newUsername = generate_username()[0]
+            newUsername = newUsername[0].upper() + newUsername[1:]
+        self.username = newUsername
 
     def __repr__(self):
         return f"<User {self.id}>"
@@ -40,5 +52,7 @@ class UserModel(db.Model):
             "username": self.username,
             "subgroups": [subgroup.id for subgroup in self.subgroups],
             "posts": [post.id for post in self.posts],
-            "comments": [comment.id for comment in self.comments]
+            "upvoted_posts": [post.id for post in self.upvoted_posts],
+            "comments": [comment.id for comment in self.comments],
+            "upvoted_comments": [comment.id for comment in self.upvoted_comments],
         }
