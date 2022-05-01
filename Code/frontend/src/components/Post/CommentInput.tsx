@@ -3,6 +3,7 @@ import {
     Dispatch,
     RefObject,
     SetStateAction,
+    useContext,
     useState
 } from "react";
 import {
@@ -16,10 +17,10 @@ import {
     Alert
 } from "react-native";
 import { Button, Input } from "@rneui/themed";
-import { v4 as uuidv4 } from "uuid";
 
 import Colors, { primaryColors } from "../../constants/Colors";
 import useColorScheme from "../../hooks/useColorScheme";
+import UserContext from "../../../UserContext";
 
 const styles = StyleSheet.create({
     commentContainer: {
@@ -36,14 +37,14 @@ type CommentInputProps = {
 };
 
 const CommentInput = ({ postId, setRefreshing }: CommentInputProps) => {
+    const { user } = useContext(UserContext);
+
     const colorScheme = useColorScheme();
 
     const commentInput: RefObject<TextInput> = createRef();
     const [comment, setComment] = useState("");
 
     const postComment = async () => {
-        // TODO: change to real author_id
-        const authorId = uuidv4();
         try {
             const response = await fetch(`${process.env.API_URL}/comments`, {
                 method: "POST",
@@ -52,7 +53,7 @@ const CommentInput = ({ postId, setRefreshing }: CommentInputProps) => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    author_id: authorId,
+                    author_id: user,
                     body: comment,
                     post_id: postId
                 })
@@ -62,7 +63,6 @@ const CommentInput = ({ postId, setRefreshing }: CommentInputProps) => {
                 throw new Error(`${response.status}`);
             }
 
-            Alert.alert("Comment posted");
             commentInput?.current?.clear();
             setRefreshing(true);
         } catch (err) {

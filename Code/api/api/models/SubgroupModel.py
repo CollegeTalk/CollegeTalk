@@ -15,9 +15,10 @@ class SubgroupModel(db.Model):
     id = db.Column(UUID(as_uuid=True), primary_key=True)
     name = db.Column(db.String, unique=True)
     description = db.Column(db.String)
-    posts = db.relationship("PostModel")
+    posts = db.relationship("PostModel", cascade="all, delete")
     users = db.relationship(
-        "UserModel", secondary="subgroup_users", back_populates="subgroups")
+        "UserModel", secondary="users_subgroups", back_populates="subgroups"
+    )
 
     def __init__(self, name, description):
         self.id = uuid4()
@@ -37,5 +38,5 @@ class SubgroupModel(db.Model):
             "name": self.name,
             "description": self.description,
             "posts": [post.id for post in self.posts],
-            "users": [user.id for user in self.users]
+            "users": [user.id for user in self.users],
         }

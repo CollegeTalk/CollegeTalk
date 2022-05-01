@@ -18,6 +18,9 @@ class CommentModel(db.Model):
     author_id = db.Column(UUID(as_uuid=True), ForeignKey("users.id"))
     body = db.Column(db.String)
     num_upvotes = db.Column(db.Integer)
+    users_upvoted = db.relationship(
+        "UserModel", secondary="users_comments", back_populates="upvoted_comments"
+    )
     helpful_answer = db.Column(db.Boolean)
     post_id = db.Column(UUID(as_uuid=True), ForeignKey("posts.id"))
 
@@ -44,6 +47,7 @@ class CommentModel(db.Model):
             "author_id": self.author_id,
             "body": self.body,
             "num_upvotes": self.num_upvotes,
+            "users_upvoted": [user_id.id for user_id in self.users_upvoted],
             "helpful_answer": self.helpful_answer,
             "post_id": self.post_id,
         }

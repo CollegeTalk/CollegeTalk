@@ -157,7 +157,8 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
         <View
             style={{
                 width: "100%",
-                flex: 1
+                flex: 1,
+                backgroundColor: primaryColors.background
             }}
         >
             <LinearProgress
