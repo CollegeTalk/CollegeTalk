@@ -12,7 +12,13 @@ import InputField from "./InputField";
 const styles = StyleSheet.create({
     postContainer: {
         width: "100%",
-        marginVertical: 20
+        marginVertical: 20,
+    },
+    drownDownContainer:{
+        width : "100%",
+        justifyContent: "center",
+        alignItems: "center"
+
     },
     buttonContainer: {
         width: "100%",
@@ -79,8 +85,10 @@ const CreatePost = () => {
                 setText={setBody}
                 isLarge
             />
+        <View style={styles.drownDownContainer}>
             <SelectDropdown
-                data={["Group1", "Group2", "Group3"]}
+                // get data from database for subgroups, is currently hardcoded 
+                data={["NERF Club", "Design Jobs", "Squash", "WEAST Comedy"]}
                 onSelect={(selectedItem, index) => {
                     console.log(selectedItem, index)
                 }}
@@ -94,8 +102,9 @@ const CreatePost = () => {
                     // if data array is an array of objects then return item.property to represent item in dropdown
                     return item
                 }}
+                defaultButtonText="Choose a Subgroup"
             />
-
+        </View>
             <View style={styles.buttonContainer}>
                 <Button
                     title="Submit"
