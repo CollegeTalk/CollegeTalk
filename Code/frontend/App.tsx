@@ -13,8 +13,8 @@ const App = () => {
     const isLoadingComplete = useCachedResources();
     const colorScheme = useColorScheme();
 
-    const [user, setUser] = useState("");
-    const userStateContext = useMemo(() => ({ user, setUser }), [user]);
+    const [userId, setUser] = useState("");
+    const userStateContext = useMemo(() => ({ userId, setUser }), [userId]);
 
     useEffect(() => {
         (async () => {

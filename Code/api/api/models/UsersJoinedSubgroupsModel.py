@@ -13,11 +13,6 @@ class UsersJoinedSubgroupsModel(db.Model):
 
     __tablename__ = "users_subgroups"
 
-    id = db.Column(UUID(as_uuid=True), primary_key=True)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4())
     user_id = db.Column(UUID(as_uuid=True), ForeignKey("users.id"))
     subgroup_id = db.Column(UUID(as_uuid=True), ForeignKey("subgroups.id"))
-
-    def __init__(self, user_id, subgroup_id):
-        self.id = uuid4()
-        self.user_id = user_id
-        self.subgroup_id = subgroup_id

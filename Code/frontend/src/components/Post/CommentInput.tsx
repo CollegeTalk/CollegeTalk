@@ -37,7 +37,7 @@ type CommentInputProps = {
 };
 
 const CommentInput = ({ postId, setRefreshing }: CommentInputProps) => {
-    const { user } = useContext(UserContext);
+    const { userId } = useContext(UserContext);
 
     const colorScheme = useColorScheme();
 
@@ -53,7 +53,7 @@ const CommentInput = ({ postId, setRefreshing }: CommentInputProps) => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    author_id: user,
+                    author_id: userId,
                     body: comment,
                     post_id: postId
                 })

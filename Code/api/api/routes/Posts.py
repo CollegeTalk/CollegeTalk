@@ -1,4 +1,5 @@
-from api.models import PostModel, db
+from api.models import db, UserModel, PostModel
+from .utils import update_relationship
 from flask import jsonify, request
 from flask_restful import Resource
 
@@ -31,6 +32,17 @@ class Posts(Resource):
             return jsonify(post.serialize)
         except RuntimeError:
             return jsonify({"error": f"Error adding {id}"})
+
+    def put(self):
+        # update posts (for upvotes)
+        try:
+            data = request.json
+            user = db.session.query(UserModel).filter_by(id=data["user_id"]).first_or_404()
+            update_relationship(PostModel, user, data)
+            db.session.commit()
+            return jsonify({ "user_id": data["user_id"], "posts": [post_id for post_id in data["objs"]] })
+        except RuntimeError:
+            return jsonify({"error": f"Error updating {id}"})
 
 
 api.add_resource(Posts, "/posts")
