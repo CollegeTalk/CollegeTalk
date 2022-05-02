@@ -1,8 +1,12 @@
 import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
-import { Card, Text, Icon } from "@rneui/themed";
+import { Card, Avatar, Text, Icon } from "@rneui/themed";
 import "react-native-gesture-handler";
 
-import { HomeScreenNavigationProp, PostUpvotesData } from "../../../types";
+import {
+    HomeScreenNavigationProp,
+    Post,
+    PostUpvotesData
+} from "../../../types";
 import { primaryColors } from "../../constants/Colors";
 
 const styles = StyleSheet.create({
@@ -17,8 +21,9 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between"
     },
-    titleContainer: {
-        flex: 5
+    avatarContainer: {
+        flex: 5,
+        flexDirection: "row"
     },
     title: {
         fontSize: 24,
@@ -42,6 +47,13 @@ const styles = StyleSheet.create({
         color: "dimgray"
     }
 });
+
+const generateColor = () => {
+    const randomColor = Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, "0");
+    return `#${randomColor}`;
+};
 
 // TODO: this method is screaming for a refactor :(
 export const generateTimestamp = (timeCreated: Date) => {
@@ -91,11 +103,7 @@ export const generateTimestamp = (timeCreated: Date) => {
     return timestampText;
 };
 
-type PostCardProps = {
-    id: string;
-    title: string;
-    body: string;
-    time_created: Date;
+type PostCardProps = Post & {
     postUpvotesData: PostUpvotesData;
     navigation: HomeScreenNavigationProp;
     toggleUpvote: (id: string, upvoted: boolean) => void;
@@ -103,6 +111,7 @@ type PostCardProps = {
 
 const PostCard = ({
     id,
+    author_username: authorUsername,
     title,
     body,
     time_created: timeCreated,
@@ -110,6 +119,9 @@ const PostCard = ({
     navigation,
     toggleUpvote
 }: PostCardProps) => {
+    const initials = authorUsername.replace(/[a-z0-9]/g, "");
+    const avatarColor = generateColor();
+
     const timestamp = generateTimestamp(timeCreated);
 
     return (
@@ -118,9 +130,23 @@ const PostCard = ({
         >
             <Card containerStyle={styles.container}>
                 <View style={styles.headingContainer}>
-                    <View style={styles.titleContainer}>
-                        <Card.Title style={styles.title}>{title}</Card.Title>
-                        <Text style={styles.timestamp}>{timestamp}</Text>
+                    <View style={styles.avatarContainer}>
+                        <Avatar
+                            size={36}
+                            rounded
+                            title={initials}
+                            containerStyle={{
+                                justifyContent: "center",
+                                backgroundColor: avatarColor,
+                                marginRight: 8
+                            }}
+                        />
+                        <View>
+                            <Card.Title style={styles.title}>
+                                {title}
+                            </Card.Title>
+                            <Text style={styles.timestamp}>{timestamp}</Text>
+                        </View>
                     </View>
                     <View style={styles.iconContainer}>
                         <Icon

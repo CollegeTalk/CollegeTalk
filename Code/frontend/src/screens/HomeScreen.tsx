@@ -1,4 +1,11 @@
-import { useState, useEffect, useContext, useCallback } from "react";
+import {
+    useState,
+    useEffect,
+    useContext,
+    useCallback,
+    Dispatch,
+    SetStateAction
+} from "react";
 import {
     StyleSheet,
     Alert,
@@ -49,7 +56,7 @@ const updateUpvotes = async (userId: string, upvotesData: UpvotesData) => {
                 };
             }
         });
-        if (Object.keys(postsData).length !== 0) {
+        if (Object.keys(postsData).length) {
             const response = await fetch(`${process.env.API_URL}/posts`, {
                 method: "PUT",
                 headers: {
@@ -62,7 +69,6 @@ const updateUpvotes = async (userId: string, upvotesData: UpvotesData) => {
                     objs: postsData
                 })
             });
-
             if (!response.ok) {
                 throw new Error(`${response.status}`);
             }
@@ -72,10 +78,57 @@ const updateUpvotes = async (userId: string, upvotesData: UpvotesData) => {
     }
 };
 
+const fetchPosts = async (
+    setFetching: Dispatch<SetStateAction<[boolean, boolean]>> | null,
+    setPosts: Dispatch<SetStateAction<Post[]>>,
+    setPostUpvotes: Dispatch<SetStateAction<UpvotesData>>,
+    userId: string,
+    upvotesData: UpvotesData
+) => {
+    try {
+        await updateUpvotes(userId, upvotesData);
+
+        const response = await fetch(`${process.env.API_URL}/posts`, {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        const postsData = await response.json();
+
+        const postUpvotesData = Object.assign(
+            {},
+            ...postsData.map(
+                ({
+                    id,
+                    num_upvotes: numUpvotes,
+                    users_upvoted: usersUpvoted
+                }: Post) => ({
+                    [id]: {
+                        numUpvotes,
+                        hasUpvote: usersUpvoted.includes(userId),
+                        changedUpvote: false
+                    }
+                })
+            )
+        );
+        if (setFetching !== null) {
+            setFetching([true, false]);
+        }
+        setPosts(postsData);
+        setPostUpvotes(postUpvotesData);
+    } catch (err: any) {
+        Alert.alert(`Something went wrong! ${err}`);
+    }
+};
+
 const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
     const colorScheme = useColorScheme();
 
-    const { userId } = useContext(UserContext);
+    const {
+        user: { id: userId }
+    } = useContext(UserContext);
 
     const [refreshing, setRefreshing] = useState(false);
     const [[updatedUpvotes, fetching], setFetching] = useState([true, true]);
@@ -98,48 +151,14 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
 
     useFocusEffect(
         useCallback(() => {
-            const fetchPosts = async () => {
-                try {
-                    await updateUpvotes(userId, upvotesData);
-
-                    const response = await fetch(
-                        `${process.env.API_URL}/posts`,
-                        {
-                            method: "GET",
-                            headers: {
-                                Accept: "application/json",
-                                "Content-Type": "application/json"
-                            }
-                        }
-                    );
-                    const postsData = await response.json();
-
-                    const postUpvotesData = Object.assign(
-                        {},
-                        ...postsData.map(
-                            ({
-                                id,
-                                num_upvotes: numUpvotes,
-                                users_upvoted: usersUpvoted
-                            }: Post) => ({
-                                [id]: {
-                                    numUpvotes,
-                                    hasUpvote: usersUpvoted.includes(userId),
-                                    changedUpvote: false
-                                }
-                            })
-                        )
-                    );
-                    setFetching([true, false]);
-                    setPosts(postsData);
-                    setPostUpvotes(postUpvotesData);
-                } catch (err: any) {
-                    Alert.alert(`Something went wrong! ${err}`);
-                }
-            };
-
             if (fetching) {
-                fetchPosts();
+                fetchPosts(
+                    setFetching,
+                    setPosts,
+                    setPostUpvotes,
+                    userId,
+                    upvotesData
+                );
             }
         }, [fetching, upvotesData, userId])
     );
@@ -157,44 +176,8 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
     };
 
     const handleRefresh = useCallback(async () => {
-        const fetchPosts = async () => {
-            try {
-                await updateUpvotes(userId, upvotesData);
-
-                const response = await fetch(`${process.env.API_URL}/posts`, {
-                    method: "GET",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                    }
-                });
-                const postsData = await response.json();
-
-                const postUpvotesData = Object.assign(
-                    {},
-                    ...postsData.map(
-                        ({
-                            id,
-                            num_upvotes: numUpvotes,
-                            users_upvoted: usersUpvoted
-                        }: Post) => ({
-                            [id]: {
-                                numUpvotes,
-                                hasUpvote: usersUpvoted.includes(userId),
-                                changedUpvote: false
-                            }
-                        })
-                    )
-                );
-                setPosts(postsData);
-                setPostUpvotes(postUpvotesData);
-            } catch (err: any) {
-                Alert.alert(`Something went wrong! ${err}`);
-            }
-        };
-
         setRefreshing(true);
-        await fetchPosts();
+        await fetchPosts(null, setPosts, setPostUpvotes, userId, upvotesData);
         setRefreshing(false);
     }, [upvotesData, userId]);
 
@@ -228,7 +211,8 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
                     />
                 )}
                 <Text style={styles.title}>Home</Text>
-                {Object.keys(upvotesData).length ? (
+                {Object.keys(upvotesData).length ||
+                Object.keys(upvotesData).length === posts.length ? (
                     <PostsFeed
                         {...{ posts, navigation, upvotesData, toggleUpvote }}
                     />

@@ -21,11 +21,11 @@ class UserModel(db.Model):
     )
     posts = db.relationship("PostModel", cascade="all, delete")
     upvoted_posts = db.relationship(
-        "PostModel", secondary="users_posts", back_populates="users_upvoted"
+        "PostModel", secondary="users_posts", back_populates="users_upvoted", cascade="all, delete"
     )
     comments = db.relationship("CommentModel", cascade="all, delete")
     upvoted_comments = db.relationship(
-        "CommentModel", secondary="users_comments", back_populates="users_upvoted"
+        "CommentModel", secondary="users_comments", back_populates="users_upvoted", cascade="all, delete"
     )
 
     def __init__(self, name, username=""):

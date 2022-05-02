@@ -17,7 +17,7 @@ class SubgroupModel(db.Model):
     description = db.Column(db.String)
     posts = db.relationship("PostModel", cascade="all, delete")
     users = db.relationship(
-        "UserModel", secondary="users_subgroups", back_populates="subgroups"
+        "UserModel", secondary="users_subgroups", back_populates="subgroups", cascade="all, delete"
     )
 
     def __init__(self, name, description):

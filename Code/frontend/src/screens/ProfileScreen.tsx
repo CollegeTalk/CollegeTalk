@@ -18,16 +18,17 @@ import UserContext from "../../UserContext";
 
 const styles = StyleSheet.create({
     container: {
+        width: "100%",
         flex: 1,
         alignItems: "center",
         justifyContent: "flex-start",
-        backgroundColor: primaryColors.background,
-        paddingTop: 20
+        backgroundColor: primaryColors.background
     },
     title: {
         fontSize: 30,
         fontWeight: "bold",
-        color: primaryColors.text
+        color: primaryColors.text,
+        paddingTop: 20
     },
     animationContainer: {
         width: "80%",
@@ -46,7 +47,10 @@ const styles = StyleSheet.create({
 const ProfileScreen = ({ navigation }: BottomTabNavScreenProps<"Profile">) => {
     const colorScheme = useColorScheme();
 
-    const { userId, setUser } = useContext(UserContext);
+    const {
+        user: { id: userId },
+        setUser
+    } = useContext(UserContext);
 
     const [initialFetched, setInitialFetched] = useState(false);
 
@@ -67,9 +71,9 @@ const ProfileScreen = ({ navigation }: BottomTabNavScreenProps<"Profile">) => {
                     signal: controller.signal
                 });
                 const usersData = await response.json();
-                setUsers(usersData);
 
                 setInitialFetched(true);
+                setUsers(usersData);
             } catch (err: any) {
                 if (!controller.signal.aborted) {
                     Alert.alert(`Something went wrong! ${err}`);
@@ -93,24 +97,17 @@ const ProfileScreen = ({ navigation }: BottomTabNavScreenProps<"Profile">) => {
 
     const selectUser = (selectedUserId: string, idx: number) => {
         setSelectedUser([selectedUserId, idx]);
-        setUser(userId);
+        setUser(users[idx]);
     };
 
-    return !initialFetched ? (
-        <View
-            style={{
-                width: "100%",
-                flex: 1,
-                backgroundColor: primaryColors.background
-            }}
-        >
-            <LinearProgress
-                animation={!initialFetched}
-                color={Colors[colorScheme].tint}
-            />
-        </View>
-    ) : (
+    return (
         <View style={styles.container}>
+            {!initialFetched && (
+                <LinearProgress
+                    animation={!initialFetched}
+                    color={Colors[colorScheme].tint}
+                />
+            )}
             <Text style={styles.title}>Profile</Text>
             <View style={styles.animationContainer}>
                 <LottieView source={JaneAnimation} autoPlay loop />
@@ -186,13 +183,13 @@ const ProfileScreen = ({ navigation }: BottomTabNavScreenProps<"Profile">) => {
                 }}
             >
                 <Text style={styles.statText}>
-                    {users[userIdx].subgroups.length} subgroups
+                    {users[userIdx]?.subgroups.length} subgroups
                 </Text>
                 <Text style={styles.statText}>
-                    {users[userIdx].posts.length} posts
+                    {users[userIdx]?.posts.length} posts
                 </Text>
                 <Text style={styles.statText}>
-                    {users[userIdx].comments.length} comments
+                    {users[userIdx]?.comments.length} comments
                 </Text>
             </View>
         </View>

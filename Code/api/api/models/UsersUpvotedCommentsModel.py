@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 from sqlalchemy import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -13,6 +11,5 @@ class UsersUpvotedCommentsModel(db.Model):
 
     __tablename__ = "users_comments"
 
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4())
-    user_id = db.Column(UUID(as_uuid=True), ForeignKey("users.id"))
-    upvoted_comment_id = db.Column(UUID(as_uuid=True), ForeignKey("comments.id"))
+    user_id = db.Column(UUID(as_uuid=True), ForeignKey("users.id"), primary_key=True)
+    upvoted_comment_id = db.Column(UUID(as_uuid=True), ForeignKey("comments.id"), primary_key=True)

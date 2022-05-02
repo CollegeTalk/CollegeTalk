@@ -97,18 +97,40 @@ export type User = {
     username: string;
     subgroups: string[];
     posts: string[];
+    upvoted_posts: string[];
     comments: string[];
+    upvoted_comments: string[];
 };
 
 export type Post = {
     id: string;
     time_created: Date;
     author_id: string;
+    author_username: string;
     title: string;
     body: string;
     num_upvotes: number;
     users_upvoted: string[];
     subgroup_id: string;
+};
+
+export type Comment = {
+    id: string;
+    time_created: Date;
+    author_id: string;
+    body: string;
+    num_upvotes: number;
+    users_upvoted: string[];
+    helpful_answer: boolean;
+};
+
+/**
+ * Frontend model types
+ */
+export type ContextUser = {
+    id: string;
+    name: string;
+    username: string;
 };
 
 export type PostUpvotesData = {
@@ -126,14 +148,4 @@ export type UpvotesRequestBody = {
         num_upvotes: number;
         function: string;
     };
-};
-
-export type Comment = {
-    id: string;
-    time_created: Date;
-    author_id: string;
-    body: string;
-    num_upvotes: number;
-    users_upvoted: string[];
-    helpful_answer: boolean;
 };
