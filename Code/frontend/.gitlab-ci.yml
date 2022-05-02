@@ -18,6 +18,7 @@ lint_frontend:
 test_frontend:
     stage: test
     script:
+        - npx jest -u --coverage=false
         - npx jest --ci
 
 staging_frontend_expo:
@@ -29,7 +30,6 @@ staging_frontend_expo:
     only:
         - dev
         - main
-
 
 deploy_frontend:
     stage: deploy

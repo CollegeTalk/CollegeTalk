@@ -25,7 +25,7 @@ type CreatePostProps = {
 };
 
 const CreatePost = ({ navigation }: CreatePostProps) => {
-    const { user } = useContext(UserContext);
+    const { userId } = useContext(UserContext);
 
     const titleInput: RefObject<TextInput> = createRef();
     const [showTitleError, toggleTitleError] = useState(false);
@@ -58,7 +58,7 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    author_id: user,
+                    author_id: userId,
                     title,
                     body,
                     subgroup_id: subgroupId

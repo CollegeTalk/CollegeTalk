@@ -13,11 +13,6 @@ class UsersUpvotedPostsModel(db.Model):
 
     __tablename__ = "users_posts"
 
-    id = db.Column(UUID(as_uuid=True), primary_key=True)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid4())
     user_id = db.Column(UUID(as_uuid=True), ForeignKey("users.id"))
     upvoted_post_id = db.Column(UUID(as_uuid=True), ForeignKey("posts.id"))
-
-    def __init__(self, user_id, upvoted_post_id):
-        self.id = uuid4()
-        self.user_id = user_id
-        self.upvoted_post_id = upvoted_post_id

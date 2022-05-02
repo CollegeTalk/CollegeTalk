@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
 const ProfileScreen = ({ navigation }: BottomTabNavScreenProps<"Profile">) => {
     const colorScheme = useColorScheme();
 
-    const { user, setUser } = useContext(UserContext);
+    const { userId, setUser } = useContext(UserContext);
 
     const [initialFetched, setInitialFetched] = useState(false);
 
     const [users, setUsers] = useState<User[]>([]);
-    const [[selectedUser, userIdx], setSelectedUser] = useState([user, 0]);
+    const [[selectedUser, userIdx], setSelectedUser] = useState([userId, 0]);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -91,8 +91,8 @@ const ProfileScreen = ({ navigation }: BottomTabNavScreenProps<"Profile">) => {
         };
     });
 
-    const selectUser = (userId: string, idx: number) => {
-        setSelectedUser([userId, idx]);
+    const selectUser = (selectedUserId: string, idx: number) => {
+        setSelectedUser([selectedUserId, idx]);
         setUser(userId);
     };
 

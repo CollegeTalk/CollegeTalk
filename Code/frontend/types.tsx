@@ -107,6 +107,7 @@ export type Post = {
     title: string;
     body: string;
     num_upvotes: number;
+    users_upvoted: string[];
     subgroup_id: string;
 };
 
@@ -120,11 +121,19 @@ export type UpvotesData = {
     [id: string]: PostUpvotesData;
 };
 
+export type UpvotesRequestBody = {
+    [id: string]: {
+        num_upvotes: number;
+        function: string;
+    };
+};
+
 export type Comment = {
     id: string;
     time_created: Date;
     author_id: string;
     body: string;
     num_upvotes: number;
+    users_upvoted: string[];
     helpful_answer: boolean;
 };
