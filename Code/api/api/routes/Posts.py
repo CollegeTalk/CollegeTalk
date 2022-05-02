@@ -18,7 +18,14 @@ class Posts(Resource):
         # get all posts, newest to oldest
         else:
             posts = PostModel.query.order_by(PostModel.time_created.desc())
-        return jsonify([post.serialize for post in posts])
+        
+        result = [post.serialize for post in posts]
+        
+        fetch_author_username = lambda id: UserModel.query.filter_by(id=id).first().username
+        for post_data in result:
+            post_data["author_username"] = fetch_author_username(post_data["author_id"])
+
+        return jsonify(result)
 
     def post(self):
         # post new post
@@ -40,7 +47,7 @@ class Posts(Resource):
             user = db.session.query(UserModel).filter_by(id=data["user_id"]).first_or_404()
             update_relationship(PostModel, user, data)
             db.session.commit()
-            return jsonify({ "user_id": data["user_id"], "posts": [post_id for post_id in data["objs"]] })
+            return jsonify({ "user_id": data["user_id"], "posts": [post.id for post in user.upvoted_posts] })
         except RuntimeError:
             return jsonify({"error": f"Error updating {id}"})
 

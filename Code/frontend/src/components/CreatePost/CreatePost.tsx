@@ -25,7 +25,9 @@ type CreatePostProps = {
 };
 
 const CreatePost = ({ navigation }: CreatePostProps) => {
-    const { userId } = useContext(UserContext);
+    const {
+        user: { id: userId }
+    } = useContext(UserContext);
 
     const titleInput: RefObject<TextInput> = createRef();
     const [showTitleError, toggleTitleError] = useState(false);

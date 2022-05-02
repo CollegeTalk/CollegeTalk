@@ -1,6 +1,18 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
+import { User } from "./types";
+
 export default createContext<{
-    userId: string;
-    setUser: Dispatch<SetStateAction<string>>;
-}>({ userId: "", setUser: () => {} });
+    user: User;
+    setUser: Dispatch<SetStateAction<User>>;
+}>({
+    user: {
+        id: "",
+        name: "",
+        username: "",
+        subgroups: [],
+        posts: [],
+        comments: []
+    },
+    setUser: () => null
+});

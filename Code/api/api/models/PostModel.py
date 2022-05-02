@@ -20,7 +20,7 @@ class PostModel(db.Model):
     body = db.Column(db.String)
     num_upvotes = db.Column(db.Integer)
     users_upvoted = db.relationship(
-        "UserModel", secondary="users_posts", back_populates="upvoted_posts"
+        "UserModel", secondary="users_posts", back_populates="upvoted_posts", cascade="all, delete"
     )
     resolved = db.Column(db.Boolean)
     subgroup_id = db.Column(UUID(as_uuid=True), ForeignKey("subgroups.id"))

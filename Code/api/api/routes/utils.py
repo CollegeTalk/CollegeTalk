@@ -11,6 +11,7 @@ def update_fields(obj, data):
 def update_relationship(model, user, data):
     """updater function for relationships to use in PUT routes"""
     for obj_id, obj_data in data["objs"].items():
+        print(obj_id)
         obj = db.session.query(model).filter_by(id=obj_id).first_or_404()
         field = getattr(obj, data["field"])
 
