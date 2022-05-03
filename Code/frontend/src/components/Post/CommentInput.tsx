@@ -33,11 +33,13 @@ const styles = StyleSheet.create({
 
 type CommentInputProps = {
     postId: string;
-    setRefreshing: Dispatch<SetStateAction<boolean>>;
+    setFetching: Dispatch<SetStateAction<boolean>>;
 };
 
-const CommentInput = ({ postId, setRefreshing }: CommentInputProps) => {
-    const { userId } = useContext(UserContext);
+const CommentInput = ({ postId, setFetching }: CommentInputProps) => {
+    const {
+        user: { id: userId }
+    } = useContext(UserContext);
 
     const colorScheme = useColorScheme();
 
@@ -64,9 +66,9 @@ const CommentInput = ({ postId, setRefreshing }: CommentInputProps) => {
             }
 
             commentInput?.current?.clear();
-            setRefreshing(true);
+            setFetching(true);
         } catch (err) {
-            console.error(`Something went wrong! Error code ${err}`);
+            Alert.alert(`Something went wrong! Error code ${err}`);
         }
     };
 

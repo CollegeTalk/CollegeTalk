@@ -21,7 +21,7 @@ import UserContext from "../../UserContext";
 import {
     HomeStackScreenProps,
     Post,
-    UpvotesData,
+    AggregateUpvotesData,
     UpvotesRequestBody
 } from "../../types";
 import Colors, { primaryColors } from "../constants/Colors";
@@ -43,7 +43,10 @@ const styles = StyleSheet.create({
     }
 });
 
-const updateUpvotes = async (userId: string, upvotesData: UpvotesData) => {
+const updateUpvotes = async (
+    userId: string,
+    upvotesData: AggregateUpvotesData
+) => {
     try {
         const postsData: UpvotesRequestBody = {};
         Object.keys(upvotesData).forEach((postId) => {
@@ -79,14 +82,17 @@ const updateUpvotes = async (userId: string, upvotesData: UpvotesData) => {
 };
 
 const fetchPosts = async (
-    setFetching: Dispatch<SetStateAction<[boolean, boolean]>> | null,
+    setFetching: Dispatch<SetStateAction<boolean>> | null,
     setPosts: Dispatch<SetStateAction<Post[]>>,
-    setPostUpvotes: Dispatch<SetStateAction<UpvotesData>>,
+    setPostUpvotes: Dispatch<SetStateAction<AggregateUpvotesData>>,
+    updatedUpvotes: boolean,
     userId: string,
-    upvotesData: UpvotesData
+    upvotesData: AggregateUpvotesData
 ) => {
     try {
-        await updateUpvotes(userId, upvotesData);
+        if (!updatedUpvotes) {
+            await updateUpvotes(userId, upvotesData);
+        }
 
         const response = await fetch(`${process.env.API_URL}/posts`, {
             method: "GET",
@@ -114,7 +120,7 @@ const fetchPosts = async (
             )
         );
         if (setFetching !== null) {
-            setFetching([true, false]);
+            setFetching(false);
         }
         setPosts(postsData);
         setPostUpvotes(postUpvotesData);
@@ -131,23 +137,22 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
     } = useContext(UserContext);
 
     const [refreshing, setRefreshing] = useState(false);
-    const [[updatedUpvotes, fetching], setFetching] = useState([true, true]);
+    const [fetching, setFetching] = useState(true);
 
     const [posts, setPosts] = useState<Post[]>([]);
-
-    const [upvotesData, setPostUpvotes] = useState<UpvotesData>({});
+    const [upvotesData, setPostUpvotes] = useState<AggregateUpvotesData>({});
 
     useEffect(() => {
         const unsubscribeUpvoteListener = navigation.addListener(
             "blur",
             async () => {
                 await updateUpvotes(userId, upvotesData);
-                setFetching([true, true]);
+                setFetching(true);
             }
         );
 
         return () => unsubscribeUpvoteListener();
-    }, [navigation, updatedUpvotes, upvotesData, userId]);
+    }, [navigation, upvotesData, userId]);
 
     useFocusEffect(
         useCallback(() => {
@@ -156,6 +161,7 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
                     setFetching,
                     setPosts,
                     setPostUpvotes,
+                    true,
                     userId,
                     upvotesData
                 );
@@ -177,7 +183,14 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
 
     const handleRefresh = useCallback(async () => {
         setRefreshing(true);
-        await fetchPosts(null, setPosts, setPostUpvotes, userId, upvotesData);
+        await fetchPosts(
+            null,
+            setPosts,
+            setPostUpvotes,
+            false,
+            userId,
+            upvotesData
+        );
         setRefreshing(false);
     }, [upvotesData, userId]);
 
@@ -204,21 +217,19 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
                     />
                 }
             >
-                {fetching && (
+                {fetching ? (
                     <LinearProgress
                         animation={fetching}
                         color={Colors[colorScheme].tint}
                     />
-                )}
+                ) : null}
                 <Text style={styles.title}>Home</Text>
                 {Object.keys(upvotesData).length ||
                 Object.keys(upvotesData).length === posts.length ? (
                     <PostsFeed
                         {...{ posts, navigation, upvotesData, toggleUpvote }}
                     />
-                ) : (
-                    <Text />
-                )}
+                ) : null}
             </ScrollView>
         </SafeAreaView>
     );

@@ -118,6 +118,7 @@ export type Comment = {
     id: string;
     time_created: Date;
     author_id: string;
+    author_username: string;
     body: string;
     num_upvotes: number;
     users_upvoted: string[];
@@ -133,14 +134,19 @@ export type ContextUser = {
     username: string;
 };
 
-export type PostUpvotesData = {
+export type UpvotesData = {
     numUpvotes: number;
     hasUpvote: boolean;
     changedUpvote: boolean;
 };
 
-export type UpvotesData = {
-    [id: string]: PostUpvotesData;
+export type AggregateUpvotesData = {
+    [id: string]: UpvotesData;
+};
+
+export type PostAndCommentsUpvotesData = {
+    post: UpvotesData;
+    comments: AggregateUpvotesData;
 };
 
 export type UpvotesRequestBody = {

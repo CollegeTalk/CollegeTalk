@@ -102,12 +102,12 @@ const ProfileScreen = ({ navigation }: BottomTabNavScreenProps<"Profile">) => {
 
     return (
         <View style={styles.container}>
-            {!initialFetched && (
+            {!initialFetched ? (
                 <LinearProgress
                     animation={!initialFetched}
                     color={Colors[colorScheme].tint}
                 />
-            )}
+            ) : null}
             <Text style={styles.title}>Profile</Text>
             <View style={styles.animationContainer}>
                 <LottieView source={JaneAnimation} autoPlay loop />
