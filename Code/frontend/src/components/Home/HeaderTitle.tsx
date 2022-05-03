@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { SearchBar } from "@rneui/themed";
 
 type HeaderTitleProps = {
@@ -30,9 +30,7 @@ const HeaderTitle = ({ isHome }: HeaderTitleProps) => {
                 round
             />
         </View>
-    ) : (
-        <Text />
-    );
+    ) : null;
 };
 
 export default HeaderTitle;

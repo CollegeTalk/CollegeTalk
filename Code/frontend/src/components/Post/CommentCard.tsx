@@ -1,11 +1,19 @@
-import { useState, useEffect } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { Card, Icon } from "@rneui/themed";
+import { Card, Icon, Avatar } from "@rneui/themed";
 
 import { primaryColors } from "../../constants/Colors";
-import { PostScreenNavigationProp } from "../../../types";
+import {
+    Comment,
+    UpvotesData,
+    PostAndCommentsUpvotesData
+} from "../../../types";
 
-import { generateTimestamp } from "../Home/PostCard";
+import {
+    generateColor,
+    generateTimestamp,
+    getInitials
+} from "../Home/PostCard";
 
 const styles = StyleSheet.create({
     headingContainer: {
@@ -13,8 +21,9 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between"
     },
-    titleContainer: {
-        flex: 5
+    avatarContainer: {
+        flex: 5,
+        flexDirection: "row"
     },
     iconContainer: {
         flex: 1,
@@ -31,72 +40,24 @@ const styles = StyleSheet.create({
     }
 });
 
-type CommentCardProps = {
+type CommentCardProps = Comment & {
     showDivider: boolean;
-    id: string;
-    body: string;
-    time_created: Date;
-    num_upvotes: number;
-    helpful_answer: boolean;
-    navigation: PostScreenNavigationProp;
+    commentUpvotesData: UpvotesData;
+    setUpvotes: Dispatch<SetStateAction<PostAndCommentsUpvotesData>>;
 };
 
 const CommentCard = ({
     showDivider,
-    id: commentId,
+    commentUpvotesData: { numUpvotes, hasUpvote, changedUpvote },
+    id,
     body,
+    author_username: authorUsername,
     time_created: timeCreated,
-    num_upvotes: numUpvotes,
-    helpful_answer: helpfulAnswer,
-    navigation
+    setUpvotes
 }: CommentCardProps) => {
-    const [hasUpvote, toggleUpvote] = useState(false);
-    const [[upvotes, changedUpvote], setNumUpvotes] = useState([
-        numUpvotes + (hasUpvote ? 1 : 0),
-        false
-    ]);
+    const [avatarColor] = useState(generateColor());
 
-    useEffect(() => {
-        const updateUpvotes = async () => {
-            if (changedUpvote) {
-                try {
-                    const response = await fetch(
-                        `${process.env.API_URL}/comments/${commentId}`,
-                        {
-                            method: "PUT",
-                            headers: {
-                                Accept: "application/json",
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                num_upvotes: upvotes
-                            })
-                        }
-                    );
-
-                    if (!response.ok) {
-                        throw new Error(`${response.status}`);
-                    }
-                } catch (err) {
-                    console.error(`Something went wrong! Error code ${err}`);
-                }
-            }
-        };
-
-        const unsubscribeUpvoteListener = navigation.addListener("blur", () =>
-            updateUpvotes()
-        );
-
-        return () => {
-            unsubscribeUpvoteListener();
-        };
-    }, [changedUpvote, commentId, navigation, upvotes]);
-
-    const toggleUserUpvote = () => {
-        toggleUpvote(!hasUpvote);
-        setNumUpvotes([hasUpvote ? upvotes - 1 : upvotes + 1, !changedUpvote]);
-    };
-
+    const initials = getInitials(authorUsername);
     const timestamp = generateTimestamp(timeCreated);
 
     return (
@@ -115,9 +76,21 @@ const CommentCard = ({
             }}
         >
             <View style={styles.headingContainer}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.timestamp}>{timestamp}</Text>
-                    <Text style={styles.body}>{body}</Text>
+                <View style={styles.avatarContainer}>
+                    <Avatar
+                        size={42}
+                        rounded
+                        title={initials}
+                        containerStyle={{
+                            justifyContent: "center",
+                            backgroundColor: avatarColor,
+                            marginRight: 8
+                        }}
+                    />
+                    <View>
+                        <Text style={styles.timestamp}>{timestamp}</Text>
+                        <Text style={styles.body}>{body}</Text>
+                    </View>
                 </View>
                 <View style={styles.iconContainer}>
                     <Icon
@@ -125,7 +98,20 @@ const CommentCard = ({
                         size={32}
                         type="material"
                         color={hasUpvote ? "green" : "slategray"}
-                        onPress={() => toggleUserUpvote()}
+                        onPress={() =>
+                            setUpvotes((prevState) => ({
+                                ...prevState,
+                                comments: {
+                                    ...prevState.comments,
+                                    [id]: {
+                                        numUpvotes:
+                                            numUpvotes + (hasUpvote ? 0 : 1),
+                                        hasUpvote: !hasUpvote,
+                                        changedUpvote: !changedUpvote
+                                    }
+                                }
+                            }))
+                        }
                     />
                     <Text
                         style={{
@@ -135,7 +121,7 @@ const CommentCard = ({
                             marginLeft: 5
                         }}
                     >
-                        {upvotes}
+                        {numUpvotes}
                     </Text>
                 </View>
             </View>

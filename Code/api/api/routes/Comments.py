@@ -8,11 +8,18 @@ from .base import api
 
 class Comments(Resource):
     def get(self):
-        # get all comments
+        # get comments for queried post
         post_id = request.args.get("post_id")
         comments = CommentModel.query.filter_by(post_id=post_id).order_by(CommentModel.helpful_answer.desc(),
                                                                           CommentModel.num_upvotes.desc())
-        return jsonify([comment.serialize for comment in comments])
+
+        result = [comment.serialize for comment in comments]
+
+        fetch_author_username = lambda id: UserModel.query.filter_by(id=id).first().username
+        for comment_data in result:
+            comment_data["author_username"] = fetch_author_username(comment_data["author_id"])
+
+        return jsonify(result)
 
     def post(self):
         # post new comment

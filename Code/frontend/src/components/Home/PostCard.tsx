@@ -1,12 +1,9 @@
+import { useState } from "react";
 import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
 import { Card, Avatar, Text, Icon } from "@rneui/themed";
 import "react-native-gesture-handler";
 
-import {
-    HomeScreenNavigationProp,
-    Post,
-    PostUpvotesData
-} from "../../../types";
+import { HomeScreenNavigationProp, Post, UpvotesData } from "../../../types";
 import { primaryColors } from "../../constants/Colors";
 
 const styles = StyleSheet.create({
@@ -48,7 +45,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const generateColor = () => {
+export const generateColor = () => {
     const randomColor = Math.floor(Math.random() * 16777215)
         .toString(16)
         .padStart(6, "0");
@@ -67,9 +64,13 @@ export const generateTimestamp = (timeCreated: Date) => {
         // ms -> secs
         timeDiff = Math.round(timeDiff / 1000);
         if (timeDiff < 60) {
-            timestampText += `${timeDiff} second${
-                timeDiff !== 1 ? "s" : ""
-            } ago`;
+            if (timeDiff < 10) {
+                timestampText += "just now";
+            } else {
+                timestampText += `${timeDiff} second${
+                    timeDiff !== 1 ? "s" : ""
+                } ago`;
+            }
         } else {
             // secs -> mins
             timeDiff = Math.round(timeDiff / 60);
@@ -103,8 +104,11 @@ export const generateTimestamp = (timeCreated: Date) => {
     return timestampText;
 };
 
+export const getInitials = (authorUsername: string) =>
+    authorUsername.replace(/[a-z0-9]/g, "");
+
 type PostCardProps = Post & {
-    postUpvotesData: PostUpvotesData;
+    postUpvotesData: UpvotesData;
     navigation: HomeScreenNavigationProp;
     toggleUpvote: (id: string, upvoted: boolean) => void;
 };
@@ -119,8 +123,8 @@ const PostCard = ({
     navigation,
     toggleUpvote
 }: PostCardProps) => {
-    const initials = authorUsername.replace(/[a-z0-9]/g, "");
-    const avatarColor = generateColor();
+    const initials = getInitials(authorUsername);
+    const [avatarColor] = useState(generateColor());
 
     const timestamp = generateTimestamp(timeCreated);
 
@@ -170,7 +174,7 @@ const PostCard = ({
                         </Text>
                     </View>
                 </View>
-                {body !== "" && <Text style={styles.body}>{body}</Text>}
+                {body !== "" ? <Text style={styles.body}>{body}</Text> : null}
             </Card>
         </TouchableWithoutFeedback>
     );

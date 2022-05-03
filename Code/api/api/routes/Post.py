@@ -10,7 +10,12 @@ class Post(Resource):
     def get(self, id):
         try:
             post = PostModel.query.filter_by(id=id).first()
-            return jsonify(post.serialize)
+            post_data = post.serialize
+        
+            user_id = post_data["author_id"]
+            post_data["author_username"] = UserModel.query.filter_by(id=user_id).first().username
+
+            return jsonify(post_data)
         except RuntimeError:
             return jsonify({"error": f"Post {id} not found"})
 
