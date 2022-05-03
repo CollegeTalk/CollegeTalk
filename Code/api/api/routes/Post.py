@@ -23,7 +23,7 @@ class Post(Resource):
         try:
             post = db.session.query(PostModel).filter_by(id=id).first_or_404()
             data = request.json
-            update_fields(UserModel, post, data)
+            update_fields(post, data)
             db.session.commit()
             return jsonify(post.serialize)
         except RuntimeError:
