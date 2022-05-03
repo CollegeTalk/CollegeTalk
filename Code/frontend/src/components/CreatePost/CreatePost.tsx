@@ -1,10 +1,10 @@
-import { RefObject, useState, createRef } from "react";
+import { RefObject, useState, useEffect, createRef, useContext } from "react";
 import { TextInput, View, Alert, StyleSheet } from "react-native";
 import { Button } from "@rneui/themed";
-import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
 
 import { primaryColors } from "../../constants/Colors";
+import { CreatePostScreenNavigationProp } from "../../../types";
+import UserContext from "../../../UserContext";
 
 import InputField from "./InputField";
 
@@ -20,39 +20,52 @@ const styles = StyleSheet.create({
     }
 });
 
-const CreatePost = () => {
+type CreatePostProps = {
+    navigation: CreatePostScreenNavigationProp;
+};
+
+const CreatePost = ({ navigation }: CreatePostProps) => {
+    const {
+        user: { id: userId }
+    } = useContext(UserContext);
+
     const titleInput: RefObject<TextInput> = createRef();
-    const [[title, showTitleError], setTitle] = useState(["", false]);
+    const [showTitleError, toggleTitleError] = useState(false);
+    const [title, setTitle] = useState("");
+
     const bodyInput: RefObject<TextInput> = createRef();
-    const [[body], setBody] = useState(["", false]);
+    const [body, setBody] = useState("");
+
+    useEffect(() => {
+        const unsubscribeInputListener = navigation.addListener("blur", () =>
+            toggleTitleError(false)
+        );
+
+        return () => unsubscribeInputListener();
+    });
 
     const submitPost = async () => {
         if (title === "") {
-            setTitle([title, true]);
+            toggleTitleError(true);
             return;
         }
 
         try {
-            // TODO: change to real author_id
-            const authorId = uuidv4();
             // TODO: change to real subgroup_id
-            const subgroupId = "68d580b2-f9d6-4eeb-aa45-686a984151ab";
-            const response = await fetch(
-                `https://collegetalk-staging.azurewebsites.net/posts`,
-                {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        author_id: authorId,
-                        title,
-                        body,
-                        subgroup_id: subgroupId
-                    })
-                }
-            );
+            const subgroupId = "dffefc81-a557-4d9f-abbd-8ad5080b167e";
+            const response = await fetch(`${process.env.API_URL}/posts`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    author_id: userId,
+                    title,
+                    body,
+                    subgroup_id: subgroupId
+                })
+            });
 
             if (!response.ok) {
                 throw new Error(`${response.status}`);
@@ -70,13 +83,16 @@ const CreatePost = () => {
         <View style={styles.postContainer}>
             <InputField
                 ref={titleInput}
-                type={showTitleError ? "title" : ""}
+                showError={showTitleError}
+                errorMessage="Please input a valid title"
                 placeholder="Your awesome question"
                 setText={setTitle}
+                toggleError={toggleTitleError}
                 isLarge={false}
             />
             <InputField
                 ref={bodyInput}
+                showError={false}
                 placeholder="Optional details here"
                 setText={setBody}
                 isLarge

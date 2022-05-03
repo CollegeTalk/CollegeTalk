@@ -1,108 +1,235 @@
 import {
-    Dispatch,
-    SetStateAction,
-    useCallback,
     useState,
-    useEffect
+    useEffect,
+    useContext,
+    useCallback,
+    Dispatch,
+    SetStateAction
 } from "react";
 import {
     StyleSheet,
     Alert,
     RefreshControl,
     SafeAreaView,
-    ScrollView
+    ScrollView,
+    Text
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import { LinearProgress } from "@rneui/themed";
 
-import { Text } from "../components/Themed";
-// import { RootTabScreenProps } from "../../types";
-import { primaryColors } from "../constants/Colors";
-import { Post } from "../../types";
+import UserContext from "../../UserContext";
+import {
+    HomeStackScreenProps,
+    Post,
+    AggregateUpvotesData,
+    UpvotesRequestBody
+} from "../../types";
+import Colors, { primaryColors } from "../constants/Colors";
+import useColorScheme from "../hooks/useColorScheme";
 
 import PostsFeed from "../components/Home/PostsFeed";
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        backgroundColor: primaryColors.background
-    },
     scrollView: {
+        width: "100%",
         alignItems: "center",
-        paddingTop: 15,
         paddingBottom: 30
     },
     title: {
         fontSize: 30,
         fontWeight: "bold",
-        color: primaryColors.text
+        color: primaryColors.text,
+        paddingTop: 15
     }
 });
 
-const fetchPosts = async (
-    controller: AbortController,
-    setPosts: Dispatch<SetStateAction<[Post[], boolean]>>,
-    setRefreshing: Dispatch<SetStateAction<boolean>>
+const updateUpvotes = async (
+    userId: string,
+    upvotesData: AggregateUpvotesData
 ) => {
     try {
-        const response = await fetch(
-            `https://collegetalk-staging.azurewebsites.net/posts`,
-            {
-                method: "GET",
+        const postsData: UpvotesRequestBody = {};
+        Object.keys(upvotesData).forEach((postId) => {
+            const { numUpvotes, hasUpvote, changedUpvote } =
+                upvotesData[postId];
+            if (changedUpvote) {
+                postsData[postId] = {
+                    num_upvotes: numUpvotes,
+                    function: hasUpvote ? "add" : "remove"
+                };
+            }
+        });
+        if (Object.keys(postsData).length) {
+            const response = await fetch(`${process.env.API_URL}/posts`, {
+                method: "PUT",
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json"
                 },
-                signal: controller.signal
+                body: JSON.stringify({
+                    user_id: userId,
+                    field: "users_upvoted",
+                    objs: postsData
+                })
+            });
+            if (!response.ok) {
+                throw new Error(`${response.status}`);
             }
-        );
-        const postsData = await response.json();
-        setRefreshing(false);
-        setPosts([postsData, true]);
-    } catch (err: any) {
-        if (!controller.signal.aborted) {
-            Alert.alert(`Something went wrong! ${err}`);
         }
+    } catch (err) {
+        Alert.alert(`Something went wrong! Error code ${err}`);
     }
 };
 
-// { navigation }: RootTabScreenProps<"Home">
-const HomeScreen = () => {
-    const controller = new AbortController();
+const fetchPosts = async (
+    setFetching: Dispatch<SetStateAction<boolean>> | null,
+    setPosts: Dispatch<SetStateAction<Post[]>>,
+    setPostUpvotes: Dispatch<SetStateAction<AggregateUpvotesData>>,
+    updatedUpvotes: boolean,
+    userId: string,
+    upvotesData: AggregateUpvotesData
+) => {
+    try {
+        if (!updatedUpvotes) {
+            await updateUpvotes(userId, upvotesData);
+        }
+
+        const response = await fetch(`${process.env.API_URL}/posts`, {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        const postsData = await response.json();
+
+        const postUpvotesData = Object.assign(
+            {},
+            ...postsData.map(
+                ({
+                    id,
+                    num_upvotes: numUpvotes,
+                    users_upvoted: usersUpvoted
+                }: Post) => ({
+                    [id]: {
+                        numUpvotes,
+                        hasUpvote: usersUpvoted.includes(userId),
+                        changedUpvote: false
+                    }
+                })
+            )
+        );
+        if (setFetching !== null) {
+            setFetching(false);
+        }
+        setPosts(postsData);
+        setPostUpvotes(postUpvotesData);
+    } catch (err: any) {
+        Alert.alert(`Something went wrong! ${err}`);
+    }
+};
+
+const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
+    const colorScheme = useColorScheme();
+
+    const {
+        user: { id: userId }
+    } = useContext(UserContext);
 
     const [refreshing, setRefreshing] = useState(false);
+    const [fetching, setFetching] = useState(true);
 
-    const [[posts, initialFetched], setPosts] = useState([[], false] as [
-        Post[],
-        boolean
-    ]);
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [upvotesData, setPostUpvotes] = useState<AggregateUpvotesData>({});
 
     useEffect(() => {
-        if (!initialFetched || refreshing) {
-            fetchPosts(controller, setPosts, setRefreshing);
-        }
-        return () => controller?.abort();
-    }, [controller, refreshing, posts, fetchPosts, setPosts, setRefreshing]);
+        const unsubscribeUpvoteListener = navigation.addListener(
+            "blur",
+            async () => {
+                await updateUpvotes(userId, upvotesData);
+                setFetching(true);
+            }
+        );
 
-    const onRefresh = useCallback(() => {
+        return () => unsubscribeUpvoteListener();
+    }, [navigation, upvotesData, userId]);
+
+    useFocusEffect(
+        useCallback(() => {
+            if (fetching) {
+                fetchPosts(
+                    setFetching,
+                    setPosts,
+                    setPostUpvotes,
+                    true,
+                    userId,
+                    upvotesData
+                );
+            }
+        }, [fetching, upvotesData, userId])
+    );
+
+    const toggleUpvote = (id: string, upvoted: boolean) => {
+        const { numUpvotes, hasUpvote } = upvotesData[id];
+        setPostUpvotes({
+            ...upvotesData,
+            [id]: {
+                numUpvotes: hasUpvote ? numUpvotes - 1 : numUpvotes + 1,
+                hasUpvote: upvoted,
+                changedUpvote: hasUpvote !== upvoted
+            }
+        });
+    };
+
+    const handleRefresh = useCallback(async () => {
         setRefreshing(true);
-    }, [setRefreshing]);
+        await fetchPosts(
+            null,
+            setPosts,
+            setPostUpvotes,
+            false,
+            userId,
+            upvotesData
+        );
+        setRefreshing(false);
+    }, [upvotesData, userId]);
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView
+            style={{
+                width: "100%",
+                height: "100%",
+                flex: fetching ? 1 : 0,
+                backgroundColor: primaryColors.background
+            }}
+        >
             {/** tintColor = iOS, colors = Android */}
             <ScrollView
                 contentContainerStyle={styles.scrollView}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
-                        onRefresh={onRefresh}
+                        onRefresh={() => {
+                            handleRefresh();
+                        }}
                         tintColor="white"
                         colors={["white"]}
                     />
                 }
             >
+                {fetching ? (
+                    <LinearProgress
+                        animation={fetching}
+                        color={Colors[colorScheme].tint}
+                    />
+                ) : null}
                 <Text style={styles.title}>Home</Text>
-                <PostsFeed {...{ posts }} />
+                {Object.keys(upvotesData).length ||
+                Object.keys(upvotesData).length === posts.length ? (
+                    <PostsFeed
+                        {...{ posts, navigation, upvotesData, toggleUpvote }}
+                    />
+                ) : null}
             </ScrollView>
         </SafeAreaView>
     );
