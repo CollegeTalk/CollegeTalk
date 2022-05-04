@@ -223,12 +223,7 @@ def test_put_post(client):
     assert post.author_id == test_user_id
     assert post.title == "What is computer science?"
     assert post.body == "Tell me what it is."
-<<<<<<< HEAD
-    assert post.subgroup_id == subgroup_uuid
-    assert 1 == 2
-=======
     assert post.subgroup_id == test_subgroup_id
->>>>>>> 2ec4703a7b0ac6b271bb7b10f2dfd77842092007
 
     _clear_post_tables()
 
