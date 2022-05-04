@@ -23,7 +23,8 @@ import {
     HomeStackScreenProps,
     Post,
     AggregateUpvotesData,
-    UpdateRequestBody
+    UpdateRequestBody,
+    Subgroup
 } from "../../types";
 import Colors, { primaryColors } from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -36,11 +37,23 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingBottom: 30
     },
+    headingContainer: {
+        width: "100%",
+        paddingHorizontal: 20
+    },
     title: {
         fontSize: 30,
         fontWeight: "bold",
-        color: primaryColors.text,
+        textAlign: "left",
+        color: primaryColors.background,
         paddingTop: 15
+    },
+    description: {
+        fontSize: 20,
+        fontWeight: "400",
+        textAlign: "left",
+        color: "black",
+        paddingTop: 10
     }
 });
 
@@ -84,10 +97,12 @@ const updateUpvotes = async (
 
 const fetchPosts = async (
     setFetching: Dispatch<SetStateAction<boolean>> | null,
+    setSubgroupData: Dispatch<SetStateAction<Subgroup>>,
     setPosts: Dispatch<SetStateAction<Post[]>>,
     setPostUpvotes: Dispatch<SetStateAction<AggregateUpvotesData>>,
     updatedUpvotes: boolean,
     userId: string,
+    subgroupId: string,
     upvotesData: AggregateUpvotesData
 ) => {
     try {
@@ -95,14 +110,29 @@ const fetchPosts = async (
             await updateUpvotes(userId, upvotesData);
         }
 
-        const response = await fetch(`${process.env.API_URL}/posts`, {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
+        const subgroupResponse = await fetch(
+            `${process.env.API_URL}/subgroups/${subgroupId}`,
+            {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                }
             }
-        });
-        const postsData = await response.json();
+        );
+        const subgroupData = await subgroupResponse.json();
+
+        const postsResponse = await fetch(
+            `${process.env.API_URL}/posts?subgroup_id=${subgroupId}`,
+            {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+        const postsData = await postsResponse.json();
 
         const postUpvotesData = Object.assign(
             {},
@@ -123,6 +153,7 @@ const fetchPosts = async (
         if (setFetching !== null) {
             setFetching(false);
         }
+        setSubgroupData(subgroupData);
         setPosts(postsData);
         setPostUpvotes(postUpvotesData);
     } catch (err: any) {
@@ -130,7 +161,12 @@ const fetchPosts = async (
     }
 };
 
-const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
+const SubgroupScreen = ({
+    navigation,
+    route: {
+        params: { subgroup_id: subgroupId }
+    }
+}: HomeStackScreenProps<"Subgroup">) => {
     const colorScheme = useColorScheme();
 
     const {
@@ -140,6 +176,13 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
     const [refreshing, setRefreshing] = useState(false);
     const [fetching, setFetching] = useState(true);
 
+    const [subgroupData, setSubgroupData] = useState<Subgroup>({
+        id: "",
+        name: "",
+        description: "",
+        posts: [],
+        users: []
+    });
     const [posts, setPosts] = useState<Post[]>([]);
     const [upvotesData, setPostUpvotes] = useState<AggregateUpvotesData>({});
 
@@ -160,14 +203,16 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
             if (fetching) {
                 fetchPosts(
                     setFetching,
+                    setSubgroupData,
                     setPosts,
                     setPostUpvotes,
                     true,
                     userId,
+                    subgroupId,
                     upvotesData
                 );
             }
-        }, [fetching, upvotesData, userId])
+        }, [fetching, subgroupId, upvotesData, userId])
     );
 
     const toggleUpvote = (id: string, upvoted: boolean) => {
@@ -186,14 +231,18 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
         setRefreshing(true);
         await fetchPosts(
             null,
+            setSubgroupData,
             setPosts,
             setPostUpvotes,
             false,
             userId,
+            subgroupId,
             upvotesData
         );
         setRefreshing(false);
-    }, [upvotesData, userId]);
+    }, [subgroupId, upvotesData, userId]);
+
+    const { name, description } = subgroupData;
 
     return (
         <SafeAreaView
@@ -201,7 +250,7 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
                 width: "100%",
                 height: "100%",
                 flex: fetching ? 1 : 0,
-                backgroundColor: primaryColors.background
+                backgroundColor: primaryColors.text
             }}
         >
             {/** tintColor = iOS, colors = Android */}
@@ -224,7 +273,10 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
                         color={Colors[colorScheme].tint}
                     />
                 ) : null}
-                <Text style={styles.title}>Home</Text>
+                <View style={styles.headingContainer}>
+                    <Text style={styles.title}>{name}</Text>
+                    <Text style={styles.description}>{description}</Text>
+                </View>
                 {Object.keys(upvotesData).length ||
                 Object.keys(upvotesData).length === posts.length ? (
                     <View style={{ width: "100%" }}>
@@ -233,7 +285,7 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
                                   <PostCard
                                       key={postData.id}
                                       {...{
-                                          color: "secondary",
+                                          color: "primary",
                                           ...postData,
                                           navigation,
                                           toggleUpvote,
@@ -250,4 +302,4 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
     );
 };
 
-export default HomeScreen;
+export default SubgroupScreen;

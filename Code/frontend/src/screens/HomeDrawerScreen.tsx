@@ -1,20 +1,39 @@
-import { StyleSheet } from "react-native";
+import {
+    Dispatch,
+    SetStateAction,
+    useContext,
+    useState,
+    useEffect
+} from "react";
+import {
+    ActivityIndicator,
+    Alert,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet
+} from "react-native";
+import {
+    DrawerContentComponentProps,
+    getDrawerStatusFromState
+} from "@react-navigation/drawer";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { Button } from "@rneui/themed";
-
-import { Feather } from "@expo/vector-icons";
-import { primaryColors } from "../constants/Colors";
-
 import { Text, View } from "../components/Themed";
 
+import { primaryColors } from "../constants/Colors";
+import { Subgroup } from "../../types";
+import UserContext from "../../UserContext";
+
 const styles = StyleSheet.create({
-    container: {
+    container: { height: "100%", overflow: "visible" },
+    scrollView: {
         height: "100%",
         flex: 1,
-        marginVertical: 44
+        paddingHorizontal: 16,
+        paddingVertical: 10
     },
     institutionContainer: {
         width: "100%",
-        paddingHorizontal: 10,
         marginVertical: 12
     },
     sectionLabel: {
@@ -33,90 +52,176 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         paddingVertical: 10
     },
-    groupsContainer: {
+    subgroupsContainer: {
         width: "100%",
         flex: 1,
-        paddingHorizontal: 10,
         marginVertical: 12
     },
-    groupSubcontainer: {
+    subgroupSubcontainer: {
         flex: 1,
         flexDirection: "column",
         justifyContent: "space-between",
         backgroundColor: primaryColors.background,
-        borderRadius: 8,
+        borderRadius: 6,
         paddingHorizontal: 15,
-        paddingVertical: 10
+        paddingVertical: 20
     },
     groupList: {
         backgroundColor: "transparent"
     },
     groupText: {
-        fontSize: 18,
+        fontSize: 14,
         fontWeight: "bold",
         color: primaryColors.background
     }
 });
 
 type GroupButtonProps = {
-    title: string;
+    goToSubgroupPage: (subgroupId: string) => void;
+    subgroupData: Subgroup;
 };
 
-const GroupButton = ({ title }: GroupButtonProps) => (
+const SubgroupButton = ({
+    goToSubgroupPage,
+    subgroupData: { id, name }
+}: GroupButtonProps) => (
     <Button
-        title={title}
+        title={name}
         buttonStyle={{
             backgroundColor: primaryColors.text,
+            borderWidth: 3,
+            borderColor: primaryColors.text,
             borderRadius: 30
         }}
         containerStyle={{
             marginHorizontal: 5,
-            marginVertical: 10
+            marginBottom: 14
         }}
         titleStyle={styles.groupText}
+        onPress={() => goToSubgroupPage(id)}
     />
 );
 
-const HomeDrawerScreen = () => (
-    <View style={styles.container}>
-        <View style={styles.institutionContainer}>
-            <Text style={styles.sectionLabel}>My Institution</Text>
-            <Text style={styles.institutionText}>William & Mary</Text>
-        </View>
-        <View style={styles.groupsContainer}>
-            <Text style={styles.sectionLabel}>My Groups</Text>
-            <View style={styles.groupSubcontainer}>
-                <View style={styles.groupList}>
-                    <GroupButton title="NERF Club" />
-                    <GroupButton title="Design Jobs" />
-                    <GroupButton title="Squash" />
-                    <GroupButton title="WEAST Comedy" />
+const fetchSubgroups = async (
+    setFetching: Dispatch<SetStateAction<boolean>>,
+    setSubgroups: Dispatch<SetStateAction<Subgroup[]>>,
+    userId: string
+) => {
+    try {
+        setFetching(true);
+
+        const response = await fetch(`${process.env.API_URL}/subgroups`, {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+        const subgroupsData = await response.json();
+
+        const userSubgroupsData = subgroupsData.filter(({ users }: Subgroup) =>
+            users.includes(userId)
+        );
+
+        setSubgroups(userSubgroupsData);
+    } catch (err: any) {
+        Alert.alert(`Something went wrong with fetching! ${err}`);
+    }
+};
+
+const HomeDrawerScreen = ({
+    navigation,
+    state
+}: DrawerContentComponentProps) => {
+    const {
+        user: { id: userId }
+    } = useContext(UserContext);
+
+    const [fetching, setFetching] = useState(false);
+
+    const [subgroups, setSubgroups] = useState<Subgroup[]>([]);
+
+    useEffect(() => {
+        const isDrawerOpen = getDrawerStatusFromState(state) === "open";
+        if (isDrawerOpen && !fetching) {
+            fetchSubgroups(setFetching, setSubgroups, userId);
+            setFetching(false);
+        }
+    }, [fetching, navigation, state, userId]);
+
+    const goToSubgroupPage = (subgroupId: string) => {
+        navigation.navigate("Subgroup", {
+            subgroup_id: subgroupId
+        });
+    };
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <ScrollView style={styles.scrollView}>
+                <View style={styles.institutionContainer}>
+                    <Text style={styles.sectionLabel}>My Institution</Text>
+                    <Text style={styles.institutionText}>William & Mary</Text>
                 </View>
-                <Button
-                    title="Add"
-                    type="outline"
-                    icon={
-                        <Feather
-                            size={20}
-                            name="plus"
-                            color={primaryColors.text}
-                        />
-                    }
-                    buttonStyle={{
-                        borderWidth: 3,
-                        borderColor: primaryColors.text,
-                        borderRadius: 30
-                    }}
-                    titleStyle={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: primaryColors.text,
-                        marginLeft: 5
-                    }}
-                />
-            </View>
-        </View>
-    </View>
-);
+                <View style={styles.subgroupsContainer}>
+                    <Text style={styles.sectionLabel}>My Subgroups</Text>
+                    <View style={styles.subgroupSubcontainer}>
+                        {fetching ? (
+                            <View
+                                style={{
+                                    height: "100%",
+                                    backgroundColor: "transparent"
+                                }}
+                            >
+                                <ActivityIndicator
+                                    size="large"
+                                    color={primaryColors.text}
+                                />
+                            </View>
+                        ) : (
+                            <>
+                                <View style={styles.groupList}>
+                                    {subgroups.map((subgroupData) => (
+                                        <SubgroupButton
+                                            key={subgroupData.id}
+                                            {...{
+                                                goToSubgroupPage,
+                                                subgroupData
+                                            }}
+                                        />
+                                    ))}
+                                </View>
+                                <Button
+                                    title="Add"
+                                    type="outline"
+                                    icon={
+                                        <FontAwesome5
+                                            size={14}
+                                            name="plus"
+                                            color={primaryColors.text}
+                                        />
+                                    }
+                                    buttonStyle={{
+                                        borderWidth: 3,
+                                        borderColor: primaryColors.text,
+                                        borderRadius: 30
+                                    }}
+                                    titleStyle={{
+                                        fontSize: 18,
+                                        fontWeight: "bold",
+                                        color: primaryColors.text,
+                                        marginLeft: 8
+                                    }}
+                                    onPress={() =>
+                                        navigation.navigate("Subgroups")
+                                    }
+                                />
+                            </>
+                        )}
+                    </View>
+                </View>
+            </ScrollView>
+        </SafeAreaView>
+    );
+};
 
 export default HomeDrawerScreen;

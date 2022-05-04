@@ -4,10 +4,10 @@ import { Feather } from "@expo/vector-icons";
 
 import Colors from "../../constants/Colors";
 
-import { HomeStackNavigationProp } from "../../../types";
+import { HomeScreenNavigationProp } from "../../../types";
 
 type HeaderLeftProps = {
-    navigation: HomeStackNavigationProp;
+    navigation: HomeScreenNavigationProp;
     isHome: boolean;
     colorScheme: "light" | "dark";
 };

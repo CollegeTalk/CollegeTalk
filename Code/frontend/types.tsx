@@ -23,7 +23,9 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
  */
 export type HomeStackParamList = {
     Home: undefined;
-    Post: { post_id: "string" };
+    Post: { post_id: string };
+    Subgroups: undefined;
+    Subgroup: { subgroup_id: string };
 };
 
 export type BottomTabParamList = {
@@ -47,6 +49,12 @@ export type RootStackParamList = {
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
     NativeStackScreenProps<RootStackParamList, Screen>;
 
+export type HomeDrawerScreenProps<Screen extends keyof HomeDrawerParamList> =
+    CompositeScreenProps<
+        DrawerScreenProps<HomeDrawerParamList, Screen>,
+        NativeStackScreenProps<RootStackParamList>
+    >;
+
 export type BottomTabNavScreenProps<Screen extends keyof BottomTabParamList> =
     CompositeScreenProps<
         BottomTabScreenProps<BottomTabParamList, Screen>,
@@ -61,11 +69,6 @@ export type HomeStackScreenProps<Screen extends keyof HomeStackParamList> =
             DrawerScreenProps<HomeDrawerParamList>
         >
     >;
-
-export type HomeStackNavigationProp = CompositeNavigationProp<
-    BottomTabNavigationProp<BottomTabParamList, "HomeStack">,
-    StackNavigationProp<HomeStackParamList>
->;
 
 export type HomeScreenNavigationProp = CompositeNavigationProp<
     StackNavigationProp<HomeStackParamList, "Home">,
@@ -102,6 +105,14 @@ export type User = {
     upvoted_comments: string[];
 };
 
+export type Subgroup = {
+    id: string;
+    name: string;
+    description: string;
+    posts: string[];
+    users: string[];
+};
+
 export type Post = {
     id: string;
     time_created: Date;
@@ -134,6 +145,15 @@ export type ContextUser = {
     username: string;
 };
 
+export type SubgroupData = {
+    isMember: boolean;
+    changedStatus: boolean;
+};
+
+export type AggregateSubgroupData = {
+    [id: string]: SubgroupData;
+};
+
 export type UpvotesData = {
     numUpvotes: number;
     hasUpvote: boolean;
@@ -149,9 +169,9 @@ export type PostAndCommentsUpvotesData = {
     comments: AggregateUpvotesData;
 };
 
-export type UpvotesRequestBody = {
+export type UpdateRequestBody = {
     [id: string]: {
-        num_upvotes: number;
+        num_upvotes?: number;
         function: string;
     };
 };

@@ -1,5 +1,5 @@
 import { Ref, Dispatch, SetStateAction, forwardRef } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View, Keyboard } from "react-native";
 import { Input } from "@rneui/themed";
 
 import { primaryColors } from "../../constants/Colors";
@@ -67,6 +67,11 @@ const InputField = forwardRef(
                 errorStyle={{ color: "red" }}
                 errorMessage={showError ? errorMessage : undefined}
                 multiline={isLarge}
+                returnKeyType={!isLarge ? "next" : "default"}
+                blurOnSubmit
+                onSubmitEditing={() => {
+                    Keyboard.dismiss();
+                }}
             />
         </View>
     )
