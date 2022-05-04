@@ -219,20 +219,76 @@ def test_put_post(client):
     assert post.title == "What is computer science?"
     assert post.body == "Tell me what it is."
     assert post.subgroup_id == subgroup_uuid
+    assert 1 == 2
 
     _clear_post_tables()
 
 
 def test_post_post_invalid_fields(client):
-    # TODO: test invalid fields
-    pass
+    post = db.session.query(PostModel).first()
+
+    assert post == None
+
+    test_author_id, test_title, test_post_body, subgroup_uuid = _post_generator()
+
+    rs = client.post(
+        "/posts",
+        json=dict(
+            author_id=test_author_id,
+            title=test_title,
+            body=test_post_body,
+            subgroup_id=subgroup_uuid,
+            invalid="field"
+        ),
+    )
+
+    assert rs.status_code == 500
+
+    _clear_post_tables()
 
 
 def test_get_nonexistent_post(client):
-    # TODO: test nonexistent post
-    pass
+    rs = client.get("/posts/invalidpostid")
+    assert rs.status_code == 500
 
 
 def test_put_post_invalid_fields(client):
-    # TODO: test invalid fields
-    pass
+    rs = client.get("/posts")
+
+    assert rs.status_code == 200
+    data = rs.json
+    assert len(data) == 0
+
+    test_author_id, test_title, test_post_body, subgroup_uuid = _post_generator()
+    new_post = PostModel(
+        author_id=test_author_id,
+        title=test_title,
+        body=test_post_body,
+        subgroup_id=subgroup_uuid,
+    )
+    db.session.add(new_post)
+    db.session.commit()
+
+    post = db.session.query(PostModel).one_or_none()
+    assert not post == None
+    assert post.author_id == test_author_id
+    assert post.title == test_title
+    assert post.body == test_post_body
+    assert post.subgroup_id == subgroup_uuid
+
+    post_id = new_post.id
+
+    rs = client.put(
+        f"/posts/{post_id}",
+        json=dict(
+            author_id=test_author_id,
+            title="What is computer science?",
+            body="Tell me what it is.",
+            subgroup_id=subgroup_uuid,
+            invalid = "field"
+        ),
+    )
+
+    assert rs.status_code == 500
+
+    _clear_post_tables()
