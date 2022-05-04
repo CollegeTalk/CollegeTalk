@@ -27,11 +27,13 @@ const styles = StyleSheet.create({
     }
 });
 
+
 const CreatePost = () => {
     const titleInput: RefObject<TextInput> = createRef();
     const [[title, showTitleError], setTitle] = useState(["", false]);
     const bodyInput: RefObject<TextInput> = createRef();
     const [[body], setBody] = useState(["", false]);
+
 
     const submitPost = async () => {
         if (title === "") {
@@ -88,7 +90,7 @@ const CreatePost = () => {
         <View style={styles.drownDownContainer}>
             <SelectDropdown
                 // get data from database for subgroups, is currently hardcoded 
-                data={["NERF Club", "Design Jobs", "Squash", "WEAST Comedy"]}
+                data={["Subgroup1", "Subgroup2", "Subgroup3"]}
                 onSelect={(selectedItem, index) => {
                     console.log(selectedItem, index)
                 }}
