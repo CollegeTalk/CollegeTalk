@@ -1,4 +1,4 @@
-import { RefObject, useState, useEffect, createRef, useContext } from "react";
+import { RefObject, useState, useEffect, useRef, useContext } from "react";
 import { TextInput, View, Alert, StyleSheet } from "react-native";
 import { Button } from "@rneui/themed";
 
@@ -29,11 +29,11 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
         user: { id: userId }
     } = useContext(UserContext);
 
-    const titleInput: RefObject<TextInput> = createRef();
+    const titleInput: RefObject<TextInput> = useRef(null);
     const [showTitleError, toggleTitleError] = useState(false);
     const [title, setTitle] = useState("");
 
-    const bodyInput: RefObject<TextInput> = createRef();
+    const bodyInput: RefObject<TextInput> = useRef(null);
     const [body, setBody] = useState("");
 
     useEffect(() => {

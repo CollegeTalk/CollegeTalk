@@ -70,6 +70,8 @@ export type HomeStackScreenProps<Screen extends keyof HomeStackParamList> =
         >
     >;
 
+export type HomeStackNavigationProp = StackNavigationProp<HomeStackParamList>;
+
 export type HomeScreenNavigationProp = CompositeNavigationProp<
     StackNavigationProp<HomeStackParamList, "Home">,
     CompositeNavigationProp<
