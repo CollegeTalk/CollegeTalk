@@ -24,7 +24,7 @@ import {
     HomeStackScreenProps,
     Post,
     Comment,
-    UpvotesRequestBody,
+    UpdateRequestBody,
     PostAndCommentsUpvotesData
 } from "../../types";
 import UserContext from "../../UserContext";
@@ -98,7 +98,7 @@ const updateUpvotes = async (
     }: PostAndCommentsUpvotesData
 ) => {
     try {
-        const postsData: UpvotesRequestBody = {};
+        const postsData: UpdateRequestBody = {};
         let { numUpvotes, hasUpvote, changedUpvote } = postUpvotesData;
         if (changedUpvote) {
             postsData[postId] = {
@@ -124,7 +124,7 @@ const updateUpvotes = async (
             }
         }
 
-        const commentsData: UpvotesRequestBody = {};
+        const commentsData: UpdateRequestBody = {};
         Object.keys(commentsUpvotesData).forEach((commentId) => {
             ({ numUpvotes, hasUpvote, changedUpvote } =
                 commentsUpvotesData[commentId]);

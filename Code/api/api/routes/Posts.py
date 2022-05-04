@@ -8,20 +8,27 @@ from .base import api
 
 class Posts(Resource):
     def get(self):
+        cursor = PostModel.query
+        posts = None
+
+        # get posts associated with a specific subgroup
+        subgroup_id = request.args.get("subgroup_id")
+        if subgroup_id != None and subgroup_id.isalnum():
+            posts = cursor.filter_by(subgroup_id=subgroup_id)
+
         # get a limited number of posts, newest to oldest
         limit = request.args.get("limit")
-        posts = None
         if limit != None and limit.isnumeric() and int(limit) >= 0:
-            posts = PostModel.query.order_by(PostModel.time_created.desc()).limit(
-                int(limit)
-            )
+            posts = cursor.order_by(PostModel.time_created.desc()).limit(int(limit))
         # get all posts, newest to oldest
         else:
-            posts = PostModel.query.order_by(PostModel.time_created.desc())
-        
+            posts = cursor.order_by(PostModel.time_created.desc())
+
         result = [post.serialize for post in posts]
-        
-        fetch_author_username = lambda id: UserModel.query.filter_by(id=id).first().username
+
+        fetch_author_username = (
+            lambda id: UserModel.query.filter_by(id=id).first().username
+        )
         for post_data in result:
             post_data["author_username"] = fetch_author_username(post_data["author_id"])
 
@@ -44,10 +51,17 @@ class Posts(Resource):
         # update posts (for upvotes)
         try:
             data = request.json
-            user = db.session.query(UserModel).filter_by(id=data["user_id"]).first_or_404()
+            user = (
+                db.session.query(UserModel).filter_by(id=data["user_id"]).first_or_404()
+            )
             update_relationship(PostModel, user, data)
             db.session.commit()
-            return jsonify({ "user_id": data["user_id"], "posts": [post.id for post in user.upvoted_posts] })
+            return jsonify(
+                {
+                    "user_id": data["user_id"],
+                    "posts": [post.id for post in user.upvoted_posts],
+                }
+            )
         except RuntimeError:
             return jsonify({"error": f"Error updating {id}"})
 

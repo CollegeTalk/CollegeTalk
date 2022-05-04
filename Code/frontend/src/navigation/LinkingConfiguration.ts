@@ -20,7 +20,8 @@ const linking: LinkingOptions<RootStackParamList> = {
                             HomeStack: {
                                 screens: {
                                     Home: "home",
-                                    Post: "post/:id"
+                                    Post: "post/:id",
+                                    Subgroups: "subgroups"
                                 }
                             },
                             CreatePost: {
