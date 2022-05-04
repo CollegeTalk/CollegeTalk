@@ -1,5 +1,6 @@
 import { RefObject, useState, useEffect, useRef, useContext } from "react";
 import { TextInput, View, Alert, StyleSheet } from "react-native";
+import SelectDropdown from 'react-native-select-dropdown';
 import { Button } from "@rneui/themed";
 
 import { primaryColors } from "../../constants/Colors";
@@ -17,6 +18,11 @@ const styles = StyleSheet.create({
         width: "100%",
         flexDirection: "row",
         justifyContent: "center"
+    },
+    dropDownContainer:{
+        width : "100%",
+        justifyContent: "center",
+        alignItems: "center"
     }
 });
 
@@ -97,6 +103,24 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
                 setText={setBody}
                 isLarge
             />
+            <View style ={styles.dropDownContainer}>
+                <SelectDropdown
+                    data={["Subgroup1", "Subgroup2", "Subgroup3"]}
+                    onSelect={(selectedItem, index) => {
+                        console.log(selectedItem, index)
+                    }}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                        // text represented after item is selected
+                        // if data array is an array of objects then return selectedItem.property to render after item is selected
+                        return selectedItem
+                    }}
+                    rowTextForSelection={(item, index) => {
+                        // text represented for each item in dropdown
+                        // if data array is an array of objects then return item.property to represent item in dropdown
+                    return item
+                    }}
+                    />
+            </View>
             <View style={styles.buttonContainer}>
                 <Button
                     title="Submit"
