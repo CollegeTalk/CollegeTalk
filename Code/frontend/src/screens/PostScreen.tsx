@@ -201,6 +201,11 @@ const fetchPostAndComments = async (
                 }
             }
         );
+
+        if (!commentsReponse.ok) {
+            throw new Error(`Error code ${commentsReponse.status}`);
+        }
+
         const commentsData = await commentsReponse.json();
 
         const newCommentsUpvotesData = Object.assign(

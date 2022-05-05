@@ -61,7 +61,7 @@ const CommentInput = ({ postId, setFetching }: CommentInputProps) => {
                 })
             });
 
-            if (!response.ok) {
+            if (response && !response.ok) {
                 throw new Error(`${response.status}`);
             }
 

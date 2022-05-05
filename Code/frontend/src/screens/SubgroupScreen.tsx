@@ -16,7 +16,7 @@ import {
     View
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { LinearProgress } from "@rneui/themed";
+import { Button, LinearProgress } from "@rneui/themed";
 
 import UserContext from "../../UserContext";
 import {
@@ -39,10 +39,20 @@ const styles = StyleSheet.create({
     },
     headingContainer: {
         width: "100%",
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
+        marginBottom: 20
+    },
+    memberContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center"
+    },
+    numMembers: {
+        fontSize: 20,
+        color: "dimgray"
     },
     title: {
-        fontSize: 30,
+        fontSize: 28,
         fontWeight: "bold",
         textAlign: "left",
         color: primaryColors.background,
@@ -50,7 +60,7 @@ const styles = StyleSheet.create({
     },
     description: {
         fontSize: 20,
-        fontWeight: "400",
+        fontWeight: "500",
         textAlign: "left",
         color: "black",
         paddingTop: 10
@@ -132,6 +142,11 @@ const fetchPosts = async (
                 }
             }
         );
+
+        if (!postsResponse.ok) {
+            throw new Error(`Error code ${postsResponse.status}`);
+        }
+
         const postsData = await postsResponse.json();
 
         const postUpvotesData = Object.assign(
@@ -242,7 +257,8 @@ const SubgroupScreen = ({
         setRefreshing(false);
     }, [subgroupId, upvotesData, userId]);
 
-    const { name, description } = subgroupData;
+    const { name, description, users: members } = subgroupData;
+    const numMembers = members.length;
 
     return (
         <SafeAreaView
@@ -275,6 +291,21 @@ const SubgroupScreen = ({
                 ) : null}
                 <View style={styles.headingContainer}>
                     <Text style={styles.title}>{name}</Text>
+                    <View style={styles.memberContainer}>
+                        <Text style={styles.numMembers}>{`${numMembers} member${
+                            numMembers === 1 ? "" : "s"
+                        }`}</Text>
+                        <Button
+                            title="Join"
+                            buttonStyle={{
+                                backgroundColor: Colors[colorScheme].tint,
+                                borderRadius: 30,
+                                paddingHorizontal: 30,
+                                paddingVertical: 5
+                            }}
+                            titleStyle={{ fontSize: 16, fontWeight: "bold" }}
+                        />
+                    </View>
                     <Text style={styles.description}>{description}</Text>
                 </View>
                 {Object.keys(upvotesData).length ||

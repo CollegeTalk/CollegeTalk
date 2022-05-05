@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     },
     subgroupsContainer: {
         width: "100%",
-        flex: 1,
+        height: "100%",
         marginVertical: 12
     },
     subgroupSubcontainer: {
@@ -117,6 +117,11 @@ const fetchSubgroups = async (
                 "Content-Type": "application/json"
             }
         });
+
+        if (!response.ok) {
+            throw new Error(`${response.status}`);
+        }
+
         const subgroupsData = await response.json();
 
         const userSubgroupsData = subgroupsData.filter(({ users }: Subgroup) =>

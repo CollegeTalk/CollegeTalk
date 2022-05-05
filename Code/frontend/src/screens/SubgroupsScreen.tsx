@@ -109,17 +109,19 @@ const fetchSubgroups = async (
             await updateSubgroups(userId, userSubgroupsData);
         }
 
-        const subgroupsResponse = await fetch(
-            `${process.env.API_URL}/subgroups`,
-            {
-                method: "GET",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json"
-                }
+        const response = await fetch(`${process.env.API_URL}/subgroups`, {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
             }
-        );
-        const subgroupsData = await subgroupsResponse.json();
+        });
+
+        if (!response.ok) {
+            throw new Error(`${response.status}`);
+        }
+
+        const subgroupsData = await response.json();
 
         const newUserSubgroupsData: AggregateSubgroupData = Object.assign(
             {},

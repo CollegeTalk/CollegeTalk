@@ -225,8 +225,7 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
                     />
                 ) : null}
                 <Text style={styles.title}>Home</Text>
-                {Object.keys(upvotesData).length ||
-                Object.keys(upvotesData).length === posts.length ? (
+                {Object.keys(upvotesData).length === posts.length ? (
                     <View style={{ width: "100%" }}>
                         {posts
                             ? posts.map((postData) => (

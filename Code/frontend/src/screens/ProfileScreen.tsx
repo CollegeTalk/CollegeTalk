@@ -70,6 +70,11 @@ const ProfileScreen = ({ navigation }: BottomTabNavScreenProps<"Profile">) => {
                     },
                     signal: controller.signal
                 });
+
+                if (!response.ok) {
+                    throw new Error(`${response.status}`);
+                }
+
                 const usersData = await response.json();
 
                 setInitialFetched(true);
