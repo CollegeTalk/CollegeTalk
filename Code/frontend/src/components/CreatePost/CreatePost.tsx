@@ -3,8 +3,6 @@ import { TextInput, View, Alert, StyleSheet } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import { Button } from "@rneui/themed";
 import "react-native-get-random-values";
-import SelectDropdown from "react-native-select-dropdown";
-import { v4 as uuidv4 } from "uuid";
 
 import { primaryColors } from "../../constants/Colors";
 import { CreatePostScreenNavigationProp } from "../../../types";
@@ -15,13 +13,12 @@ import InputField from "./InputField";
 const styles = StyleSheet.create({
     postContainer: {
         width: "100%",
-        marginVertical: 20,
+        marginVertical: 20
     },
-    drownDownContainer:{
-        width : "100%",
+    drownDownContainer: {
+        width: "100%",
         justifyContent: "center",
         alignItems: "center"
-
     },
     buttonContainer: {
         width: "100%",
@@ -58,7 +55,6 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
 
         return () => unsubscribeInputListener();
     });
-
 
     const submitPost = async () => {
         if (title === "") {
