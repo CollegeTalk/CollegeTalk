@@ -12,7 +12,7 @@
         "lint": "cross-env RN_ENV=development eslint './**/*.{js,ts,jsx,tsx}' --fix",
         "lintProd": "cross-env RN_ENV=production eslint './**/*.{js,ts,jsx,tsx}' --quiet --fix",
         "test": "jest --watch --coverage=false",
-        "testProd": "jest",
+        "testProd": "jest --ci --coverage=false",
         "updateSnapshots": "jest -u --coverage=false",
         "publish": "expo publish"
     },
@@ -70,6 +70,7 @@
         "react-native-reanimated": "~2.3.1",
         "react-native-safe-area-context": "3.3.2",
         "react-native-screens": "~3.10.1",
+        "react-native-select-dropdown": "^1.13.0",
         "react-native-web": "0.17.1",
         "uuid": "^8.3.2"
     },

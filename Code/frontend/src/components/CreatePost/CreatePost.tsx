@@ -1,6 +1,10 @@
-import { RefObject, useState, useEffect, createRef, useContext } from "react";
+import { RefObject, useState, useEffect, useRef, useContext } from "react";
 import { TextInput, View, Alert, StyleSheet } from "react-native";
+import SelectDropdown from "react-native-select-dropdown";
 import { Button } from "@rneui/themed";
+import "react-native-get-random-values";
+import SelectDropdown from "react-native-select-dropdown";
+import { v4 as uuidv4 } from "uuid";
 
 import { primaryColors } from "../../constants/Colors";
 import { CreatePostScreenNavigationProp } from "../../../types";
@@ -11,12 +15,23 @@ import InputField from "./InputField";
 const styles = StyleSheet.create({
     postContainer: {
         width: "100%",
-        marginVertical: 20
+        marginVertical: 20,
+    },
+    drownDownContainer:{
+        width : "100%",
+        justifyContent: "center",
+        alignItems: "center"
+
     },
     buttonContainer: {
         width: "100%",
         flexDirection: "row",
         justifyContent: "center"
+    },
+    dropDownContainer: {
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center"
     }
 });
 
@@ -29,11 +44,11 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
         user: { id: userId }
     } = useContext(UserContext);
 
-    const titleInput: RefObject<TextInput> = createRef();
+    const titleInput: RefObject<TextInput> = useRef(null);
     const [showTitleError, toggleTitleError] = useState(false);
     const [title, setTitle] = useState("");
 
-    const bodyInput: RefObject<TextInput> = createRef();
+    const bodyInput: RefObject<TextInput> = useRef(null);
     const [body, setBody] = useState("");
 
     useEffect(() => {
@@ -44,6 +59,7 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
         return () => unsubscribeInputListener();
     });
 
+
     const submitPost = async () => {
         if (title === "") {
             toggleTitleError(true);
@@ -52,7 +68,7 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
 
         try {
             // TODO: change to real subgroup_id
-            const subgroupId = "dffefc81-a557-4d9f-abbd-8ad5080b167e";
+            const subgroupId = "2c655aa2-96d9-4277-915f-2c048fd2eaca";
             const response = await fetch(`${process.env.API_URL}/posts`, {
                 method: "POST",
                 headers: {
@@ -97,6 +113,22 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
                 setText={setBody}
                 isLarge
             />
+            <View style={styles.dropDownContainer}>
+                <SelectDropdown
+                    data={["Subgroup1", "Subgroup2", "Subgroup3"]}
+                    onSelect={(selectedItem, index) => {}}
+                    buttonTextAfterSelection={(selectedItem) =>
+                        // text represented after item is selected
+                        // if data array is an array of objects then return selectedItem.property to render after item is selected
+                        selectedItem
+                    }
+                    rowTextForSelection={(item) =>
+                        // text represented for each item in dropdown
+                        // if data array is an array of objects then return item.property to represent item in dropdown
+                        item
+                    }
+                />
+            </View>
             <View style={styles.buttonContainer}>
                 <Button
                     title="Submit"

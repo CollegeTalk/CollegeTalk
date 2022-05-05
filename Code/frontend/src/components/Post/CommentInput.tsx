@@ -61,7 +61,7 @@ const CommentInput = ({ postId, setFetching }: CommentInputProps) => {
                 })
             });
 
-            if (!response.ok) {
+            if (response && !response.ok) {
                 throw new Error(`${response.status}`);
             }
 
@@ -85,14 +85,16 @@ const CommentInput = ({ postId, setFetching }: CommentInputProps) => {
                 <View style={styles.commentContainer}>
                     <Input
                         ref={commentInput}
-                        containerStyle={{ width: "75%" }}
+                        containerStyle={{ flex: 1 }}
                         inputContainerStyle={styles.inputContainer}
                         inputStyle={{
                             color: "black",
                             borderRadius: 15,
                             borderColor: primaryColors.text,
                             borderWidth: 1,
-                            paddingHorizontal: 15,
+                            paddingHorizontal: 12,
+                            paddingTop: 8,
+                            paddingBottom: 8,
                             marginTop: 15,
                             marginBottom: 25
                         }}
@@ -100,9 +102,10 @@ const CommentInput = ({ postId, setFetching }: CommentInputProps) => {
                         shake={() => true}
                         renderErrorMessage={false}
                         onChangeText={(value) => setComment(value)}
+                        multiline
                     />
                     <Button
-                        containerStyle={{ marginTop: 15 }}
+                        containerStyle={{ marginTop: 15, marginRight: 12 }}
                         buttonStyle={{ borderRadius: 8 }}
                         title="Reply"
                         titleStyle={{ fontSize: 18 }}

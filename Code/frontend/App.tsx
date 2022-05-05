@@ -33,6 +33,11 @@ const App = () => {
                         "Content-Type": "application/json"
                     }
                 });
+
+                if (!response.ok) {
+                    throw new Error(`${response.status}`);
+                }
+
                 const { id, username, name } = (await response.json())[0];
                 setInitialFetched(true);
                 setUser({ id, username, name });

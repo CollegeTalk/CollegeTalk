@@ -9,6 +9,7 @@ const HomeDrawerNavigator = () => (
     <Drawer.Navigator
         initialRouteName="BottomTab"
         drawerContent={HomeDrawerScreen}
+        defaultStatus="closed"
     >
         <Drawer.Screen
             name="BottomTab"

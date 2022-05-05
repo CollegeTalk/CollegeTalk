@@ -81,7 +81,8 @@ const BottomTabNavigator = () => {
                                 {...{
                                     isHome:
                                         routeName === "Home" ||
-                                        routeName === undefined
+                                        routeName === undefined,
+                                    navigation
                                 }}
                             />
                         )

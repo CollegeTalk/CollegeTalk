@@ -7,12 +7,6 @@ import { HomeScreenNavigationProp, Post, UpvotesData } from "../../../types";
 import { primaryColors } from "../../constants/Colors";
 
 const styles = StyleSheet.create({
-    container: {
-        flexShrink: 1,
-        backgroundColor: primaryColors.text,
-        borderRadius: 20,
-        marginVertical: 20
-    },
     headingContainer: {
         flex: 1,
         flexDirection: "row",
@@ -22,26 +16,9 @@ const styles = StyleSheet.create({
         flex: 5,
         flexDirection: "row"
     },
-    title: {
-        fontSize: 24,
-        fontWeight: "bold",
-        textAlign: "left",
-        alignItems: "center",
-        color: "black",
-        marginBottom: 0
-    },
     iconContainer: {
         flex: 1,
         alignItems: "center"
-    },
-    body: {
-        fontSize: 18,
-        color: "black",
-        marginTop: 10
-    },
-    timestamp: {
-        fontSize: 14,
-        color: "dimgray"
     }
 });
 
@@ -108,12 +85,14 @@ export const getInitials = (authorUsername: string) =>
     authorUsername.replace(/[a-z0-9]/g, "");
 
 type PostCardProps = Post & {
+    color: "primary" | "secondary";
     postUpvotesData: UpvotesData;
     navigation: HomeScreenNavigationProp;
     toggleUpvote: (id: string, upvoted: boolean) => void;
 };
 
 const PostCard = ({
+    color,
     id,
     author_username: authorUsername,
     title,
@@ -128,11 +107,26 @@ const PostCard = ({
 
     const timestamp = generateTimestamp(timeCreated);
 
+    const upvoteIconColors = {
+        primary: (active: boolean) => (active ? "white" : primaryColors.text),
+        secondary: (active: boolean) => (active ? "green" : "slategray")
+    };
+
     return (
         <TouchableWithoutFeedback
             onPress={() => navigation.navigate("Post", { post_id: id })}
         >
-            <Card containerStyle={styles.container}>
+            <Card
+                containerStyle={{
+                    flexShrink: 1,
+                    backgroundColor:
+                        color === "primary"
+                            ? primaryColors.background
+                            : primaryColors.text,
+                    borderRadius: 20,
+                    marginVertical: 20
+                }}
+            >
                 <View style={styles.headingContainer}>
                     <View style={styles.avatarContainer}>
                         <Avatar
@@ -146,10 +140,30 @@ const PostCard = ({
                             }}
                         />
                         <View>
-                            <Card.Title style={styles.title}>
+                            <Card.Title
+                                style={{
+                                    fontSize: 24,
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                    alignItems: "center",
+                                    color:
+                                        color === "primary" ? "white" : "black",
+                                    marginBottom: 0
+                                }}
+                            >
                                 {title}
                             </Card.Title>
-                            <Text style={styles.timestamp}>{timestamp}</Text>
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    color:
+                                        color === "primary"
+                                            ? "lightgray"
+                                            : "dimgray"
+                                }}
+                            >
+                                {timestamp}
+                            </Text>
                         </View>
                     </View>
                     <View style={styles.iconContainer}>
@@ -159,12 +173,12 @@ const PostCard = ({
                             }
                             size={32}
                             type="material"
-                            color={hasUpvote ? "green" : "slategray"}
+                            color={upvoteIconColors[color](hasUpvote)}
                             onPress={() => toggleUpvote(id, !hasUpvote)}
                         />
                         <Text
                             style={{
-                                color: hasUpvote ? "green" : "slategray",
+                                color: upvoteIconColors[color](hasUpvote),
                                 fontSize: 18,
                                 fontWeight: "bold",
                                 marginLeft: 5
@@ -174,7 +188,17 @@ const PostCard = ({
                         </Text>
                     </View>
                 </View>
-                {body !== "" ? <Text style={styles.body}>{body}</Text> : null}
+                {body !== "" ? (
+                    <Text
+                        style={{
+                            fontSize: 18,
+                            color: color === "primary" ? "white" : "black",
+                            marginTop: 10
+                        }}
+                    >
+                        {body}
+                    </Text>
+                ) : null}
             </Card>
         </TouchableWithoutFeedback>
     );

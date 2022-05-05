@@ -105,7 +105,7 @@ const CommentCard = ({
                                     ...prevState.comments,
                                     [id]: {
                                         numUpvotes:
-                                            numUpvotes + (hasUpvote ? 0 : 1),
+                                            numUpvotes + (hasUpvote ? -1 : 1),
                                         hasUpvote: !hasUpvote,
                                         changedUpvote: !changedUpvote
                                     }
