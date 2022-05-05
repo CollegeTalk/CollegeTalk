@@ -1,12 +1,12 @@
-import { Ref, Dispatch, SetStateAction, forwardRef } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { Dispatch, SetStateAction, forwardRef } from "react";
+import { StyleSheet, Keyboard } from "react-native";
 import { Input } from "@rneui/themed";
 
 import { primaryColors } from "../../constants/Colors";
 
 const styles = StyleSheet.create({
-    container: {
-        marginBottom: 20
+    inputWrapper: {
+        paddingHorizontal: 0
     },
     inputContainer: {
         borderBottomWidth: 0
@@ -14,38 +14,62 @@ const styles = StyleSheet.create({
 });
 
 type InputFieldProps = {
-    type?: string;
+    showError: boolean;
+    errorMessage?: string;
     placeholder: string;
-    setText: Dispatch<SetStateAction<[string, boolean]>>;
+    setText: Dispatch<SetStateAction<string>>;
+    toggleError?: Dispatch<SetStateAction<boolean>>;
     isLarge: boolean;
 };
 
 const InputField = forwardRef(
-    ({ type, placeholder, setText, isLarge }: InputFieldProps, ref) => (
-        <View style={styles.container}>
-            <Input
-                ref={ref as Ref<TextInput>}
-                inputContainerStyle={styles.inputContainer}
-                inputStyle={{
-                    width: "100%",
-                    height: isLarge ? 100 : 50,
-                    color: "white",
-                    borderRadius: 15,
-                    borderColor: primaryColors.text,
-                    borderWidth: 1,
-                    paddingHorizontal: 15,
-                    // TODO: fix this, doesn't work??
-                    paddingVertical: isLarge ? 30 : 10,
-                    textAlignVertical: "top"
-                }}
-                placeholder={placeholder}
-                onChangeText={(value) => setText([value, false])}
-                shake={() => true}
-                errorStyle={{ color: "red" }}
-                errorMessage={type && `Please input a valid ${type}`}
-                multiline={isLarge}
-            />
-        </View>
+    (
+        {
+            showError,
+            errorMessage,
+            placeholder,
+            setText,
+            toggleError,
+            isLarge
+        }: InputFieldProps,
+        ref
+    ) => (
+        <Input
+            ref={ref}
+            containerStyle={styles.inputWrapper}
+            inputContainerStyle={styles.inputContainer}
+            inputStyle={{
+                width: "100%",
+                height: isLarge ? 100 : 50,
+                color: "white",
+                borderRadius: 15,
+                borderColor: primaryColors.text,
+                borderWidth: 1,
+                paddingHorizontal: 15,
+                /* cannot use paddingVertical for multiline */
+                paddingTop: 10,
+                paddingBottom: 10,
+                marginBottom: 20,
+                textAlignVertical: "top"
+            }}
+            placeholder={placeholder}
+            onChangeText={(value: string) => {
+                if (toggleError) {
+                    toggleError(value === "");
+                }
+                setText(value);
+            }}
+            shake={() => showError}
+            renderErrorMessage={false}
+            errorStyle={{ color: "red" }}
+            errorMessage={showError ? errorMessage : undefined}
+            multiline={isLarge}
+            returnKeyType={!isLarge ? "next" : "default"}
+            blurOnSubmit
+            onSubmitEditing={() => {
+                Keyboard.dismiss();
+            }}
+        />
     )
 );
 

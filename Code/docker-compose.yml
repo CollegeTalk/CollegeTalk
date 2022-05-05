@@ -12,7 +12,7 @@ services:
     volumes:
       - ./api:/api
     ports:
-      - "5000:5000"
+      - "9000:9000"
     depends_on:
       - database
     entrypoint: 

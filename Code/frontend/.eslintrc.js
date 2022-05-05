@@ -4,6 +4,7 @@ module.exports = {
     },
     extends: [
         "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
         "airbnb",
         "prettier",
         "plugin:jest/recommended",
@@ -45,7 +46,9 @@ module.exports = {
                 tsx: "never"
             }
         ],
-        "no-unused-vars": "warn",
+        "@typescript-eslint/no-unused-vars": "warn",
+        "no-unused-vars": "off",
+        "no-undef": "off",
         "no-console": [
             process.env.RN_ENV === "production" ||
             process.env.RN_ENV === "staging"

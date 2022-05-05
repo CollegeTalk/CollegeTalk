@@ -1,51 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
-import { Card, Text, Icon } from "@rneui/themed";
+import { Card, Avatar, Text, Icon } from "@rneui/themed";
 import "react-native-gesture-handler";
 
-import { HomeScreenNavigationProp } from "../../../types";
+import { HomeScreenNavigationProp, Post, UpvotesData } from "../../../types";
 import { primaryColors } from "../../constants/Colors";
 
 const styles = StyleSheet.create({
-    container: {
-        flexShrink: 1,
-        backgroundColor: primaryColors.text,
-        borderRadius: 20,
-        marginVertical: 20
-    },
     headingContainer: {
         flex: 1,
         flexDirection: "row",
         justifyContent: "space-between"
     },
-    titleContainer: {
-        flex: 5
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: "bold",
-        textAlign: "left",
-        alignItems: "center",
-        color: "black",
-        marginBottom: 0
+    avatarContainer: {
+        flex: 5,
+        flexDirection: "row"
     },
     iconContainer: {
         flex: 1,
         alignItems: "center"
-    },
-    body: {
-        fontSize: 18,
-        color: "black",
-        marginTop: 10
-    },
-    timestamp: {
-        fontSize: 14,
-        color: "dimgray"
     }
 });
 
+export const generateColor = () => {
+    const randomColor = Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, "0");
+    return `#${randomColor}`;
+};
+
 // TODO: this method is screaming for a refactor :(
-const generateTimestamp = (timeCreated: Date) => {
+export const generateTimestamp = (timeCreated: Date) => {
     const dateCreated = new Date(timeCreated);
 
     let timeDiff = new Date().getTime() - dateCreated.getTime();
@@ -56,9 +41,13 @@ const generateTimestamp = (timeCreated: Date) => {
         // ms -> secs
         timeDiff = Math.round(timeDiff / 1000);
         if (timeDiff < 60) {
-            timestampText += `${timeDiff} second${
-                timeDiff !== 1 ? "s" : ""
-            } ago`;
+            if (timeDiff < 10) {
+                timestampText += "just now";
+            } else {
+                timestampText += `${timeDiff} second${
+                    timeDiff !== 1 ? "s" : ""
+                } ago`;
+            }
         } else {
             // secs -> mins
             timeDiff = Math.round(timeDiff / 60);
@@ -92,79 +81,90 @@ const generateTimestamp = (timeCreated: Date) => {
     return timestampText;
 };
 
-type PostCardProps = {
-    id: string;
-    title: string;
-    body: string;
-    time_created: Date;
-    num_upvotes: number;
+export const getInitials = (authorUsername: string) =>
+    authorUsername.replace(/[a-z0-9]/g, "");
+
+type PostCardProps = Post & {
+    color: "primary" | "secondary";
+    postUpvotesData: UpvotesData;
     navigation: HomeScreenNavigationProp;
+    toggleUpvote: (id: string, upvoted: boolean) => void;
 };
 
 const PostCard = ({
+    color,
     id,
+    author_username: authorUsername,
     title,
     body,
     time_created: timeCreated,
-    num_upvotes: numUpvotes,
-    navigation
+    postUpvotesData: { numUpvotes, hasUpvote },
+    navigation,
+    toggleUpvote
 }: PostCardProps) => {
+    const initials = getInitials(authorUsername);
+    const [avatarColor] = useState(generateColor());
+
     const timestamp = generateTimestamp(timeCreated);
 
-    const [hasUpvote, toggleUpvote] = useState(false);
-    const [[upvotes, changedUpvote], setNumUpvotes] = useState([
-        numUpvotes,
-        false
-    ]);
-
-    // useEffect(() => {
-    //     const updateUpvotes = async () => {
-    //         if (changedUpvote) {
-    //             try {
-    //                 const response = await fetch(
-    //                     `${process.env.API_URL}/posts/${id}`,
-    //                     {
-    //                         method: "PUT",
-    //                         headers: {
-    //                             Accept: "application/json",
-    //                             "Content-Type": "application/json"
-    //                         },
-    //                         body: JSON.stringify({
-    //                             num_upvotes: upvotes
-    //                         })
-    //                     }
-    //                 );
-
-    //                 if (!response.ok) {
-    //                     throw new Error(`${response.status}`);
-    //                 }
-    //             } catch (err) {
-    //                 console.error(`Something went wrong! Error code ${err}`);
-    //             }
-    //         }
-    //     };
-
-    //     navigation.addListener("beforeRemove", () => updateUpvotes());
-
-    //     return () => {
-    //         navigation.removeListener("beforeRemove", () => updateUpvotes());
-    //     };
-    // });
-
-    const toggleUserUpvote = () => {
-        toggleUpvote(!hasUpvote);
-        setNumUpvotes([hasUpvote ? upvotes - 1 : upvotes + 1, !changedUpvote]);
+    const upvoteIconColors = {
+        primary: (active: boolean) => (active ? "white" : primaryColors.text),
+        secondary: (active: boolean) => (active ? "green" : "slategray")
     };
 
     return (
         <TouchableWithoutFeedback
             onPress={() => navigation.navigate("Post", { post_id: id })}
         >
-            <Card containerStyle={styles.container}>
+            <Card
+                containerStyle={{
+                    flexShrink: 1,
+                    backgroundColor:
+                        color === "primary"
+                            ? primaryColors.background
+                            : primaryColors.text,
+                    borderRadius: 20,
+                    marginVertical: 20
+                }}
+            >
                 <View style={styles.headingContainer}>
-                    <View style={styles.titleContainer}>
-                        <Card.Title style={styles.title}>{title}</Card.Title>
-                        <Text style={styles.timestamp}>{timestamp}</Text>
+                    <View style={styles.avatarContainer}>
+                        <Avatar
+                            size={36}
+                            rounded
+                            title={initials}
+                            containerStyle={{
+                                justifyContent: "center",
+                                backgroundColor: avatarColor,
+                                marginRight: 8
+                            }}
+                        />
+                        <View>
+                            <Card.Title
+                                style={{
+                                    fontSize: 24,
+                                    fontWeight: "bold",
+                                    textAlign: "left",
+                                    alignItems: "center",
+                                    color:
+                                        color === "primary" ? "white" : "black",
+                                    marginBottom: 0
+                                }}
+                            >
+                                {title}
+                            </Card.Title>
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    color:
+                                        color === "primary"
+                                            ? "lightgray"
+                                            : "dimgray"
+                                }}
+                            >
+                                {timestamp}
+                            </Text>
+                        </View>
                     </View>
                     <View style={styles.iconContainer}>
                         <Icon
@@ -173,22 +173,32 @@ const PostCard = ({
                             }
                             size={32}
                             type="material"
-                            color={hasUpvote ? "green" : "slategray"}
-                            onPress={() => toggleUserUpvote()}
+                            color={upvoteIconColors[color](hasUpvote)}
+                            onPress={() => toggleUpvote(id, !hasUpvote)}
                         />
                         <Text
                             style={{
-                                color: hasUpvote ? "green" : "slategray",
+                                color: upvoteIconColors[color](hasUpvote),
                                 fontSize: 18,
                                 fontWeight: "bold",
                                 marginLeft: 5
                             }}
                         >
-                            {upvotes}
+                            {numUpvotes}
                         </Text>
                     </View>
                 </View>
-                {body !== "" && <Text style={styles.body}>{body}</Text>}
+                {body !== "" ? (
+                    <Text
+                        style={{
+                            fontSize: 18,
+                            color: color === "primary" ? "white" : "black",
+                            marginTop: 10
+                        }}
+                    >
+                        {body}
+                    </Text>
+                ) : null}
             </Card>
         </TouchableWithoutFeedback>
     );
