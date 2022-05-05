@@ -25,8 +25,6 @@ const HeaderTitle = ({ isHome, navigation }: HeaderTitleProps) => {
             }
         );
         const subgroupsData = await response.json();
-
-        console.log(subgroupsData);
     };
 
     return isHome ? (

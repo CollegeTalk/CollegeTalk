@@ -106,9 +106,7 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
             <View style={styles.dropDownContainer}>
                 <SelectDropdown
                     data={["Subgroup1", "Subgroup2", "Subgroup3"]}
-                    onSelect={(selectedItem, index) => {
-                        console.log(selectedItem, index);
-                    }}
+                    onSelect={(selectedItem, index) => {}}
                     buttonTextAfterSelection={(selectedItem) =>
                         // text represented after item is selected
                         // if data array is an array of objects then return selectedItem.property to render after item is selected

@@ -1,78 +1,74 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<CreatePostTitle /> renders correctly 1`] = `
+exports[`<InputField /> renders correctly 1`] = `
 <View
   style={
     Object {
-      "marginBottom": 20,
+      "paddingHorizontal": 0,
+      "width": "100%",
     }
   }
+  testID="RNE__Input__view-wrapper"
 >
   <View
     style={
       Object {
-        "paddingHorizontal": 0,
-        "width": "100%",
+        "alignItems": "center",
+        "borderBottomWidth": 0,
+        "borderColor": "#86939e",
+        "flexDirection": "row",
+        "transform": Array [
+          Object {
+            "translateX": 0,
+          },
+        ],
       }
     }
-    testID="RNE__Input__view-wrapper"
   >
-    <View
+    <TextInput
+      allowFontScaling={true}
+      blurOnSubmit={true}
+      editable={true}
+      multiline={false}
+      onChangeText={[Function]}
+      onSubmitEditing={[Function]}
+      placeholder=""
+      placeholderTextColor="#86939e"
+      rejectResponderTermination={true}
+      returnKeyType="next"
+      shake={[Function]}
       style={
         Object {
-          "alignItems": "center",
-          "borderBottomWidth": 0,
-          "borderColor": "#86939e",
-          "flexDirection": "row",
-          "transform": Array [
-            Object {
-              "translateX": 0,
-            },
-          ],
+          "borderColor": "#e2d6aa",
+          "borderRadius": 15,
+          "borderWidth": 1,
+          "color": "white",
+          "flex": 1,
+          "fontSize": 18,
+          "height": 50,
+          "marginBottom": 20,
+          "minHeight": 40,
+          "paddingBottom": 10,
+          "paddingHorizontal": 15,
+          "paddingTop": 10,
+          "textAlignVertical": "top",
+          "width": "100%",
         }
       }
-    >
-      <TextInput
-        allowFontScaling={true}
-        editable={true}
-        multiline={false}
-        onChangeText={[Function]}
-        placeholder=""
-        placeholderTextColor="#86939e"
-        rejectResponderTermination={true}
-        shake={[Function]}
-        style={
-          Object {
-            "borderColor": "#e2d6aa",
-            "borderRadius": 15,
-            "borderWidth": 1,
-            "color": "white",
-            "flex": 1,
-            "fontSize": 18,
-            "height": 50,
-            "minHeight": 40,
-            "paddingBottom": 10,
-            "paddingHorizontal": 15,
-            "paddingTop": 10,
-            "textAlignVertical": "top",
-            "width": "100%",
-          }
-        }
-        testID="RNE__Input__text-input"
-        underlineColorAndroid="transparent"
-      />
-    </View>
-    <Text
-      style={
-        Object {
-          "color": "red",
-          "fontSize": 12,
-          "height": 0,
-          "margin": 0,
-          "padding": 0,
-        }
-      }
+      testID="RNE__Input__text-input"
+      underlineColorAndroid="transparent"
     />
   </View>
+  <Text
+    style={
+      Object {
+        "color": "red",
+        "fontSize": 12,
+        "height": 0,
+        "margin": 0,
+        "padding": 0,
+      }
+    }
+  />
 </View>
 `;

@@ -18,8 +18,8 @@ lint_frontend:
 test_frontend:
     stage: test
     script:
-        - npx jest -u --coverage=false
-        - npx jest --ci
+        - npm run updateSnapshots
+        - npm run testProd
 
 staging_frontend_expo:
     stage: staging
