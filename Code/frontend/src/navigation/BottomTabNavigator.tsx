@@ -1,17 +1,18 @@
-import { ComponentProps, useState } from "react";
-import { View, Pressable } from "react-native";
-import { DrawerActions } from "@react-navigation/native";
+import { ComponentProps } from "react";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
-import { FAB, SearchBar } from "@rneui/themed";
+import { FAB } from "@rneui/themed";
 
-import { RootTabParamList, RootTabScreenProps } from "../../types";
-import Colors from "../constants/Colors";
+import { BottomTabParamList, BottomTabNavScreenProps } from "../../types";
+import Colors, { primaryColors } from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 
-import HomeScreen from "../screens/HomeScreen";
+import HomeStack from "./HomeStack";
 import CreatePostScreen from "../screens/CreatePostScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import HeaderLeft from "../components/Home/HeaderLeft";
+import HeaderTitle from "../components/Home/HeaderTitle";
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -26,7 +27,7 @@ const TabBarIcon = ({
     <Feather size={35} style={{ marginBottom: -3 }} name={name} color={color} />
 );
 
-const BottomTab = createBottomTabNavigator<RootTabParamList>();
+const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 /**
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
@@ -37,7 +38,7 @@ const BottomTabNavigator = () => {
 
     return (
         <BottomTab.Navigator
-            initialRouteName="Home"
+            initialRouteName="HomeStack"
             screenOptions={{
                 tabBarActiveTintColor: Colors[colorScheme].tint,
                 tabBarShowLabel: false,
@@ -45,72 +46,65 @@ const BottomTabNavigator = () => {
             }}
         >
             <BottomTab.Screen
-                name="Home"
-                component={HomeScreen}
-                options={({ navigation }: RootTabScreenProps<"Home">) => ({
-                    title: "",
-                    tabBarIcon: ({ color }) => (
-                        <TabBarIcon name="home" color={color} />
-                    ),
-                    headerLeft: () => (
-                        <Pressable
-                            onPress={() =>
-                                navigation.dispatch(
-                                    DrawerActions.toggleDrawer()
-                                )
-                            }
-                            style={({ pressed }) => ({
-                                opacity: pressed ? 0.5 : 1
-                            })}
-                        >
-                            <Feather
-                                name="menu"
-                                size={25}
-                                color={Colors[colorScheme].text}
-                                style={{ marginLeft: 15 }}
+                name="HomeStack"
+                component={HomeStack}
+                options={({
+                    navigation,
+                    route
+                }: BottomTabNavScreenProps<"HomeStack">) => {
+                    const routeName = getFocusedRouteNameFromRoute(route);
+
+                    return {
+                        title: "",
+                        tabBarIcon: ({ color }) => (
+                            <TabBarIcon name="home" color={color} />
+                        ),
+                        headerStyle: {
+                            backgroundColor:
+                                routeName === "Home" || routeName === undefined
+                                    ? Colors[colorScheme].background
+                                    : primaryColors.background
+                        },
+                        headerLeft: () => (
+                            <HeaderLeft
+                                {...{
+                                    navigation,
+                                    isHome:
+                                        routeName === "Home" ||
+                                        routeName === undefined,
+                                    colorScheme
+                                }}
                             />
-                        </Pressable>
-                    ),
-                    headerTitle: () => {
-                        const [searchQuery, updateSearchQuery] = useState("");
-                        return (
-                            <View style={{ width: 250 }}>
-                                <SearchBar
-                                    containerStyle={{
-                                        width: "90%",
-                                        height: "90%",
-                                        backgroundColor: "transparent",
-                                        borderTopWidth: 0,
-                                        borderBottomWidth: 0
-                                    }}
-                                    inputContainerStyle={{
-                                        height: "40%",
-                                        marginTop: -5
-                                    }}
-                                    placeholder="Search CollegeTalk"
-                                    onChangeText={updateSearchQuery}
-                                    value={searchQuery}
-                                    lightTheme
-                                    round
-                                />
-                            </View>
-                        );
-                    }
-                })}
+                        ),
+                        headerTitle: () => (
+                            <HeaderTitle
+                                {...{
+                                    isHome:
+                                        routeName === "Home" ||
+                                        routeName === undefined,
+                                    navigation
+                                }}
+                            />
+                        )
+                    };
+                }}
             />
             <BottomTab.Screen
                 name="CreatePost"
                 component={CreatePostScreen}
                 options={({
                     navigation
-                }: RootTabScreenProps<"CreatePost">) => ({
+                }: BottomTabNavScreenProps<"CreatePost">) => ({
                     title: "",
                     tabBarButton: () => (
                         <FAB
                             style={{
                                 top: -10
                             }}
-                            icon={{ name: "add", color: "white" }}
+                            icon={
+                                <Feather name="plus" color="white" size={32} />
+                            }
+                            buttonStyle={{ padding: 0 }}
                             color={Colors.light.tint}
                             onPress={() => navigation.navigate("CreatePost")}
                         />

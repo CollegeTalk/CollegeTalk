@@ -13,9 +13,12 @@ class SubgroupModel(db.Model):
     __tablename__ = "subgroups"
 
     id = db.Column(UUID(as_uuid=True), primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String, unique=True)
     description = db.Column(db.String)
-    posts = db.relationship("PostModel")
+    posts = db.relationship("PostModel", cascade="all, delete")
+    users = db.relationship(
+        "UserModel", secondary="users_subgroups", back_populates="subgroups", cascade="all, delete"
+    )
 
     def __init__(self, name, description):
         self.id = uuid4()
@@ -28,11 +31,12 @@ class SubgroupModel(db.Model):
     @property
     def serialize(self):
         """
-        Return post in serializeable format
+        Return subgroup in serializeable format
         """
         return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'posts': [post.id for post in self.posts]
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "posts": [post.id for post in self.posts],
+            "users": [user.id for user in self.users],
         }

@@ -15,25 +15,29 @@ const linking: LinkingOptions<RootStackParamList> = {
         screens: {
             Root: {
                 screens: {
-                    Home: {
+                    BottomTab: {
                         screens: {
-                            HomeScreen: "home"
-                        }
-                    },
-                    CreatePost: {
-                        screens: {
-                            CreatePostScreen: "create-post"
-                        }
-                    },
-                    Profile: {
-                        screens: {
-                            Profile: "profile"
+                            HomeStack: {
+                                screens: {
+                                    Home: "home",
+                                    Post: "post/:id",
+                                    Subgroups: "subgroups"
+                                }
+                            },
+                            CreatePost: {
+                                screens: {
+                                    CreatePost: "create-post"
+                                }
+                            },
+                            Profile: {
+                                screens: {
+                                    Profile: "profile"
+                                }
+                            }
                         }
                     }
                 }
             },
-            // Modal: "modal",
-            HomeDrawer: "home-drawer",
             NotFound: "*"
         }
     }

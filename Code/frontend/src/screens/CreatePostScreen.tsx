@@ -8,7 +8,7 @@ import {
 import LottieView from "lottie-react-native";
 
 import { primaryColors } from "../constants/Colors";
-// import { RootTabScreenProps } from "../../types";
+import { BottomTabNavScreenProps } from "../../types";
 import BusAnimation from "../assets/animations/457-moving-bus.json";
 
 import { Text, View } from "../components/Themed";
@@ -16,7 +16,6 @@ import CreatePost from "../components/CreatePost/CreatePost";
 
 const styles = StyleSheet.create({
     viewWrapper: {
-        width: "100%",
         height: "100%",
         flexDirection: "row",
         justifyContent: "center"
@@ -43,8 +42,9 @@ const styles = StyleSheet.create({
     }
 });
 
-// { navigation }: RootTabScreenProps<"CreatePost">
-const CreatePostScreen = () => (
+const CreatePostScreen = ({
+    navigation
+}: BottomTabNavScreenProps<"CreatePost">) => (
     <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.viewWrapper}
@@ -52,7 +52,7 @@ const CreatePostScreen = () => (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
                 <Text style={styles.title}>Ask a Question:</Text>
-                <CreatePost />
+                <CreatePost {...{ navigation }} />
                 <View style={styles.animationContainer}>
                     <LottieView source={BusAnimation} autoPlay loop />
                 </View>

@@ -28,7 +28,7 @@ const useCachedResources = () => {
         }
 
         loadResourcesAndDataAsync();
-    }, []);
+    }, [isLoadingComplete, setLoadingComplete, SplashScreen, Font]);
 
     return isLoadingComplete;
 };

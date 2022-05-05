@@ -25,5 +25,7 @@ class Subgroup(Resource):
         except RuntimeError:
             return jsonify({"error": f"Error updating {id}"})
 
+    # TODO: implement feature to grab top upvoted posts
+
 
 api.add_resource(Subgroup, "/subgroups/<string:id>")
