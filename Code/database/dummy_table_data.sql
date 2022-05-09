@@ -2,24 +2,20 @@ TRUNCATE users_posts, users_comments, users_subgroups, users, comments, posts, s
 
 
 -- Create dummy users
-INSERT INTO users VALUES ('afe686fa-4221-4a97-81a4-6bf174f962f6', 'Kylo Forbes', 'vaWl5lnFi5');
-INSERT INTO users VALUES ('07115216-b43f-4727-9feb-8e0021d3429b', 'Frank Norris', 'T1K5GnMG3u');
-INSERT INTO users VALUES ('c8df57e8-8d1a-4181-9c42-17507c96b7cb', 'Alexis Dorsey', 'hIIZntY8NZ');
-INSERT INTO users VALUES ('150bc5dd-2bac-49cb-ab66-70a32b2405b7', 'Christopher Milner', '8GwPR2gold');
-INSERT INTO users VALUES ('0fa83040-b67e-420b-b99a-c377a27a0a4f', 'Riaan Dupont', 'BMnoB3BQ7p');
-INSERT INTO users VALUES ('91d39015-1c59-42d1-b542-b3591e511244', 'Elizabeth Farley', '66qgIP5HwF');
-INSERT INTO users VALUES ('51bf355d-d377-4f66-a956-fb428da2fbaa', 'Corinne Edwards', 'FIyJ48P26M');
-INSERT INTO users VALUES ('bcd8d954-af57-4cc6-98a9-3b3733ea7a29', 'Dawson Rossi', 'SOol32OdQx');
-INSERT INTO users VALUES ('a5e5cead-71dc-4cca-9589-89c9d7dc10c2', 'Gladys Jacobs', 'i2X8VZIOtP');
-INSERT INTO users VALUES ('6d893dc5-42db-47da-bb95-27a97daf1569', 'Clarice Bates', 'aHZbQqyrrW');
-INSERT INTO users VALUES ('8b9b19aa-80bf-4625-a56c-5ba3546127d4', 'Peyton Gardner', 'PEXjOjpgqE');
-INSERT INTO users VALUES ('6876fd3b-344b-4d30-ae1c-499f68a3e93a', 'Carter Berg', 'AEhYX69JoX');
-INSERT INTO users VALUES ('bd114cec-802e-4881-bbe7-8c71a4646a16', 'Morgan Aldred', 'sQ64HXxtYP');
-INSERT INTO users VALUES ('e2b7f5b6-36b9-4496-851c-3a3ae930d85d', 'Shola Dillon', 'AFAwN4Nblk');
-INSERT INTO users VALUES ('28dcdd7f-08e0-4f73-95a6-b6b1bdbc55bc', 'Freddie Martin', 'vvyPW2yiME');
-INSERT INTO users VALUES ('e32a641c-b980-49e2-9e72-67a1c8a22c79', 'Sheldon Duffy', '806TbCEq0P');
-INSERT INTO users VALUES ('8fe33dc6-6cd5-43f1-b952-509928018750', 'Joss Gregory', '3jbOAjtVbq');
-INSERT INTO users VALUES ('aeafbaf3-5e50-4f85-9e27-94994234b3b9', 'Gurpreet Carr', 'UTNDrmZsHx');
+INSERT INTO users VALUES ('afe686fa-4221-4a97-81a4-6bf174f962f6', 'Kylo Forbes', 'NeedyBittern4');
+INSERT INTO users VALUES ('07115216-b43f-4727-9feb-8e0021d3429b', 'Frank Norris', 'ScornfulLollies2');
+INSERT INTO users VALUES ('c8df57e8-8d1a-4181-9c42-17507c96b7cb', 'Alexis Dorsey', 'SimilarApricots8');
+INSERT INTO users VALUES ('150bc5dd-2bac-49cb-ab66-70a32b2405b7', 'Christopher Milner', 'AmazedLlama8');
+INSERT INTO users VALUES ('0fa83040-b67e-420b-b99a-c377a27a0a4f', 'Riaan Dupont', 'GiddyChough8');
+INSERT INTO users VALUES ('6d893dc5-42db-47da-bb95-27a97daf1569', 'Clarice Bates', 'NeedfulLlama2');
+INSERT INTO users VALUES ('8b9b19aa-80bf-4625-a56c-5ba3546127d4', 'Peyton Gardner', 'ThrilledGranola7');
+INSERT INTO users VALUES ('6876fd3b-344b-4d30-ae1c-499f68a3e93a', 'Carter Berg', 'JealousApricots8');
+INSERT INTO users VALUES ('bd114cec-802e-4881-bbe7-8c71a4646a16', 'Morgan Aldred', 'BubblyChile4');
+INSERT INTO users VALUES ('e2b7f5b6-36b9-4496-851c-3a3ae930d85d', 'Shola Dillon', 'BoredFlamingo9');
+INSERT INTO users VALUES ('28dcdd7f-08e0-4f73-95a6-b6b1bdbc55bc', 'Freddie Martin', 'ScornfulKitten8');
+INSERT INTO users VALUES ('e32a641c-b980-49e2-9e72-67a1c8a22c79', 'Sheldon Duffy', 'PeacefulWeaver7');
+INSERT INTO users VALUES ('8fe33dc6-6cd5-43f1-b952-509928018750', 'Joss Gregory', 'PluckyThrush3');
+INSERT INTO users VALUES ('aeafbaf3-5e50-4f85-9e27-94994234b3b9', 'Gurpreet Carr', 'JoyfulSnail4');
 
 
 
@@ -38,11 +34,11 @@ INSERT INTO posts VALUES ('e3a3b0a0-74d8-4a5d-9c59-811bdee8f611', '2022-04-25 22
 INSERT INTO posts VALUES ('1b76ed39-9e27-42e2-baf3-a187f19021e4', '2021-01-23 22:31:59 +0000', '07115216-b43f-4727-9feb-8e0021d3429b', 'CSCI 301: how much Java are you required to know for this class before it begins?', 'I mainly only know python since I’ve taken no Java based classes. Should I already be fully knowledgeable in Java and how much?', 0, FALSE, '49a7f9ff-ec8a-4877-86ef-025ed7e995f9');
 INSERT INTO posts VALUES ('e920f19e-fb86-4603-96f8-4a54b032a54a', '2022-04-21 22:35:31 +0000', '150bc5dd-2bac-49cb-ab66-70a32b2405b7', 'Experiences w/ CSCI 241?', 'I heard it’s kind of a weed out class for CSCI majors', 6, FALSE, '49a7f9ff-ec8a-4877-86ef-025ed7e995f9');
 INSERT INTO posts VALUES ('2f6a6838-b78f-4126-8b26-3ced15010c5e', '2022-04-22 23:17:31 +0000', '0fa83040-b67e-420b-b99a-c377a27a0a4f', 'Best professor for CSCI 241?', 'Hi, I''m preparing to take CSCI 241 this semester. I hear that the class can be really difficult, so I was wondering if part of it has to do with teaching style. Does anyone have a CSCI 241 professor that they recommend in particular? I am also curious: where does much of the course''s difficulty arise from?', 0, FALSE, '49a7f9ff-ec8a-4877-86ef-025ed7e995f9');
-INSERT INTO posts VALUES ('a4884c06-9e70-4de6-bf52-929f719c5c90', '2022-04-27 23:18:12 +0000', '91d39015-1c59-42d1-b542-b3591e511244', 'CSCI 140 workload', 'Hi all, I’m considering adding programming for data science this semester, but I don’t want to over encumber myself. Could anyone who has taken this class attest to its workload? Additionally, reviews for professor Zhang and professor Khargonkar are hard to come by online, so if anybody has had them in the past, please share your experiences with them.', 12, FALSE, '49a7f9ff-ec8a-4877-86ef-025ed7e995f9');
-INSERT INTO posts VALUES ('e9abddaa-8ce1-4afb-b5c7-7ee6ae8cae18', '2022-04-25 23:20:27 +0000', '51bf355d-d377-4f66-a956-fb428da2fbaa', 'Arohi Khargonkar for CSCI 140/141?', 'Did anyone have her for this semester? She doesn''t have a rate my professor, so I''m curious as to how she is.', 0, FALSE, '49a7f9ff-ec8a-4877-86ef-025ed7e995f9');
+INSERT INTO posts VALUES ('a4884c06-9e70-4de6-bf52-929f719c5c90', '2022-04-27 23:18:12 +0000', 'c8df57e8-8d1a-4181-9c42-17507c96b7cb', 'CSCI 140 workload', 'Hi all, I’m considering adding programming for data science this semester, but I don’t want to over encumber myself. Could anyone who has taken this class attest to its workload? Additionally, reviews for professor Zhang and professor Khargonkar are hard to come by online, so if anybody has had them in the past, please share your experiences with them.', 12, FALSE, '49a7f9ff-ec8a-4877-86ef-025ed7e995f9');
+INSERT INTO posts VALUES ('e9abddaa-8ce1-4afb-b5c7-7ee6ae8cae18', '2022-04-25 23:20:27 +0000', '0fa83040-b67e-420b-b99a-c377a27a0a4f', 'Arohi Khargonkar for CSCI 140/141?', 'Did anyone have her for this semester? She doesn''t have a rate my professor, so I''m curious as to how she is.', 0, FALSE, '49a7f9ff-ec8a-4877-86ef-025ed7e995f9');
 
-INSERT INTO posts VALUES ('6bcfdedf-563c-424f-aff7-765a8eb7ac3b', '2022-04-24 21:14:33 +0000', 'bcd8d954-af57-4cc6-98a9-3b3733ea7a29', 'What should I do with my internship money (freshman)', 'Hi guys, I’m a freshman at a t15 and recently accepted an offer at a pretty big company doing data analytics stuff. Making around 30/hr and I think I’m getting an additional 8k because they’re not paying for housing (I’m from the bay). All in all I’m going to have like 15-23k in the bank after this summer, more money than I’ve ever had. My family is well off so I have no pressing financial concerns, but I don’t want to blow this money on drugs alc and food like I would otherwise. What useful things do you guys suggest purchasing/investing in?', 273, FALSE, '87c93979-bf9e-44df-b4b4-92aa2708dc18');
-INSERT INTO posts VALUES ('197cad67-0c94-4f75-bb8a-497d18ebefb5', '2022-04-23 22:14:33 +0000', 'a5e5cead-71dc-4cca-9589-89c9d7dc10c2', 'Does something only count as a personal project if it''s done completely from scratch?', 'I would assume following a tutorial doesn''t count. What if you follow a tutorial and put it away, then try to do it on your own? What specifically counts as a personal project?', 140, FALSE, '87c93979-bf9e-44df-b4b4-92aa2708dc18');
+INSERT INTO posts VALUES ('6bcfdedf-563c-424f-aff7-765a8eb7ac3b', '2022-04-24 21:14:33 +0000', 'afe686fa-4221-4a97-81a4-6bf174f962f6', 'What should I do with my internship money (freshman)', 'Hi guys, I’m a freshman at a t15 and recently accepted an offer at a pretty big company doing data analytics stuff. Making around 30/hr and I think I’m getting an additional 8k because they’re not paying for housing (I’m from the bay). All in all I’m going to have like 15-23k in the bank after this summer, more money than I’ve ever had. My family is well off so I have no pressing financial concerns, but I don’t want to blow this money on drugs alc and food like I would otherwise. What useful things do you guys suggest purchasing/investing in?', 273, FALSE, '87c93979-bf9e-44df-b4b4-92aa2708dc18');
+INSERT INTO posts VALUES ('197cad67-0c94-4f75-bb8a-497d18ebefb5', '2022-04-23 22:14:33 +0000', '150bc5dd-2bac-49cb-ab66-70a32b2405b7', 'Does something only count as a personal project if it''s done completely from scratch?', 'I would assume following a tutorial doesn''t count. What if you follow a tutorial and put it away, then try to do it on your own? What specifically counts as a personal project?', 140, FALSE, '87c93979-bf9e-44df-b4b4-92aa2708dc18');
 INSERT INTO posts VALUES ('f10d2394-1e82-4c22-86d3-8844e03d3ac1', '2022-04-22 23:14:33 +0000', '6d893dc5-42db-47da-bb95-27a97daf1569', 'How do you guys do it?', 'Between school work, doing side projects, leetcode, and all that in between having a social life where do you guys find the time or are you guys are in the same boat as me? I feel like there’s is not enough time for me in the day to do all this. I do feel like I spend a lot of time going out having a social life on the weekends in which I should probably stop and spend that time programming to be come a better programmer', 120, FALSE, '87c93979-bf9e-44df-b4b4-92aa2708dc18');
 INSERT INTO posts VALUES ('ad7fcfc2-91be-45da-b2b2-71219937b297', '2022-04-28 12:14:33 +0000', '8b9b19aa-80bf-4625-a56c-5ba3546127d4', 'Why do so many CS majors grind leetcode when DSA is required in many CS curricula?', 'I''m currently taking data structures and algorithms, and every concept we are learning seems to be taken off of leetcode. In our discussion sections, we do interview problems, and our homework is just leetcode on steroids. I feel like leetcode won''t be able to teach me more than I will learn from this class. Do you guys feel the same way? Why do so many people grind leetcode when we learn the concepts in class?', 189, FALSE, '87c93979-bf9e-44df-b4b4-92aa2708dc18');
 INSERT INTO posts VALUES ('a0450e67-66fd-4321-b15d-ba0762cad14f', '2022-04-21 19:14:33 +0000', '6876fd3b-344b-4d30-ae1c-499f68a3e93a', 'what were the most important CS classes you guys took in your opinion', 'whether it was its relevance to a day-to-day job, or how much of a better engineer it made you, or whatever else', 12, FALSE, '87c93979-bf9e-44df-b4b4-92aa2708dc18');
