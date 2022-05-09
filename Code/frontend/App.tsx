@@ -37,10 +37,13 @@ const App = () => {
                 if (!response.ok) {
                     throw new Error(`${response.status}`);
                 }
+                const results = await response.json();
 
-                const { id, username, name } = (await response.json())[0];
                 setInitialFetched(true);
-                setUser({ id, username, name });
+                if (results?.length) {
+                    const { id, username, name } = results[0];
+                    setUser({ id, username, name });
+                }
             } catch (err: any) {
                 Alert.alert(`Something went wrong! ${err}`);
             }

@@ -10,7 +10,7 @@
                 "API_URL": "http://localhost:9000"
             }
         },
-        "preview": {
+        "staging": {
             "distribution": "internal",
             "env": {
                 "API_URL": "https://collegetalk-staging.azurewebsites.net"

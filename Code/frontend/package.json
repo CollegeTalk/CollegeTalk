@@ -14,7 +14,8 @@
         "test": "jest --watch --coverage=false",
         "testProd": "jest --ci --coverage=false",
         "updateSnapshots": "jest -u --coverage=false",
-        "publish": "expo publish"
+        "publishStaging": "expo publish --release-channel staging",
+        "publishProd": "expo publish --release-channel production"
     },
     "jest": {
         "preset": "jest-expo",
