@@ -27,4 +27,4 @@ class Subgroup(Resource):
     # TODO: implement feature to grab top upvoted posts
 
 
-api.add_resource(Subgroup, "/subgroups/<string:id>")
+api.add_resource(Subgroup, "/subgroup/<string:id>")
