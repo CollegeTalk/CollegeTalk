@@ -160,7 +160,7 @@ const fetchPosts = async (
         }
 
         const subgroupResponse = await fetch(
-            `${process.env.API_URL}/subgroups/${subgroupId}`,
+            `${process.env.API_URL}/subgroup/${subgroupId}`,
             {
                 method: "GET",
                 headers: {

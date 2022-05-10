@@ -16,8 +16,7 @@ class Subgroup(Resource):
 
     def put(self, id):
         try:
-            subgroup = db.session.query(SubgroupModel).filter_by(
-                id=id).first_or_404()
+            subgroup = db.session.query(SubgroupModel).filter_by(id=id).first_or_404()
             data = request.json
             update_fields(subgroup, data)
             db.session.commit()
@@ -28,4 +27,4 @@ class Subgroup(Resource):
     # TODO: implement feature to grab top upvoted posts
 
 
-api.add_resource(Subgroup, "/subgroups/<string:id>")
+api.add_resource(Subgroup, "/subgroup/<string:id>")
