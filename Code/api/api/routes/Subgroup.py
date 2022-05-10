@@ -16,8 +16,7 @@ class Subgroup(Resource):
 
     def put(self, id):
         try:
-            subgroup = db.session.query(SubgroupModel).filter_by(
-                id=id).first_or_404()
+            subgroup = db.session.query(SubgroupModel).filter_by(id=id).first_or_404()
             data = request.json
             update_fields(subgroup, data)
             db.session.commit()

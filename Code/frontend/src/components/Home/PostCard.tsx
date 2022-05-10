@@ -184,7 +184,8 @@ const PostCard = ({
                         marginBottom: 4
                     }}
                 >
-                    {title}
+                    {/** // TODO: temporary fix for apostrophe issue */}
+                    {title.replace(/â€™/g, "'")}
                 </Card.Title>
                 <Text
                     style={{
