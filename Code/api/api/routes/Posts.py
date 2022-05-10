@@ -1,5 +1,5 @@
 from api.models import db, UserModel, PostModel
-from .utils import update_relationship
+from .utils import update_relationship, validate_uuid4
 from flask import jsonify, request
 from flask_restful import Resource
 
@@ -12,7 +12,7 @@ class Posts(Resource):
 
         # get posts associated with a specific subgroup
         subgroup_id = request.args.get("subgroup_id")
-        if subgroup_id != None and subgroup_id.isalnum():
+        if subgroup_id != None and validate_uuid4(subgroup_id):
             posts = posts.filter_by(subgroup_id=subgroup_id)
 
         # get a limited number of posts, newest to oldest
