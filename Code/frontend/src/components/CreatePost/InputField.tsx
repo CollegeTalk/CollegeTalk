@@ -6,7 +6,8 @@ import { primaryColors } from "../../constants/Colors";
 
 const styles = StyleSheet.create({
     inputWrapper: {
-        paddingHorizontal: 0
+        paddingHorizontal: 0,
+        marginBottom: 20
     },
     inputContainer: {
         borderBottomWidth: 0
@@ -40,16 +41,16 @@ const InputField = forwardRef(
             inputContainerStyle={styles.inputContainer}
             inputStyle={{
                 width: "100%",
-                height: isLarge ? 100 : 50,
+                height: isLarge ? 100 : "auto",
+                flex: 1,
                 color: "white",
                 borderRadius: 15,
                 borderColor: primaryColors.text,
-                borderWidth: 1,
+                borderWidth: 2,
                 paddingHorizontal: 15,
                 /* cannot use paddingVertical for multiline */
                 paddingTop: 10,
                 paddingBottom: 10,
-                marginBottom: 20,
                 textAlignVertical: "top"
             }}
             placeholder={placeholder}
@@ -63,7 +64,7 @@ const InputField = forwardRef(
             renderErrorMessage={false}
             errorStyle={{ color: "red" }}
             errorMessage={showError ? errorMessage : undefined}
-            multiline={isLarge}
+            multiline
             returnKeyType={!isLarge ? "next" : "default"}
             blurOnSubmit
             onSubmitEditing={() => {

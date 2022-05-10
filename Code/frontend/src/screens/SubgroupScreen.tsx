@@ -24,7 +24,8 @@ import {
     Post,
     AggregateUpvotesData,
     UpdateRequestBody,
-    Subgroup
+    Subgroup,
+    SubgroupData
 } from "../../types";
 import Colors, { primaryColors } from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -67,6 +68,42 @@ const styles = StyleSheet.create({
     }
 });
 
+const updateSubgroup = async (
+    userId: string,
+    subgroupId: string,
+    userSubgroupData: SubgroupData
+) => {
+    try {
+        const subgroupsData: UpdateRequestBody = {};
+        const { isMember, changedStatus } = userSubgroupData;
+        if (changedStatus) {
+            subgroupsData[subgroupId] = {
+                function: isMember ? "add" : "remove"
+            };
+        }
+
+        if (Object.keys(subgroupsData).length) {
+            const response = await fetch(`${process.env.API_URL}/subgroups`, {
+                method: "PUT",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    field: "users",
+                    objs: subgroupsData
+                })
+            });
+            if (!response.ok) {
+                throw new Error(`${response.status}`);
+            }
+        }
+    } catch (err) {
+        Alert.alert(`Something went wrong! Error code ${err}`);
+    }
+};
+
 const updateUpvotes = async (
     userId: string,
     upvotesData: AggregateUpvotesData
@@ -101,13 +138,15 @@ const updateUpvotes = async (
             }
         }
     } catch (err) {
-        Alert.alert(`Something went wrong! Error code ${err}`);
+        Alert.alert(
+            `Something went wrong with updating upvotes! Error code ${err}`
+        );
     }
 };
 
 const fetchPosts = async (
     setFetching: Dispatch<SetStateAction<boolean>> | null,
-    setSubgroupData: Dispatch<SetStateAction<Subgroup>>,
+    setSubgroupData: Dispatch<SetStateAction<[Subgroup, SubgroupData]>>,
     setPosts: Dispatch<SetStateAction<Post[]>>,
     setPostUpvotes: Dispatch<SetStateAction<AggregateUpvotesData>>,
     updatedUpvotes: boolean,
@@ -168,7 +207,13 @@ const fetchPosts = async (
         if (setFetching !== null) {
             setFetching(false);
         }
-        setSubgroupData(subgroupData);
+        setSubgroupData([
+            subgroupData,
+            {
+                isMember: subgroupData.users.includes(userId),
+                changedStatus: false
+            }
+        ]);
         setPosts(postsData);
         setPostUpvotes(postUpvotesData);
     } catch (err: any) {
@@ -191,13 +236,19 @@ const SubgroupScreen = ({
     const [refreshing, setRefreshing] = useState(false);
     const [fetching, setFetching] = useState(true);
 
-    const [subgroupData, setSubgroupData] = useState<Subgroup>({
-        id: "",
-        name: "",
-        description: "",
-        posts: [],
-        users: []
-    });
+    const [[subgroupData, userSubgroupData], setSubgroupData] = useState<
+        [Subgroup, SubgroupData]
+    >([
+        {
+            id: "",
+            name: "",
+            description: "",
+            posts: [],
+            users: []
+        },
+        { isMember: false, changedStatus: false }
+    ]);
+
     const [posts, setPosts] = useState<Post[]>([]);
     const [upvotesData, setPostUpvotes] = useState<AggregateUpvotesData>({});
 
@@ -205,13 +256,14 @@ const SubgroupScreen = ({
         const unsubscribeUpvoteListener = navigation.addListener(
             "blur",
             async () => {
+                await updateSubgroup(userId, subgroupId, userSubgroupData);
                 await updateUpvotes(userId, upvotesData);
                 setFetching(true);
             }
         );
 
         return () => unsubscribeUpvoteListener();
-    }, [navigation, upvotesData, userId]);
+    }, [navigation, subgroupId, upvotesData, userId, userSubgroupData]);
 
     useFocusEffect(
         useCallback(() => {
@@ -258,6 +310,7 @@ const SubgroupScreen = ({
     }, [subgroupId, upvotesData, userId]);
 
     const { name, description, users: members } = subgroupData;
+    const { isMember, changedStatus } = userSubgroupData;
     const numMembers = members.length;
 
     return (
@@ -296,14 +349,49 @@ const SubgroupScreen = ({
                             numMembers === 1 ? "" : "s"
                         }`}</Text>
                         <Button
-                            title="Join"
+                            title={isMember ? "Joined" : "Join"}
                             buttonStyle={{
-                                backgroundColor: Colors[colorScheme].tint,
+                                backgroundColor: isMember
+                                    ? Colors[colorScheme].tint
+                                    : "transparent",
+                                borderWidth: 3,
+                                borderColor: Colors[colorScheme].tint,
                                 borderRadius: 30,
-                                paddingHorizontal: 30,
-                                paddingVertical: 5
+                                paddingHorizontal: 20,
+                                paddingVertical: 4
                             }}
-                            titleStyle={{ fontSize: 16, fontWeight: "bold" }}
+                            icon={{
+                                name: isMember ? "check-circle" : "plus",
+                                type: "material-community",
+                                size: 22,
+                                color: isMember
+                                    ? "white"
+                                    : Colors[colorScheme].tint
+                            }}
+                            iconContainerStyle={{
+                                marginHorizontal: 0
+                            }}
+                            titleStyle={{
+                                fontSize: 16,
+                                fontWeight: "bold",
+                                color: isMember
+                                    ? "white"
+                                    : Colors[colorScheme].tint,
+                                marginLeft: isMember ? 6 : 2
+                            }}
+                            onPress={() =>
+                                setSubgroupData([
+                                    subgroupData,
+                                    {
+                                        isMember: !isMember,
+                                        changedStatus: !changedStatus
+                                    }
+                                ])
+                            }
+                            loading={fetching}
+                            loadingProps={{
+                                color: Colors[colorScheme].tint
+                            }}
                         />
                     </View>
                     <Text style={styles.description}>{description}</Text>

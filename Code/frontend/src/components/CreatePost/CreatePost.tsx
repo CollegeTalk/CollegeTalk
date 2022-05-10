@@ -1,12 +1,15 @@
-import { RefObject, useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext, useCallback } from "react";
 import { TextInput, View, Alert, StyleSheet } from "react-native";
-import SelectDropdown from "react-native-select-dropdown";
+import { useFocusEffect } from "@react-navigation/native";
 import { Button } from "@rneui/themed";
-import "react-native-get-random-values";
+import SelectDropdown from "react-native-select-dropdown";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import { primaryColors } from "../../constants/Colors";
-import { CreatePostScreenNavigationProp } from "../../../types";
+import Colors, { primaryColors } from "../../constants/Colors";
+import useColorScheme from "../../hooks/useColorScheme";
+import { CreatePostScreenNavigationProp, Subgroup } from "../../../types";
 import UserContext from "../../../UserContext";
+import { fetchSubgroups } from "../../screens/HomeDrawerScreen";
 
 import InputField from "./InputField";
 
@@ -15,20 +18,10 @@ const styles = StyleSheet.create({
         width: "100%",
         marginVertical: 20
     },
-    drownDownContainer: {
-        width: "100%",
-        justifyContent: "center",
-        alignItems: "center"
-    },
     buttonContainer: {
         width: "100%",
         flexDirection: "row",
         justifyContent: "center"
-    },
-    dropDownContainer: {
-        width: "100%",
-        justifyContent: "center",
-        alignItems: "center"
     }
 });
 
@@ -41,12 +34,22 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
         user: { id: userId }
     } = useContext(UserContext);
 
-    const titleInput: RefObject<TextInput> = useRef(null);
+    const colorScheme = useColorScheme();
+
+    const titleInput = useRef<TextInput>(null);
     const [showTitleError, toggleTitleError] = useState(false);
     const [title, setTitle] = useState("");
 
-    const bodyInput: RefObject<TextInput> = useRef(null);
+    const bodyInput = useRef<TextInput>(null);
     const [body, setBody] = useState("");
+
+    const [fetching, setFetching] = useState(false);
+
+    const [subgroups, setSubgroups] = useState<Subgroup[]>([]);
+
+    const dropdownRef = useRef<SelectDropdown>(null);
+    const [isDropdownOpen, toggleDropdownState] = useState(false);
+    const [selectedSubgroup, setSelectedSubgroup] = useState("");
 
     useEffect(() => {
         const unsubscribeInputListener = navigation.addListener("blur", () =>
@@ -56,6 +59,14 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
         return () => unsubscribeInputListener();
     });
 
+    useFocusEffect(
+        useCallback(() => {
+            fetchSubgroups(setFetching, setSubgroups, userId);
+            setSelectedSubgroup("");
+            dropdownRef?.current?.reset();
+        }, [userId])
+    );
+
     const submitPost = async () => {
         if (title === "") {
             toggleTitleError(true);
@@ -63,8 +74,6 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
         }
 
         try {
-            // TODO: change to real subgroup_id
-            const subgroupId = "2c655aa2-96d9-4277-915f-2c048fd2eaca";
             const response = await fetch(`${process.env.API_URL}/posts`, {
                 method: "POST",
                 headers: {
@@ -75,7 +84,7 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
                     author_id: userId,
                     title,
                     body,
-                    subgroup_id: subgroupId
+                    subgroup_id: selectedSubgroup
                 })
             });
 
@@ -109,22 +118,68 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
                 setText={setBody}
                 isLarge
             />
-            <View style={styles.dropDownContainer}>
-                <SelectDropdown
-                    data={["Subgroup1", "Subgroup2", "Subgroup3"]}
-                    onSelect={(selectedItem, index) => {}}
-                    buttonTextAfterSelection={(selectedItem) =>
-                        // text represented after item is selected
-                        // if data array is an array of objects then return selectedItem.property to render after item is selected
-                        selectedItem
-                    }
-                    rowTextForSelection={(item) =>
-                        // text represented for each item in dropdown
-                        // if data array is an array of objects then return item.property to represent item in dropdown
-                        item
-                    }
-                />
-            </View>
+            <SelectDropdown
+                ref={dropdownRef}
+                data={subgroups}
+                buttonStyle={{
+                    width: "100%",
+                    backgroundColor: selectedSubgroup
+                        ? Colors[colorScheme].tint
+                        : "transparent",
+                    borderWidth: 2,
+                    borderColor: selectedSubgroup
+                        ? Colors[colorScheme].tint
+                        : primaryColors.text,
+                    borderRadius: 15,
+                    marginBottom: 20
+                }}
+                buttonTextStyle={{
+                    textAlign: "left",
+                    fontWeight: selectedSubgroup ? "600" : "normal",
+                    color: selectedSubgroup ? "white" : "slategray"
+                }}
+                defaultButtonText="Select a Subgroup"
+                renderDropdownIcon={() => (
+                    <View
+                        style={{
+                            backgroundColor: selectedSubgroup
+                                ? "white"
+                                : Colors[colorScheme].tint,
+                            borderRadius: 30
+                        }}
+                    >
+                        <MaterialCommunityIcons
+                            name={
+                                isDropdownOpen ? "chevron-up" : "chevron-down"
+                            }
+                            size={30}
+                            color={
+                                selectedSubgroup
+                                    ? Colors[colorScheme].tint
+                                    : "white"
+                            }
+                        />
+                    </View>
+                )}
+                onFocus={() => toggleDropdownState(!isDropdownOpen)}
+                onBlur={() => toggleDropdownState(!isDropdownOpen)}
+                disabled={fetching}
+                onSelect={({ id }: Subgroup) => setSelectedSubgroup(id)}
+                buttonTextAfterSelection={({ name }: Subgroup) => name}
+                rowTextForSelection={({ name }: Subgroup) => name}
+                dropdownStyle={{
+                    borderRadius: 10,
+                    backgroundColor: primaryColors.text,
+                    marginTop: 6
+                }}
+                rowStyle={{
+                    backgroundColor: primaryColors.text,
+                    borderBottomColor: "gray"
+                }}
+                rowTextStyle={{
+                    fontWeight: "500"
+                }}
+            />
             <View style={styles.buttonContainer}>
                 <Button
                     title="Submit"
@@ -145,7 +200,9 @@ const CreatePost = ({ navigation }: CreatePostProps) => {
                         width: 200,
                         marginVertical: 10
                     }}
+                    disabledStyle={{ backgroundColor: "gray" }}
                     onPress={() => submitPost()}
+                    disabled={selectedSubgroup === ""}
                 />
             </View>
         </View>

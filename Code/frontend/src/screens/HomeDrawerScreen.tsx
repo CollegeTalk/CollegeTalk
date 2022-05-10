@@ -103,7 +103,7 @@ const SubgroupButton = ({
     />
 );
 
-const fetchSubgroups = async (
+export const fetchSubgroups = async (
     setFetching: Dispatch<SetStateAction<boolean>>,
     setSubgroups: Dispatch<SetStateAction<Subgroup[]>>,
     userId: string
@@ -129,6 +129,7 @@ const fetchSubgroups = async (
             users.includes(userId)
         );
 
+        setFetching(false);
         setSubgroups(userSubgroupsData);
     } catch (err: any) {
         Alert.alert(`Something went wrong with fetching! ${err}`);

@@ -49,6 +49,10 @@ const styles = StyleSheet.create({
         width: "100%",
         marginTop: 16
     },
+    subgroupContainer: {
+        flex: 1,
+        marginLeft: 5
+    },
     subgroupName: {
         fontSize: 24,
         fontWeight: "500"
@@ -157,15 +161,22 @@ const SubgroupsScreen = ({ navigation }: HomeStackScreenProps<"Subgroups">) => {
     >([[], {}]);
 
     useEffect(() => {
-        const unsubscribeUpvoteListener = navigation.addListener(
-            "blur",
-            async () => {
-                await updateSubgroups(userId, userSubgroupsData);
-                setFetching(true);
-            }
-        );
+        let isMounted = true;
 
-        return () => unsubscribeUpvoteListener();
+        if (isMounted) {
+            const unsubscribeUpvoteListener = navigation.addListener(
+                "blur",
+                async () => {
+                    await updateSubgroups(userId, userSubgroupsData);
+                    setFetching(true);
+                }
+            );
+            return () => unsubscribeUpvoteListener();
+        }
+
+        return () => {
+            isMounted = false;
+        };
     }, [navigation, userId, userSubgroupsData]);
 
     useFocusEffect(
@@ -302,7 +313,7 @@ const SubgroupsScreen = ({ navigation }: HomeStackScreenProps<"Subgroups">) => {
                                         ]);
                                     }}
                                 />
-                                <View style={{ marginLeft: 5 }}>
+                                <View style={styles.subgroupContainer}>
                                     <Text style={styles.subgroupName}>
                                         {name}
                                     </Text>

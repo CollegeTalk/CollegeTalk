@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
     },
     avatarContainer: {
         flex: 5,
-        flexDirection: "row"
+        flexDirection: "row",
+        alignItems: "center"
     },
     iconContainer: {
         flex: 1,
@@ -108,7 +109,8 @@ const PostCard = ({
     const timestamp = generateTimestamp(timeCreated);
 
     const upvoteIconColors = {
-        primary: (active: boolean) => (active ? "white" : primaryColors.text),
+        primary: (active: boolean) =>
+            active ? primaryColors.text : "lightgray",
         secondary: (active: boolean) => (active ? "green" : "slategray")
     };
 
@@ -130,7 +132,7 @@ const PostCard = ({
                 <View style={styles.headingContainer}>
                     <View style={styles.avatarContainer}>
                         <Avatar
-                            size={36}
+                            size={30}
                             rounded
                             title={initials}
                             containerStyle={{
@@ -139,39 +141,22 @@ const PostCard = ({
                                 marginRight: 8
                             }}
                         />
-                        <View>
-                            <Card.Title
-                                style={{
-                                    fontSize: 24,
-                                    fontWeight: "bold",
-                                    textAlign: "left",
-                                    alignItems: "center",
-                                    color:
-                                        color === "primary" ? "white" : "black",
-                                    marginBottom: 0
-                                }}
-                            >
-                                {title}
-                            </Card.Title>
-                            <Text
-                                style={{
-                                    fontSize: 14,
-                                    color:
-                                        color === "primary"
-                                            ? "lightgray"
-                                            : "dimgray"
-                                }}
-                            >
-                                {timestamp}
-                            </Text>
-                        </View>
+                        <Text
+                            style={{
+                                fontSize: 18,
+                                fontWeight: "600",
+                                color: color === "primary" ? "white" : "black"
+                            }}
+                        >
+                            {authorUsername}
+                        </Text>
                     </View>
                     <View style={styles.iconContainer}>
                         <Icon
                             name={
                                 hasUpvote ? "thumb-up-alt" : "thumb-up-off-alt"
                             }
-                            size={32}
+                            size={24}
                             type="material"
                             color={upvoteIconColors[color](hasUpvote)}
                             onPress={() => toggleUpvote(id, !hasUpvote)}
@@ -179,15 +164,36 @@ const PostCard = ({
                         <Text
                             style={{
                                 color: upvoteIconColors[color](hasUpvote),
-                                fontSize: 18,
-                                fontWeight: "bold",
-                                marginLeft: 5
+                                fontSize: 14,
+                                fontWeight: "bold"
                             }}
                         >
                             {numUpvotes}
                         </Text>
                     </View>
                 </View>
+                {/* can't use marginVertical, need to override Card.Title marginBottom */}
+                <Card.Title
+                    style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        textAlign: "left",
+                        alignItems: "center",
+                        color: color === "primary" ? "white" : "black",
+                        marginTop: 4,
+                        marginBottom: 4
+                    }}
+                >
+                    {title}
+                </Card.Title>
+                <Text
+                    style={{
+                        fontSize: 14,
+                        color: color === "primary" ? "lightgray" : "dimgray"
+                    }}
+                >
+                    {timestamp}
+                </Text>
                 {body !== "" ? (
                     <Text
                         style={{
@@ -196,7 +202,8 @@ const PostCard = ({
                             marginTop: 10
                         }}
                     >
-                        {body}
+                        {/** // TODO: temporary fix for apostrophe issue */}
+                        {body.replace(/â€™/g, "'")}
                     </Text>
                 ) : null}
             </Card>
