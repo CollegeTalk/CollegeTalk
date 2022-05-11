@@ -7,10 +7,10 @@
             "developmentClient": true,
             "distribution": "internal",
             "env": {
-                "API_URL": "http://localhost:9000"
+                "API_URL": "https://collegetalk-dev.azurewebsites.net"
             }
         },
-        "preview": {
+        "staging": {
             "distribution": "internal",
             "env": {
                 "API_URL": "https://collegetalk-staging.azurewebsites.net"

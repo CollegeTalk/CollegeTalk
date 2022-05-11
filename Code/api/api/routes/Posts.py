@@ -1,5 +1,5 @@
 from api.models import db, UserModel, PostModel
-from .utils import update_relationship
+from .utils import update_relationship, validate_uuid4
 from flask import jsonify, request
 from flask_restful import Resource
 
@@ -8,21 +8,20 @@ from .base import api
 
 class Posts(Resource):
     def get(self):
-        cursor = PostModel.query
-        posts = None
+        posts = PostModel.query
 
         # get posts associated with a specific subgroup
         subgroup_id = request.args.get("subgroup_id")
-        if subgroup_id != None and subgroup_id.isalnum():
-            posts = cursor.filter_by(subgroup_id=subgroup_id)
+        if subgroup_id != None and validate_uuid4(subgroup_id):
+            posts = posts.filter_by(subgroup_id=subgroup_id)
 
         # get a limited number of posts, newest to oldest
         limit = request.args.get("limit")
         if limit != None and limit.isnumeric() and int(limit) >= 0:
-            posts = cursor.order_by(PostModel.time_created.desc()).limit(int(limit))
+            posts = posts.order_by(PostModel.time_created.desc()).limit(int(limit))
         # get all posts, newest to oldest
         else:
-            posts = cursor.order_by(PostModel.time_created.desc())
+            posts = posts.order_by(PostModel.time_created.desc())
 
         result = [post.serialize for post in posts]
 

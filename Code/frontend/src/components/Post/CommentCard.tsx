@@ -89,7 +89,10 @@ const CommentCard = ({
                     />
                     <View>
                         <Text style={styles.timestamp}>{timestamp}</Text>
-                        <Text style={styles.body}>{body}</Text>
+                        <Text style={styles.body}>
+                            {" "}
+                            {body.replace(/â€™/g, "'")}
+                        </Text>
                     </View>
                 </View>
                 <View style={styles.iconContainer}>

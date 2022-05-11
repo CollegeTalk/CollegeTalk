@@ -4,7 +4,8 @@ import {
     Alert,
     View,
     Text,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    ScrollView
 } from "react-native";
 import { LinearProgress, Icon, CheckBox } from "@rneui/themed";
 import LottieView from "lottie-react-native";
@@ -24,15 +25,18 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         backgroundColor: primaryColors.background
     },
+    scrollViewContainer: {
+        alignItems: "center",
+        paddingVertical: 30
+    },
     title: {
         fontSize: 30,
         fontWeight: "bold",
-        color: primaryColors.text,
-        paddingTop: 20
+        color: primaryColors.text
     },
     animationContainer: {
-        width: "80%",
-        height: "30%"
+        width: 200,
+        height: 200
     },
     statText: {
         backgroundColor: primaryColors.text,
@@ -40,7 +44,8 @@ const styles = StyleSheet.create({
         color: "black",
         paddingHorizontal: 10,
         paddingVertical: 10,
-        marginHorizontal: 8
+        marginHorizontal: 8,
+        marginVertical: 10
     }
 });
 
@@ -113,90 +118,96 @@ const ProfileScreen = ({ navigation }: BottomTabNavScreenProps<"Profile">) => {
                     color={Colors[colorScheme].tint}
                 />
             ) : null}
-            <Text style={styles.title}>Profile</Text>
-            <View style={styles.animationContainer}>
-                <LottieView source={JaneAnimation} autoPlay loop />
-            </View>
-            <View style={{ marginTop: 10 }}>
-                {users.map((userData, idx) => (
-                    <TouchableWithoutFeedback
-                        key={userData.id}
-                        onPress={() => selectUser(userData.id, idx)}
+            <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+                <Text style={styles.title}>Profile</Text>
+                <View style={styles.animationContainer}>
+                    <LottieView source={JaneAnimation} autoPlay loop />
+                </View>
+                {users.length ? (
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                            justifyContent: "center",
+                            marginHorizontal: 10,
+                            marginTop: 20
+                        }}
                     >
-                        <View
-                            style={{
-                                flexDirection: "row",
-                                alignItems: "center"
-                            }}
+                        <Text style={styles.statText}>
+                            {users[userIdx]?.subgroups.length} subgroups
+                        </Text>
+                        <Text style={styles.statText}>
+                            {users[userIdx]?.posts.length} posts
+                        </Text>
+                        <Text style={styles.statText}>
+                            {users[userIdx]?.comments.length} comments
+                        </Text>
+                    </View>
+                ) : null}
+                <View style={{ marginTop: 20 }}>
+                    {users.map((userData, idx) => (
+                        <TouchableWithoutFeedback
+                            key={userData.id}
+                            onPress={() => selectUser(userData.id, idx)}
                         >
-                            <CheckBox
-                                center
-                                containerStyle={{
-                                    backgroundColor: "transparent",
-                                    marginHorizontal: 0,
-                                    marginVertical: 10,
-                                    padding: 0
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    alignItems: "center"
                                 }}
-                                checkedIcon={
-                                    <View
-                                        style={{
-                                            borderRadius: 30,
-                                            backgroundColor:
-                                                Colors[colorScheme].tint,
-                                            padding: 3,
-                                            marginRight: 4
-                                        }}
-                                    >
-                                        <Icon
-                                            name="check"
-                                            color="white"
-                                            size={24}
-                                        />
-                                    </View>
-                                }
-                                uncheckedIcon={
-                                    <View
-                                        style={{
-                                            borderRadius: 30,
-                                            backgroundColor: "slategray",
-                                            padding: 3,
-                                            marginRight: 4
-                                        }}
-                                    >
-                                        <Icon
-                                            name="circle"
-                                            color="slategray"
-                                            size={24}
-                                        />
-                                    </View>
-                                }
-                                checked={selectedUser === userData.id}
-                                onPress={() => selectUser(userData.id, idx)}
-                            />
-                            <Text style={{ fontSize: 20, color: "white" }}>
-                                {userData.username}
-                            </Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                ))}
-            </View>
-            <View
-                style={{
-                    flexDirection: "row",
-                    marginHorizontal: 10,
-                    marginTop: 40
-                }}
-            >
-                <Text style={styles.statText}>
-                    {users[userIdx]?.subgroups.length} subgroups
-                </Text>
-                <Text style={styles.statText}>
-                    {users[userIdx]?.posts.length} posts
-                </Text>
-                <Text style={styles.statText}>
-                    {users[userIdx]?.comments.length} comments
-                </Text>
-            </View>
+                            >
+                                <CheckBox
+                                    center
+                                    containerStyle={{
+                                        backgroundColor: "transparent",
+                                        marginHorizontal: 0,
+                                        marginVertical: 10,
+                                        padding: 0
+                                    }}
+                                    checkedIcon={
+                                        <View
+                                            style={{
+                                                borderRadius: 30,
+                                                backgroundColor:
+                                                    Colors[colorScheme].tint,
+                                                padding: 3,
+                                                marginRight: 4
+                                            }}
+                                        >
+                                            <Icon
+                                                name="check"
+                                                color="white"
+                                                size={24}
+                                            />
+                                        </View>
+                                    }
+                                    uncheckedIcon={
+                                        <View
+                                            style={{
+                                                borderRadius: 30,
+                                                backgroundColor: "slategray",
+                                                padding: 3,
+                                                marginRight: 4
+                                            }}
+                                        >
+                                            <Icon
+                                                name="circle"
+                                                color="slategray"
+                                                size={24}
+                                            />
+                                        </View>
+                                    }
+                                    checked={selectedUser === userData.id}
+                                    onPress={() => selectUser(userData.id, idx)}
+                                />
+                                <Text style={{ fontSize: 20, color: "white" }}>
+                                    {userData.username}
+                                </Text>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    ))}
+                </View>
+            </ScrollView>
         </View>
     );
 };

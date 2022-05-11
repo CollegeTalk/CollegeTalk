@@ -33,9 +33,9 @@ There's a lot that goes into college life for a student, but students don't alwa
         - GET request by navigating to http://localhost:5000/items/{item_name}, with {item_name} as the text used earlier for the PUT request
         - GET the list of all items at http://localhost:5000/items
 
-## Deployments
+## Production Deployments
 
--   Frontend: https://expo.dev/@collegetalk/collegetalk
+-   Frontend: https://expo.dev/@collegetalk/collegetalk?serviceType=classic&distribution=expo-go&releaseChannel=staging
 -   API: https://collegetalk.azurewebsites.net/
 
 ## References

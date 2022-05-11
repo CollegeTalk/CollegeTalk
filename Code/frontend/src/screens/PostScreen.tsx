@@ -51,19 +51,20 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingTop: 25
+        paddingTop: 20
     },
     avatarContainer: {
         flex: 5,
         flexDirection: "row"
     },
     title: {
-        fontSize: 30,
+        fontSize: 26,
         fontWeight: "bold",
         textAlign: "left",
         alignItems: "center",
         color: "black",
-        marginBottom: 0
+        marginTop: 6,
+        marginBottom: 4
     },
     iconContainer: {
         flex: 1,
@@ -354,21 +355,29 @@ const PostScreen = ({
                 <View style={styles.headingContainer}>
                     <View style={styles.avatarContainer}>
                         {initials ? (
-                            <Avatar
-                                size={42}
-                                rounded
-                                title={initials}
-                                containerStyle={{
-                                    justifyContent: "center",
-                                    backgroundColor: avatarColor,
-                                    marginRight: 8
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    alignItems: "center"
                                 }}
-                            />
+                            >
+                                <Avatar
+                                    size={32}
+                                    rounded
+                                    title={initials}
+                                    containerStyle={{
+                                        justifyContent: "center",
+                                        backgroundColor: avatarColor,
+                                        marginRight: 8
+                                    }}
+                                />
+                                <Text
+                                    style={{ fontSize: 18, fontWeight: "500" }}
+                                >
+                                    {authorUsername}
+                                </Text>
+                            </View>
                         ) : null}
-                        <View>
-                            <Text style={styles.title}>{title}</Text>
-                            <Text style={styles.timestamp}>{timestamp}</Text>
-                        </View>
                     </View>
                     {numUpvotes !== -1 ? (
                         <View style={styles.iconContainer}>
@@ -398,8 +407,7 @@ const PostScreen = ({
                                 style={{
                                     color: hasUpvote ? "green" : "slategray",
                                     fontSize: 18,
-                                    fontWeight: "bold",
-                                    marginLeft: 5
+                                    fontWeight: "bold"
                                 }}
                             >
                                 {numUpvotes}
@@ -407,7 +415,11 @@ const PostScreen = ({
                         </View>
                     ) : null}
                 </View>
-                {body ? <Text style={styles.body}>{body}</Text> : null}
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.timestamp}>{timestamp}</Text>
+                {body ? (
+                    <Text style={styles.body}>{body.replace(/â€™/g, "'")}</Text>
+                ) : null}
                 <View style={styles.commentsContainer}>
                     <Text style={styles.commentsHeader}>
                         {comments.length} comments

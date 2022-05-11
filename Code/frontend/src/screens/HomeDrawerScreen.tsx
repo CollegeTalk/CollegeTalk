@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     container: { height: "100%", overflow: "visible" },
     scrollView: {
         height: "100%",
-        flex: 1,
         paddingHorizontal: 16,
         paddingVertical: 10
     },
@@ -54,11 +53,13 @@ const styles = StyleSheet.create({
     },
     subgroupsContainer: {
         width: "100%",
-        height: "100%",
+        flex: 1,
+        flexGrow: 1,
         marginVertical: 12
     },
     subgroupSubcontainer: {
         flex: 1,
+        flexGrow: 1,
         flexDirection: "column",
         justifyContent: "space-between",
         backgroundColor: primaryColors.background,
@@ -102,7 +103,7 @@ const SubgroupButton = ({
     />
 );
 
-const fetchSubgroups = async (
+export const fetchSubgroups = async (
     setFetching: Dispatch<SetStateAction<boolean>>,
     setSubgroups: Dispatch<SetStateAction<Subgroup[]>>,
     userId: string
@@ -128,6 +129,7 @@ const fetchSubgroups = async (
             users.includes(userId)
         );
 
+        setFetching(false);
         setSubgroups(userSubgroupsData);
     } catch (err: any) {
         Alert.alert(`Something went wrong with fetching! ${err}`);
@@ -162,7 +164,10 @@ const HomeDrawerScreen = ({
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView style={styles.scrollView}>
+            <ScrollView
+                style={styles.scrollView}
+                contentContainerStyle={{ flexGrow: 1 }}
+            >
                 <View style={styles.institutionContainer}>
                     <Text style={styles.sectionLabel}>My Institution</Text>
                     <Text style={styles.institutionText}>William & Mary</Text>
