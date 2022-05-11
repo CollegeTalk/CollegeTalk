@@ -204,6 +204,12 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
                 backgroundColor: primaryColors.background
             }}
         >
+            {fetching ? (
+                <LinearProgress
+                    animation={fetching}
+                    color={Colors[colorScheme].tint}
+                />
+            ) : null}
             {/** tintColor = iOS, colors = Android */}
             <ScrollView
                 contentContainerStyle={styles.scrollView}
@@ -218,12 +224,6 @@ const HomeScreen = ({ navigation }: HomeStackScreenProps<"Home">) => {
                     />
                 }
             >
-                {fetching ? (
-                    <LinearProgress
-                        animation={fetching}
-                        color={Colors[colorScheme].tint}
-                    />
-                ) : null}
                 <Text style={styles.title}>Home</Text>
                 {Object.keys(upvotesData).length === posts.length ? (
                     <View style={{ width: "100%" }}>

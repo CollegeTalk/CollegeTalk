@@ -322,6 +322,12 @@ const SubgroupScreen = ({
                 backgroundColor: primaryColors.text
             }}
         >
+            {fetching ? (
+                <LinearProgress
+                    animation={fetching}
+                    color={Colors[colorScheme].tint}
+                />
+            ) : null}
             {/** tintColor = iOS, colors = Android */}
             <ScrollView
                 contentContainerStyle={styles.scrollView}
@@ -331,17 +337,11 @@ const SubgroupScreen = ({
                         onRefresh={() => {
                             handleRefresh();
                         }}
-                        tintColor="white"
-                        colors={["white"]}
+                        tintColor="black"
+                        colors={["black"]}
                     />
                 }
             >
-                {fetching ? (
-                    <LinearProgress
-                        animation={fetching}
-                        color={Colors[colorScheme].tint}
-                    />
-                ) : null}
                 <View style={styles.headingContainer}>
                     <Text style={styles.title}>{name}</Text>
                     <View style={styles.memberContainer}>
